@@ -397,10 +397,19 @@ wizard = $(document).ready(function() {
          var filetype = document.getElementById('fileformat').value;
          console.log("filetype is "+filetype);
        console.log("function call is happening ");
-       if(filetype == 'delimited')
+       if(filetype == 'delimited'){
+       jQuery('#dilimiteddiv label').text("Delimiter");
        document.getElementById('dilimiteddiv').style.display='block';
+
+       }
+       else if(filetype == 'regex'){
+       jQuery('#dilimiteddiv label').text("Regex");
+       document.getElementById('dilimiteddiv').style.display='block';
+       }
        else
+       {
        document.getElementById('dilimiteddiv').style.display='none';
+       }
       }
      </script>
   <script type="text/javascript">
@@ -618,7 +627,7 @@ wizard = $(document).ready(function() {
                   <div class="form-group" id="dilimiteddiv" style="display:none;" >
                     <label class="control-label col-sm-2" for="delimiter">Delimiter</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control"  id="delimiter" name="delimiter" placeholder="Delimiter" value="" required>
+                        <input type="text" class="form-control"  id="delimiter" name="delimiter" value="" required>
                     </div>
                 </div>
 
@@ -736,15 +745,6 @@ wizard = $(document).ready(function() {
         </script>
 
 <script>
-var btn = document.getElementById("myBtn");
-
-// When the user clicks the button, open the modal
-btn.onclick = function() {
-    document.getElementById('myBtn').style.display='none';
-    document.getElementById('messageDetails').style.display='none';
-    document.getElementById('preMessageDetails').style.display='block';
-
-}
 
 function isDefault()
 {
