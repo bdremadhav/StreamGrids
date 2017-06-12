@@ -17,6 +17,17 @@ public class Messages {
     @Size(max = 2048)
     private String messageSchema;
 
+    public String getConnectionName() {
+        return connectionName;
+    }
+
+    public void setConnectionName(String connectionName) {
+        this.connectionName = connectionName;
+    }
+
+    @NotNull
+    @Size(max = 45)
+    private String connectionName;
     public int getCounter() {
         return counter;
     }

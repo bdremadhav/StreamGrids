@@ -437,6 +437,22 @@ wizard = $(document).ready(function() {
     			    edit: false,
     			    title: 'Message Name'
     		    },
+    		     format:{
+                    key : true,
+                    list: true,
+                    create:true,
+                    edit: false,
+                    title: 'File Format'
+                },
+
+                  connectionName: {
+                    key : true,
+                    list: true,
+                    create:true,
+                    edit: false,
+                    title: 'Connection Name'
+                },
+
     			    Properties: {
                     title: 'Schema',
                     width: '5%',
@@ -521,15 +537,8 @@ wizard = $(document).ready(function() {
 
 	</head>
 <body>
-
- <button type="button" id="myBtn" class=" btn-primary" id="createbutton" style="margin-left:955px;margin-bottom: 5px;">Create New Message</button>
-<div class='col-md-8' id="messageDetails" style="left: 240px;">
-<section style="width:100%;text-align:center;">
-	<div id="Container"></div>
-    </section>
-</div>
-
- <div ng-app="app" id="preMessageDetails" ng-controller="myCtrl" style="display:none;">
+ <div class="page-header">Create New Message</div>
+ <div ng-app="app" id="preMessageDetails" ng-controller="myCtrl">
 <div class='col-md-3'>
  <form  role="form" id="connectionDetails">
   <div class="form-group">
@@ -606,14 +615,34 @@ wizard = $(document).ready(function() {
                     </div>
                 </div>
 
-                    <div class="form-group" id="dilimiteddiv" style="display:none;" >
+                  <div class="form-group" id="dilimiteddiv" style="display:none;" >
                     <label class="control-label col-sm-2" for="delimiter">Delimiter</label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control"  id="delimiter" name="delimiter" placeholder="Delimiter" value="" required>
                     </div>
                 </div>
 
+                  <div class="form-group" id="advanced" >
+                 <label class="control-label col-sm-2" onclick="showAdvanced()" for="advanced">Advanced properties</label>
 
+               </div>
+
+                   <div class="form-group" id="persistanceId" style="display:none;">
+                   <label class="control-label col-sm-2" for="persistanceId">persistance id</label>
+                   <select class="form-control" id="ispersistanceId" name="persistanceId">
+                   <option  value="No" selected>No</option>
+                   <option  value="UUID">UUID</option>
+                   </select>
+
+                 </div>
+
+
+                   <div class="form-group" style="display:none;" id="indexId">
+                       <label class="control-label col-sm-2" for="indexId">Index Id</label>
+                       <div class="col-sm-10">
+                           <input type="text" class="form-control"   name="indexId" placeholder="Index Id" value="" required>
+                       </div>
+                   </div>
 
 
                     <div class="clearfix"></div>
@@ -639,11 +668,21 @@ wizard = $(document).ready(function() {
 		</div>
 
  </div>
+
+    <script>
+    $( "#advancedsection" ).click(function() {
+       console.log("in advancedsection");
+        $( "#advanced" ).toggle();
+    });
+
+    </script>
+
+
 <script>
                 var app = angular.module('app', []);
                    app.controller('myCtrl', function($scope) {
                     $scope.fileformats= getGenConfigMap('file_format');
-                    $scope.messageTypes={'ApacheLog':'ApacheLog','RouterLogs':'RouterLogs','Custom':'Custom'};
+                    $scope.messageTypes={'ApacheLog':'ApacheLog','RouterLogs':'RouterLogs'};
                     console.log($scope.fileformats);
                     $scope.formatMap=null;
                     $scope.busDomains = {};
@@ -714,6 +753,13 @@ if(document.getElementById('isDefaultTemplate').value == "Yes")
 document.getElementById('defaultMessage').style.display='block';
 else
 document.getElementById('defaultMessage').style.display='none';
+}
+
+function showAdvanced()
+{
+document.getElementById('advanced').style.display='none';
+document.getElementById('persistanceId').style.display='block';
+document.getElementById('indexId').style.display='block';
 }
 
 </script>

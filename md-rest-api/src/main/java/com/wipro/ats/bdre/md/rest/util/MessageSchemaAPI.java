@@ -129,9 +129,9 @@ public class MessageSchemaAPI extends MetadataAPIBase {
 
             String key="";
             String configGroup="";
-            if(jpaConnections.getConnectionType().contains("kafka")){
+            if(jpaConnections.getConnectionType().contains("Kafka")){
                 key="topicName";
-                configGroup="kafka";
+                configGroup="Kafka";
             }
              ConfigurationPropertiesId configurationPropertiesId=new ConfigurationPropertiesId();
              configurationPropertiesId.setMessageName(messageName);
@@ -195,6 +195,7 @@ public class MessageSchemaAPI extends MetadataAPIBase {
                 messages1.setMessageSchema(messages.getMessageSchema());
                 messages1.setMessagename(messages.getMessageName());
                 messages1.setFormat(messages.getFormat());
+                messages1.setConnectionName(messages.getConnections().getConnectionName());
                 messages1.setCounter(counter);
                 messagesList.add(messages1);
             }
