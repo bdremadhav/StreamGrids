@@ -403,7 +403,7 @@ wizard = $(document).ready(function() {
 
        }
        else if(filetype == 'regex'){
-       jQuery('#dilimiteddiv label').text("Regex");
+       jQuery('#dilimiteddiv label').text("Regex Pattern");
        document.getElementById('dilimiteddiv').style.display='block';
        }
        else
