@@ -613,7 +613,27 @@ wizard = $(document).ready(function() {
                       </div>
                     </div>
 
+                   </div>
+                      <div class="form-group" id="persistanceId">
+                      <label class="control-label col-sm-2" for="persistanceId">Persistance Id</label>
+                      <div class="col-sm-10">
+                      <select class="form-control" id="ispersistanceId" name="persistanceId">
+                      <option  value="No" selected>No</option>
+                      <option  value="UUID">UUID</option>
+                      </select>
+                      </div>
+                    </div>
 
+
+                      <div class="form-group" id="indexId">
+                          <label class="control-label col-sm-2" for="indexId">Index Id</label>
+                          <div class="col-sm-10">
+                              <select class="form-control" id="isindexId" name="indexId">
+                              <option  value="No" selected>No</option>
+                              <option  value="UUID">UUID</option>
+                              </select>
+                          </div>
+                      </div>
 
                   <div class="form-group" style="display:none;" id="defaultMessage">
                     <label class="control-label col-sm-2"  for="fileformat" >Message Template</label>
@@ -629,34 +649,7 @@ wizard = $(document).ready(function() {
                     <div class="col-sm-10">
                         <input type="text" class="form-control"  id="delimiter" name="delimiter" value="" required>
                     </div>
-                </div>
-                 </div>
-                 <div id="advancedProperties">
-                  <div class="form-group" id="advanced" >
-                 <label class="control-label col-sm-2" onclick="showAdvanced()" for="advanced">Advanced properties</label>
 
-               </div>
-
-                   <div class="form-group" id="persistanceId" style="display:none;">
-                   <label class="control-label col-sm-2" for="persistanceId">Persistance Id</label>
-                   <div class="col-sm-10">
-                   <select class="form-control" id="ispersistanceId" name="persistanceId">
-                   <option  value="No" selected>No</option>
-                   <option  value="UUID">UUID</option>
-                   </select>
-                   </div>
-                 </div>
-
-
-                   <div class="form-group" style="display:none;" id="indexId">
-                       <label class="control-label col-sm-2" for="indexId">Index Id</label>
-                       <div class="col-sm-10">
-                           <select class="form-control" id="isindexId" name="indexId">
-                           <option  value="No" selected>No</option>
-                           <option  value="UUID">UUID</option>
-                           </select>
-                       </div>
-                   </div>
 
 
                     <div class="clearfix"></div>
