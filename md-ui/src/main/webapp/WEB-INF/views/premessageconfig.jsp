@@ -397,12 +397,12 @@ wizard = $(document).ready(function() {
          var filetype = document.getElementById('fileformat').value;
          console.log("filetype is "+filetype);
        console.log("function call is happening ");
-       if(filetype == 'delimited'){
+       if(filetype == 'Delimited'){
        jQuery('#dilimiteddiv label').text("Delimiter");
        document.getElementById('dilimiteddiv').style.display='block';
 
        }
-       else if(filetype == 'regex'){
+       else if(filetype == 'Regex'){
        jQuery('#dilimiteddiv label').text("Regex Pattern");
        document.getElementById('dilimiteddiv').style.display='block';
        }
@@ -595,7 +595,7 @@ wizard = $(document).ready(function() {
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-sm-2"  for="fileformat"><spring:message code="dataload.page.file_format"/></label>
+                        <label class="control-label col-sm-2"  for="fileformat">Message Format</label>
                         <div class="col-sm-10">
                             <select class="form-control" id="fileformat" name="fileformat" onchange="changeme()" ng-model="fileformat1" ng-options = "file as val.value for (file, val) in fileformats" >
                                 <option  value="">Select the option</option>
