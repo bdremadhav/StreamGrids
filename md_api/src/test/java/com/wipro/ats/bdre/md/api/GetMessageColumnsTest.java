@@ -6,6 +6,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by cloudera on 5/22/17.
@@ -17,7 +18,7 @@ public class GetMessageColumnsTest {
     @Test
     public void testGetParentProcess() throws Exception {
         GetMessageColumns getMessageColumns = new GetMessageColumns();
-        List<String> sourceIds = getMessageColumns.getColumnNames(3);
+        Set<String> sourceIds = getMessageColumns.getColumnNames(3);
         LOGGER.info(sourceIds.toString());
     }
 }

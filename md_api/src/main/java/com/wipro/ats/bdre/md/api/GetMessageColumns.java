@@ -37,11 +37,11 @@ public class GetMessageColumns extends MetadataAPIBase {
     public static List<Integer> listOfSourcesForGivenPid = new ArrayList<Integer>();
 
     public static void main(String[] args) {
-        List<String> columnNames = new GetMessageColumns().getColumnNames(66);
+        Set<String> columnNames = new GetMessageColumns().getColumnNames(130);
         System.out.println("final result = " + columnNames);
     }
 
-    public List<String> getColumnNames(Integer pid) {
+    public Set<String> getColumnNames(Integer pid) {
         Process selectedProcess = processDAO.get(pid);
         Process parentProcess = selectedProcess.getProcess();
         Integer parentProcessId = parentProcess.getProcessId();
@@ -78,9 +78,10 @@ public class GetMessageColumns extends MetadataAPIBase {
         System.out.println("prevMap = " + prevMap);
 
         List<Integer> sourcesForGivenNode = new GetMessageColumns().recursivelyGetSources(pid);
-        List<String> columnNames = new ArrayList<>();
+        Set<String> columnNames = new HashSet<>();
         for(Integer sourcePid : sourcesForGivenNode){
             List<Properties> messageProperties =  propertiesDAO.getPropertiesForConfig(sourcePid, "message");
+
             if(messageProperties != null){
                 Properties messageProperty = messageProperties.get(0);
                 String messageName = messageProperty.getPropValue();

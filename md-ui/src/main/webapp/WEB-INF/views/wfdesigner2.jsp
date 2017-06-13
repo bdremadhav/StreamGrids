@@ -309,7 +309,7 @@
                                                     </div>
                                                 </div>
                                                 <hr/>
-                                                <form class="form-horizontal" role="form" ng-if="genConfig.type != 'hql'  && genConfig.type != 'hadoopstream' && genConfig.type != 'r'  && genConfig.type != 'spark' && genConfig.type != 'pig' && genConfig.type != 'shell' && genConfig.type != 'source' && genConfig.type != 'filter' && genConfig.type != 'emitter' && genConfig.type != 'persistentStore' && genConfig.type != 'addFiles'">
+                                                <form class="form-horizontal" role="form" ng-if="genConfig.type != 'hql'  && genConfig.type != 'hadoopstream' && genConfig.type != 'r'  && genConfig.type != 'spark' && genConfig.type != 'pig' && genConfig.type != 'shell' && genConfig.type != 'source' && genConfig.type != 'filter' && genConfig.type != 'sort' && genConfig.type != 'emitter' && genConfig.type != 'persistentStore' && genConfig.type != 'addFiles'">
                                                     <div class="form-group">
                                                         <label class="control-label col-sm-2" for="{{genConfig.key}}-propkey"><spring:message code="wfdesigner.page.propkey_name"/></label>
                                                         <div class="col-sm-10">
@@ -364,6 +364,27 @@
                                                      <button type="submit" ng-click="insertFilterProp(chartViewModel.selectedProcess.processId)" class="btn btn-primary  pull-right">Submit</button>
                                                 </form>
 
+                                         <form class="form-horizontal" role="form" ng-if="genConfig.type == 'sort'">
+
+                                                   <div class="form-group">
+                                                      <label class="control-label col-sm-2" for="{{genConfig.key}}-propkey">Column</label>
+                                                      <select class="form-control" id="sortcolumn" >
+                                                          <option ng-repeat="column in chartViewModel.columnList" id="{{$index}}" value="{{ column.Value }}">{{ column.DisplayText }}</option>
+                                                      </select>
+                                                  </div>
+
+                                                  <div class="form-group">
+                                                    <label class="control-label col-sm-2" for="{{genConfig.key}}-propkey">Order</label>
+                                                    <select class="form-control" id="sortorder">
+                                                        <option value="ascending">Ascending</option>
+                                                        <option value="descending">Descending</option>
+                                                     </select>
+                                                </div>
+
+
+                                                    <div class="clearfix"></div>
+                                                     <button type="submit" ng-click="insertSortProp(chartViewModel.selectedProcess.processId)" class="btn btn-primary  pull-right">Submit</button>
+                                                </form>
 
 
 

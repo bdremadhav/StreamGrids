@@ -589,6 +589,7 @@
 
 '41','param','Parameters','Additional parameters', 1,'true','text', 1
 '43','Filter','Filter','Filter', 1,'true','filter', 1
+'66','Sort','Sort','Sort', 1,'true','sort', 1
 
 '42','Kafka','Kafka Properties','Kafka', 1,'true','source', 1
 '46','Twitter','Twitter Properties','Twitter', 1,'true','source', 1
