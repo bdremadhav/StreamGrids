@@ -275,15 +275,28 @@
 
                                                             label: "Messages",
                            									collapse: "1",
-                           									url: "premessageconfig.page",
-                           									children: []
+                           									children: [
+                           									 {
+                           									 label: "View Messages",
+                                                             collapse: "1",
+                                                             url: "streamingmessage.page",
+                                                             children: []
+                                                             },
+                           									{
+                                                         label: "Create Messages",
+                                                         collapse: "1",
+                                                         url: "premessageconfig.page",
+                                                         children: []
+                                                         }
+
+                           									]
                            				},{
                            								   label: "Workflow Creator",
                            									collapse: "1",
                            									url: "wfdesigner2.page",
                            									children: []
                            				},{
-                                                            label: "View Workflows",
+                                                            label: "Manage Workflows",
                            									collapse: "1",
                            									url: "process.page",
                            									children: []

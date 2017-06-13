@@ -354,7 +354,17 @@ function source()
                                                      modal: true,
                                                      buttons: {
                                                          "Ok": function() {
-                                                             $('#Container').jtable('load');
+
+                                                 if(connectionType=="source"){
+                                                      location.href = '<c:url value="/pages/connections.page?type=source"/>';
+                                                  }
+                                                  if(connectionType=="emitter"){
+                                                      location.href = '<c:url value="/pages/connections.page?type=emitter"/>';
+                                                  }
+                                                  if(connectionType=="persistentStores"){
+                                                      location.href = '<c:url value="/pages/connections.page?type=persistance"/>';
+                                                  }
+
                                                              $(this).dialog("close");
                                                          }
                                                      }
