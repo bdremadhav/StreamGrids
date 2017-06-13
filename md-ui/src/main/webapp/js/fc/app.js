@@ -495,7 +495,31 @@ map["filtervalue"]=value3;
             data: jQuery.param(map),
             success: function(data) {
                 if(data.Result == "OK") {
-                    alertBox("info","operator properties added");
+                    alertBox("info","filter properties added");
+                }
+                else
+                alertBox("warning","Error occured");
+
+            }
+
+        });
+}
+
+$scope.insertSortProp=function(processId){
+var value1=document.getElementById("sortcolumn").value;
+var value2=document.getElementById("sortorder").value;
+console.log("values are "+value1+" "+value2);
+console.log("processId is "+processId);
+var map=new Object();
+map["column"]=value1;
+map["order"]=value2;
+    $.ajax({
+            type: "POST",
+            url: "/mdrest/properties/"+processId,
+            data: jQuery.param(map),
+            success: function(data) {
+                if(data.Result == "OK") {
+                    alertBox("info","sort properties added");
                 }
                 else
                 alertBox("warning","Error occured");

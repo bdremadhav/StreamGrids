@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by cloudera on 5/22/17.
@@ -30,7 +31,7 @@ public class SparkStreamingAPI extends MetadataAPIBase {
         RestWrapperOptions restWrapperOptions = null;
         try{
             GetMessageColumns getMessageColumns = new GetMessageColumns();
-            List<String> columnNames = getMessageColumns.getColumnNames(processId);
+            Set<String> columnNames = getMessageColumns.getColumnNames(processId);
             List<RestWrapperOptions.Option> options = new ArrayList<RestWrapperOptions.Option>();
             for (String column : columnNames) {
                 RestWrapperOptions.Option option = new RestWrapperOptions.Option(column,column);

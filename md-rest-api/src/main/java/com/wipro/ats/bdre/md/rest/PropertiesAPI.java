@@ -125,16 +125,17 @@ public class PropertiesAPI extends MetadataAPIBase {
             LOGGER.info(" value of map is " + map.toString());
             Process process=processDAO.get(processId);
             for (String string : map.keySet()) {
+                System.out.println("string = " + string);
                 com.wipro.ats.bdre.md.dao.jpa.Properties properties=new com.wipro.ats.bdre.md.dao.jpa.Properties();
                 PropertiesId propertiesId=new PropertiesId();
                 propertiesId.setProcessId(processId);
                 propertiesId.setPropKey(string);
                 properties.setId(propertiesId);
+                properties.setConfigGroup("default");
                 if (string.equals("messageName"))
                     properties.setConfigGroup("message");
                 else if(string.equals("connectionName"))
                     properties.setConfigGroup("connection");
-                properties.setConfigGroup("default");
                 properties.setProcess(process);
                 properties.setPropValue(map.get(string));
                 properties.setDescription("addition of kafka properties");
