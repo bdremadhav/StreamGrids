@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -406,6 +407,7 @@ public class GeneralConfigDAO {
              session.beginTransaction();
              Criteria criteria = session.createCriteria(GeneralConfig.class);
              criteria.setProjection(Projections.distinct(Projections.property(CONFIG_GROUP)));
+            criteria.add(Restrictions.ilike("id.configGroup","Connection", MatchMode.ANYWHERE));
              criteria.addOrder(Order.asc(CONFIG_GROUP).ignoreCase());
              Integer counter= criteria.list().size();
              criteria.setFirstResult(pageNum);

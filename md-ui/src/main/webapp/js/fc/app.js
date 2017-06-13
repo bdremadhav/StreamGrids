@@ -530,19 +530,41 @@ map["order"]=value2;
 }
 
 
-$scope.insertHdfsProp=function(processId){
-var value1=document.getElementById("messageName").value;
+$scope.insertEmitterProp=function(processId){
+var value1=document.getElementById("emitterConnectionName").value;
 console.log("values are "+value1);
 console.log("processId is "+processId);
 var map=new Object();
-map["messageName"]=value1;
+map["connectionName"]=value1;
     $.ajax({
             type: "POST",
             url: "/mdrest/properties/"+processId,
             data: jQuery.param(map),
             success: function(data) {
                 if(data.Result == "OK") {
-                    alertBox("info","HDFS properties added");
+                    alertBox("info","Emitter properties added");
+                }
+                else
+                alertBox("warning","Error occured");
+
+            }
+
+        });
+}
+
+$scope.insertPersistentStoreProp=function(processId){
+var value1=document.getElementById("persistentStoreConnectionName").value;
+console.log("values are "+value1);
+console.log("processId is "+processId);
+var map=new Object();
+map["connectionName"]=value1;
+    $.ajax({
+            type: "POST",
+            url: "/mdrest/properties/"+processId,
+            data: jQuery.param(map),
+            success: function(data) {
+                if(data.Result == "OK") {
+                    alertBox("info","PersistentStore properties added");
                 }
                 else
                 alertBox("warning","Error occured");

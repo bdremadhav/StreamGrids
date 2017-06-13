@@ -214,8 +214,8 @@
                 <!-- /.container-fluid -->
             </nav>
 
-            <div>
-                <iframe id="dframe" src="welcome.page" scrolling="yes" style="overflow-y:visible;width:100%; height: 800px; border: none;"></iframe>
+            <div >
+                <iframe id="dframe" src="https://public.tableau.com/views/StreamProcesses-final/Dashboard1?:embed=yes&:tabs=no&:toolbar=no&:display_count=no&:showVizHome=no&:showShareOptions=no"  scrolling="yes" style="overflow-y:visible;width:100%; height: 800px; border: none;"></iframe>
             </div>
 
      <!--
@@ -300,7 +300,30 @@
                            									collapse: "1",
                            									url: "process.page",
                            									children: []
-                           				}
+                           				},
+
+                           				                                <security:authorize access = "hasRole('ROLE_ADMIN')"> {
+                                                                                label: "Administration",
+                                                                                collapse: "1",
+                                                                                children: [{
+                                                                                        label: "Security",
+                                                                                        collapse: "1",
+                                                                                        url: "users.page",
+                                                                                        children: []
+                                        					}, {
+                                                                                        label: "Sessions",
+                                                                                        collapse: "1",
+                                                                                        url: "sessions.page",
+                                                                                        children: []
+                                        					}, {
+                                                                                        label: "Settings",
+                                                                                        collapse: "1",
+                                                                                        url: "settings.page",
+                                                                                        children: []
+                                        					}
+                                        					]
+                                                                            },
+                                                                            </security:authorize>
                                             ];
             $scope.createLinearMenu($scope.menu); //For creating linear menu
 			$scope.openlink = function (event, url) {
