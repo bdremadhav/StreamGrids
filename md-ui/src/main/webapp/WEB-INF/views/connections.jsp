@@ -90,8 +90,16 @@ ul{
   }   left: 420px;
 
 
+.form-horizontal .form-group {
+     margin-right: auto;
+     margin-left:  auto;
 }
 
+.form-group {
+
+    margin-bottom: auto;
+
+}
 
 
 
@@ -199,18 +207,16 @@ function source()
             }
 </script>
 </head>
+ <div class="page-header">Connections</div>
 <body ng-app="myApp" ng-controller="myCtrl">
-
-
  <button type="button" class=" btn-primary1" id="createbutton" style="margin-left:1020px;margin-bottom: 5px;"onclick="create()">Create New Connection</button>
    <div id="tabs" style="background:transparent" width="1000px">
+   </div>
      <div id="source-tab" style="display:none;">
-
-
-
-                    <div id="sourceConnectionFields">
+                <section >
+                   <div id="sourceConnectionFields">
                         <label style="left: 125px;" class="control-label col-sm-3">Source Configuration Type</label>
-                        <div id="dropdownSource" class="btn-group" style="left: 145px;" >
+                        <div id="dropdownSource" class="btn-group" style="left: 140px;" >
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="false" aria-expanded="true" id="srcDropdown">
                                 <span>Select Source</span><span class="caret"></span>
                             </button>
@@ -235,7 +241,7 @@ function source()
 
 
           </form>
-
+           </section>
       </div>
 
 
@@ -244,7 +250,7 @@ function source()
 
                 <div id="emitterConnectionFields">
                 <label style="left: 125px;" class="control-label col-sm-3">Emitter Configuration Type</label>
-                <div id="dropdownEmitter" class="btn-group" style="left: 145px;" >
+                <div id="dropdownEmitter" class="btn-group" style="left: 140px;" >
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="false" aria-expanded="true" id="emitterDropdown">
                         <span>Select Emitter</span><span class="caret"></span>
                     </button>
@@ -267,10 +273,7 @@ function source()
                          </div>
                      </div>
 
-                 </div>
-                     <!-- /btn-group -->
-             </div>
-         </form>
+             </form>
          </section>
         </div>
 
@@ -281,7 +284,7 @@ function source()
 
            <div id="persistentStoresConnectionDetails">
                 <label style="left: 125px;" class="control-label col-sm-3">PersistentStore Configuration Type</label>
-                <div id="dropdownPersistentStores" class="btn-group" style="left: 145px;" >
+                <div id="dropdownPersistentStores" class="btn-group" style="left: 140px;" >
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="false" aria-expanded="true" id="persistentStoresDropdown">
                         <span>Select Persistent Store</span><span class="caret"></span>
                     </button>
@@ -303,10 +306,6 @@ function source()
                                <input type="text" class="form-control" name="persistentStoresConnectionName">
                            </div>
                        </div>
-
-                   </div>
-                       <!-- /btn-group -->
-               </div>
            </form>
            </section>
          </div>
@@ -316,8 +315,6 @@ function source()
         <div id="Container"></div>
         </section>
        </div>
-
-    </div>
 
 
 
