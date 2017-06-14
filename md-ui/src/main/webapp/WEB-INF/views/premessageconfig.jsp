@@ -613,7 +613,23 @@ wizard = $(document).ready(function() {
                       </div>
                     </div>
 
-                   </div>
+                   
+
+                  <div class="form-group" style="display:none;" id="defaultMessage">
+                    <label class="control-label col-sm-2"  for="fileformat" >Message Template</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" id="messageType" name="messageType"  ng-model="messageType" ng-options = "file as val for (file, val) in messageTypes" >
+                            <option  value="">Select the option</option>
+                        </select>
+                    </div>
+                </div>
+
+                  <div class="form-group" id="dilimiteddiv" style="display:none;" >
+                    <label class="control-label col-sm-2" for="delimiter">Delimiter</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control"  id="delimiter" name="delimiter" value="" required>
+                    </div>
+                </div>
                       <div class="form-group" id="persistanceId">
                       <label class="control-label col-sm-2" for="persistanceId">Persistance Id</label>
                       <div class="col-sm-10">
@@ -634,22 +650,6 @@ wizard = $(document).ready(function() {
                               </select>
                           </div>
                       </div>
-
-                  <div class="form-group" style="display:none;" id="defaultMessage">
-                    <label class="control-label col-sm-2"  for="fileformat" >Message Template</label>
-                    <div class="col-sm-10">
-                        <select class="form-control" id="messageType" name="messageType"  ng-model="messageType" ng-options = "file as val for (file, val) in messageTypes" >
-                            <option  value="">Select the option</option>
-                        </select>
-                    </div>
-                </div>
-
-                  <div class="form-group" id="dilimiteddiv" style="display:none;" >
-                    <label class="control-label col-sm-2" for="delimiter">Delimiter</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control"  id="delimiter" name="delimiter" value="" required>
-                    </div>
-
 
 
                     <div class="clearfix"></div>
