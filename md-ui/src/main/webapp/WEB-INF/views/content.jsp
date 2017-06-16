@@ -16,15 +16,58 @@
 	  ga('send', 'pageview');
 	</script>
 
+	<!-- Jquery Core Js -->
+        <script src="../MaterialDesign_css/jquery.min.js"></script>
+
+
+
+        <!-- Slimscroll Plugin Js -->
+        <script src="../MaterialDesign_css/jquery.slimscroll.js"></script>
+
+        <!-- Waves Effect Plugin Js -->
+        <script src="../MaterialDesign_css/waves.js"></script>
+
+        <!-- Jquery CountTo Plugin Js -->
+        <script src="../MaterialDesign_css/jquery.countTo.js"></script>
+
+        <!-- Morris Plugin Js -->
+        <script src="../MaterialDesign_css/raphael.min.js"></script>
+        <script src="../MaterialDesign_css/morris.js"></script>
+
+
+
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <link rel="stylesheet" href="../css/css/bootstrap.min.css" />
             <link rel="stylesheet" href="../css/bootstrap.custom.css" />
+            <!--<link rel="stylesheet" href="../css/css/materialstyle.css" />-->
             <link rel="stylesheet" href="../css/submenu.css" />
-           	<script src="../js/jquery.min.js"></script>
-            <script src="../js/bootstrap.js"></script>
             <script src="../js/angular.min.js"></script>
-            
+            <link href="../StreamAnalytix_files/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css">
+            <link href="../StreamAnalytix_files/bootstrap.min.css" rel="stylesheet">
+            <link href="../StreamAnalytix_files/bootstrap-material-design.min.css" rel="stylesheet">
+            <link href="../StreamAnalytix_files/ripples.min.css" rel="stylesheet">
+            <link href="../StreamAnalytix_files/sax-fonts.css" class="include" rel="stylesheet" type="text/css">
+            <link href="../StreamAnalytix_files/toastr.min.css" rel="stylesheet">
+            <link href="../StreamAnalytix_files/datatables.min.css" rel="stylesheet">
+            <link href="../StreamAnalytix_files/theme.css" rel="stylesheet" type="text/css">
+            <link href="../StreamAnalytix_files/style.css" rel="stylesheet" type="text/css">
+            <link href="../StreamAnalytix_files/select2.4.0.css" rel="stylesheet">
+            <link href="../StreamAnalytix_files/select2-bootstrap.css" rel="stylesheet">
+
+                <!-- Favicon-->
+                <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+                <!-- Google Fonts -->
+                <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+                <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+
+
+
+
             <style>
+            .side-container{
+                   padding-left:75px;
+                }
 				body {
 					overflow: visible;
 				}
@@ -163,69 +206,112 @@
 				.dropdown-menu {
 				position:initial;
 				}
+				body.container-fluid {
+                    padding-left: 0px;
+                    padding-right: 0px;
+                }
+
+
+                .list-group.list-group-root {
+                    padding: 0;
+                    overflow: hidden;
+                }
+
+                .list-group.list-group-root .list-group {
+                    margin-bottom: 0;
+                }
+
+                .list-group.list-group-root .list-group-item {
+                    border-radius: 0;
+                    border-width: 1px 0 0 0;
+                    font-size: 18px;
+                }
+
+                .list-group.list-group-root > .list-group-item:first-child {
+                    border-top-width: 0;
+                }
+
+                .navbar.navbar-inverse {
+                    height: 60px;
+                }
+
+
 			</style>
 		</head>
 
-        <body class="container-fluid" ng-app="myApp" ng-controller="myCtrl">
-            <nav class="navbar navbar-inverse">
-                <div class="container-fluid">
-                    <!-- Brand and toggle get grouped for better mobile display -->
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
+        <body ng-app="myApp" ng-controller="myCtrl">
+         <div class="sidebar-wrapper">
 
-						<span class="bdretextlogo">Streaming Analytics Platform</span>
-                    </div>
+                             <div class="logo-wrap">
+                                 <a id="" href="content.page">
+                                     <img src="../StreamAnalytix_files/logo.png" border="0" width="30px">
+                                     <span><img src="../StreamAnalytix_files/sax.png" border="0" width="200px"></span>
+                                 </a>
+                             </div>
 
-                    <!-- Collect the nav links, forms, and other content for toggling -->
-                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                        <ul class="nav navbar-nav navbar-nav-position">
-                            <li ng-repeat="item in menu" ng-class="{dropdown:item.children.length!=0,activ:item.active}">
-                                <a href="#" ng-hide="item.children.length==0" class="dropdown-toggle text-muted " data-toggle="dropdown" role="button" aria-expanded="false">{{item.label}} <span class="glyphicon glyphicon-chevron-down"></span></a>
-                                <a href="#" ng-show="item.children.length==0" class="text-muted level1" ng-click="openlink($event,item.url)">{{item.label}}</a>
-                                <ul class="dropdown-menu" ng-hide="item.children.length==0" role="menu">
-                                    <li ng-repeat="x in item.children" ng-class="{'dropdown-submenu':x.children.length!=0,'node':x.children.length==0}" ng-click="reset($event.currentTarget,this.item)">
-                                        <a href="#" class="level2" ng-click="openlink($event,x.url)" ng-show="x.children.length==0">{{x.label}}</a>
-                                        <a href="#" tabindex="-1" ng-hide="x.children.length==0">{{x.label}}</a>
-                                        <ul class="dropdown-menu" ng-hide="x.children.length==0">
-                                            <li ng-repeat="y in x.children" url="{{y.url}}" ng-click="reset($event.currentTarget,this.item)" ng-class="{'node':x.children.length==0}">
-                                                <a href="#" class="level3" ng-click="openlink($event,y.url)">{{y.label}}</a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                        
-                        <ul class="nav navbar-nav navbar-right" >
-                            <li class="dropdown user-icon-style"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="usericon"></span></a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="/auth/bdre/security/logout">Logout <security:authentication property="principal.username"/></a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                    <!-- /.navbar-collapse -->
-                </div>
-                <!-- /.container-fluid -->
-            </nav>
+                             <ul>
+                                 <li>
+                                    <a  href="connections.page?type=source"><i class="mdi mdi-24px mdi-forum"></i><span>Source Configuration</span></a>
+                                 </li>
 
-            <div >
-                <iframe id="dframe" src="https://public.tableau.com/views/StreamProcesses-final/Dashboard1?:embed=yes&:tabs=no&:toolbar=no&:display_count=no&:showVizHome=no&:showShareOptions=no"  scrolling="yes" style="overflow-y:visible;width:100%; height: 800px; border: none;"></iframe>
-            </div>
+                                 <li>
+                                    <a href="connections.page?type=persistance"><i class="mdi mdi-24px mdi-forum"></i><span>Sink Configuration</span></a>
+                                 </li>
 
-     <!--
-	<div id="foot" class="row">
-	    div id="footer" class="footer navbar-fixed-bottom"
-		<p class="text-center"><ul id="listf" class="list-inline"><li ><a class="btn btn-xs" href="">Terms of use</a> </li><li> <a class="btn btn-xs" href="">Liceelnse</a> </li><li> <a class="btn btn-xs" href="">About BDRE</a> </li><li> <a class="btn btn-xs" href="">Help</a> </li><li><a class="btn btn-xs" href="">Site Map</a> </li><li> <a  class="btn btn-xs" href="">About Wipro</a></li>
-		    </p>
-	    </div>
-	</div>
-	 -->
+                                  <li>
+                                    <a  href="premessageconfig.page"><i class="mdi mdi-24px mdi-forum"></i><span>Messages</span></a>
+                                 </li>
+
+                                 <li>
+                                   <a href="wfdesigner2.page"><i class="mdi mdi-24px mdi-forum"></i><span>Workflow Creator</span></a>
+                                 </li>
+
+                                 <li>
+                                    <a  href="process.page"><i class="mdi mdi-24px mdi-forum"></i><span>Manage Workflows</span></a>
+                                 </li>
+
+                                 <li>
+                                    <a  href="users.page"><i class="mdi mdi-24px mdi-forum"></i><span>Security</span></a>
+                                 </li>
+
+                                  <li>
+                                     <a  href="sessions.page"><i class="mdi mdi-24px mdi-forum"></i><span>Sessions</span></a>
+                                  </li>
+
+                                  <li>
+                                     <a  href="settings.page"><i class="mdi mdi-24px mdi-forum"></i><span>Settings</span></a>
+                                  </li>
+
+                           </ul>
+                         </div>
+                        <div class="side-container">
+                                 <nav class="navbar navbar-inverse">
+                                     <div class="container-fluid">
+                                         <!-- Brand and toggle get grouped for better mobile display -->
+                                         <div class="navbar-header">
+                                             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                                                 <span class="sr-only">Toggle navigation</span>
+                                                 <span class="icon-bar"></span>
+                                                 <span class="icon-bar"></span>
+                                                 <span class="icon-bar"></span>
+                                             </button>
+
+                     						<span class="bdretextlogo"></span>
+                                         </div>
+
+                                             <ul class="nav navbar-nav navbar-right" >
+                                                 <li class="dropdown user-icon-style"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="usericon"></span></a>
+                                                     <ul class="dropdown-menu" role="menu">
+                                                         <li><a href="/auth/bdre/security/logout">Logout <security:authentication property="principal.username"/></a></li>
+                                                     </ul>
+                                                 </li>
+                                             </ul>
+                                         </div>
+                                         <!-- /.navbar-collapse -->
+
+                                     <!-- /.container-fluid -->
+                                 </nav>
+
             <script>
                 var app = angular.module("myApp", []);
                 app.controller("myCtrl", function ($scope) {
@@ -275,15 +361,28 @@
 
                                                             label: "Messages",
                            									collapse: "1",
-                           									url: "premessageconfig.page",
-                           									children: []
+                           									children: [
+                           									 {
+                           									 label: "View Messages",
+                                                             collapse: "1",
+                                                             url: "streamingmessage.page",
+                                                             children: []
+                                                             },
+                           									{
+                                                         label: "Create Messages",
+                                                         collapse: "1",
+                                                         url: "premessageconfig.page",
+                                                         children: []
+                                                         }
+
+                           									]
                            				},{
                            								   label: "Workflow Creator",
                            									collapse: "1",
                            									url: "wfdesigner2.page",
                            									children: []
                            				},{
-                                                            label: "View Workflows",
+                                                            label: "Manage Workflows",
                            									collapse: "1",
                            									url: "process.page",
                            									children: []
@@ -358,7 +457,7 @@
 			};
                             });
             </script>
-
+        </div>
         </body>
 
         </html>
