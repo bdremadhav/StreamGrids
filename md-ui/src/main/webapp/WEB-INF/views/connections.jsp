@@ -402,6 +402,10 @@
                             .dropdown-menu {
                             position:initial;
                             }
+                            #createConnectionButton{
+                            text-align:center;
+                            margin:auto;
+                            }
 
     </style>
 	<script>
@@ -416,27 +420,7 @@
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-    <!-- <link href="../css/jquery-ui-1.10.3.custom.css" rel="stylesheet">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="../css/css/materialstyle.css" />
-    <link rel="stylesheet" href="../css/submenu.css" />
-    <link rel="stylesheet" href="../css/jquery.steps.css" />
-    <link href="../css/jtables-bdre.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="../css/jquery.steps.custom.css" />
-    <link href="../css/bootstrap.custom.css" rel="stylesheet" type="text/css" />
-    <link href="../StreamAnalytix_files/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css">
-    <link href="../StreamAnalytix_files/bootstrap.min.css" rel="stylesheet">
-    <link href="../StreamAnalytix_files/bootstrap-material-design.min.css" rel="stylesheet">
-    <link href="../StreamAnalytix_files/ripples.min.css" rel="stylesheet">
-    <link href="../StreamAnalytix_files/sax-fonts.css" class="include" rel="stylesheet" type="text/css">
-    <link href="../StreamAnalytix_files/toastr.min.css" rel="stylesheet">
-    <link href="../StreamAnalytix_files/datatables.min.css" rel="stylesheet">
-    <link href="../StreamAnalytix_files/theme.css" rel="stylesheet" type="text/css">
-    <link href="../StreamAnalytix_files/style.css" rel="stylesheet" type="text/css">
-    <link href="../StreamAnalytix_files/select2.4.0.css" rel="stylesheet">
-    <link href="../StreamAnalytix_files/select2-bootstrap.css" rel="stylesheet"> -->
+
 
     <link href="../css/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="../css/jtables-bdre.css" rel="stylesheet" type="text/css" />
@@ -453,9 +437,6 @@
     <link href="../StreamAnalytix_files/style.css" rel="stylesheet" type="text/css">
     <link href="../StreamAnalytix_files/select2.4.0.css" rel="stylesheet">
     <link href="../StreamAnalytix_files/select2-bootstrap.css" rel="stylesheet">
-
-
-
     <script src="../js/jquery.min.js"></script>
     <script src="../js/jquery-ui-1.10.3.custom.js"></script>
     <script src="../js/jquery.steps.min.js"></script>
@@ -576,7 +557,7 @@ function source()
                                  </li>
 
                                   <li>
-                                     <a  href="sessions.page"><i class="mdi mdi-24px mdi-forum"></i><span>Sessions</span></a>
+                                     <a  href="sessions.page"><i class="mdi mdi-24px mdi-watch"></i><span>Sessions</span></a>
                                   </li>
 
                                   <li>
