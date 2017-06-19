@@ -35,7 +35,7 @@
         <script src="../MaterialDesign_css/morris.js"></script>
 
 
-
+            <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <link rel="stylesheet" href="../css/css/bootstrap.min.css" />
             <link rel="stylesheet" href="../css/bootstrap.custom.css" />
@@ -251,11 +251,11 @@
 
                              <ul>
                                  <li>
-                                    <a  href="connections.page?type=source"><i class="mdi mdi-24px mdi-forum"></i><span>Source Configuration</span></a>
+                                    <a  href="connections.page?type=source"><i class="mdi mdi-24px mdi-login"></i><span>Source Configuration</span></a>
                                  </li>
 
                                  <li>
-                                    <a href="connections.page?type=persistance"><i class="mdi mdi-24px mdi-forum"></i><span>Sink Configuration</span></a>
+                                    <a href="connections.page?type=persistance"><i class="mdi mdi-24px mdi-logout"></i><span>Sink Configuration</span></a>
                                  </li>
 
                                   <li>
@@ -263,23 +263,23 @@
                                  </li>
 
                                  <li>
-                                   <a href="wfdesigner2.page"><i class="mdi mdi-24px mdi-forum"></i><span>Workflow Creator</span></a>
+                                   <a href="wfdesigner2.page"><i class="mdi mdi-24px mdi-steam"></i><span>Workflow Creator</span></a>
                                  </li>
 
                                  <li>
-                                    <a  href="process.page"><i class="mdi mdi-24px mdi-forum"></i><span>Manage Workflows</span></a>
+                                    <a  href="process.page"><i class="mdi mdi-24px mdi-webhook"></i><span>Manage Workflows</span></a>
                                  </li>
 
                                  <li>
-                                    <a  href="users.page"><i class="mdi mdi-24px mdi-forum"></i><span>Security</span></a>
+                                    <a  href="users.page"><i class="mdi mdi-24px mdi-account-settings-variant"></i><span>Security</span></a>
                                  </li>
 
                                   <li>
-                                     <a  href="sessions.page"><i class="mdi mdi-24px mdi-forum"></i><span>Sessions</span></a>
+                                     <a  href="sessions.page"><i class="mdi mdi-24px mdi-watch"></i><span>Sessions</span></a>
                                   </li>
 
                                   <li>
-                                     <a  href="settings.page"><i class="mdi mdi-24px mdi-forum"></i><span>Settings</span></a>
+                                     <a  href="settings.page"><i class="mdi mdi-24px mdi-tune"></i><span>Settings</span></a>
                                   </li>
 
                            </ul>

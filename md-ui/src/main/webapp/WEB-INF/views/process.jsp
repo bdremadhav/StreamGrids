@@ -1704,40 +1704,40 @@
                          </a>
                      </div>
 
-                     <ul>
-                         <li>
-                            <a  href="connections.page?type=source"><i class="mdi mdi-24px mdi-forum"></i><span>Source Configuration</span></a>
-                         </li>
+                    <ul>
+                                                     <li>
+                                                        <a  href="connections.page?type=source"><i class="mdi mdi-24px mdi-login"></i><span>Source Configuration</span></a>
+                                                     </li>
 
-                         <li>
-                            <a href="connections.page?type=persistance"><i class="mdi mdi-24px mdi-forum"></i><span>Sink Configuration</span></a>
-                         </li>
+                                                     <li>
+                                                        <a href="connections.page?type=persistance"><i class="mdi mdi-24px mdi-logout"></i><span>Sink Configuration</span></a>
+                                                     </li>
 
-                          <li>
-                            <a  href="premessageconfig.page"><i class="mdi mdi-24px mdi-forum"></i><span>Messages</span></a>
-                         </li>
+                                                      <li>
+                                                        <a  href="premessageconfig.page"><i class="mdi mdi-24px mdi-forum"></i><span>Messages</span></a>
+                                                     </li>
 
-                         <li>
-                           <a href="wfdesigner2.page"><i class="mdi mdi-24px mdi-forum"></i><span>Workflow Creator</span></a>
-                         </li>
+                                                     <li>
+                                                       <a href="wfdesigner2.page"><i class="mdi mdi-24px mdi-steam"></i><span>Workflow Creator</span></a>
+                                                     </li>
 
-                         <li>
-                            <a  href="process.page"><i class="mdi mdi-24px mdi-forum"></i><span>Manage Workflows</span></a>
-                         </li>
+                                                     <li>
+                                                        <a  href="process.page"><i class="mdi mdi-24px mdi-webhook"></i><span>Manage Workflows</span></a>
+                                                     </li>
 
-                         <li>
-                            <a  href="users.page"><i class="mdi mdi-24px mdi-forum"></i><span>Security</span></a>
-                         </li>
+                                                     <li>
+                                                        <a  href="users.page"><i class="mdi mdi-24px mdi-account-settings-variant"></i><span>Security</span></a>
+                                                     </li>
 
-                          <li>
-                             <a  href="sessions.page"><i class="mdi mdi-24px mdi-forum"></i><span>Sessions</span></a>
-                          </li>
+                                                      <li>
+                                                         <a  href="sessions.page"><i class="mdi mdi-24px mdi-watch"></i><span>Sessions</span></a>
+                                                      </li>
 
-                          <li>
-                             <a  href="settings.page"><i class="mdi mdi-24px mdi-forum"></i><span>Settings</span></a>
-                          </li>
+                                                      <li>
+                                                         <a  href="settings.page"><i class="mdi mdi-24px mdi-tune"></i><span>Settings</span></a>
+                                                      </li>
 
-                   </ul>
+                                               </ul>
                  </div>
                 <div class="side-container">
                          <nav class="navbar navbar-inverse">
@@ -1753,7 +1753,7 @@
 
              						<span class="bdretextlogo"></span>
                                  </div>
-
+                                    <div>
                                      <ul class="nav navbar-nav navbar-right" >
                                          <li class="dropdown user-icon-style"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="usericon"></span></a>
                                              <ul class="dropdown-menu" role="menu">
@@ -1761,6 +1761,7 @@
                                              </ul>
                                          </li>
                                      </ul>
+                                     <div>
                                  </div>
                                  <!-- /.navbar-collapse -->
 
