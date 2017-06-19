@@ -1190,11 +1190,12 @@
 
                                            submit.onclick = function() {
                                              modal.style.display = "none";
-
-
-
-
-
+                                             formIntoMap("basic");
+                                             formIntoMap("advanceProperties");
+                                             var processData = data.record;
+                                             console.log(processData.processId);
+                                             map["processId"]=processData.processId;
+                                              console.log(map);
                                 			$("#execute-dialog-confirm").dialog({
                                 				resizable: false,
                                 				height: 'auto',
@@ -1211,7 +1212,7 @@
                                 							$.ajax({
                                 								url: '/mdrest/process/execute/',
                                 								type: 'POST',
-                                								data: processData,
+                                								data: jQuery.param(map),
                                 								dataType: 'json',
                                 								success: function(data) {
                                 									if(data.Result == "OK") {
@@ -1595,6 +1596,20 @@
                 </script>
                 <%--  --%>
                     <script>
+                    var map = new Object();
+
+                    function formIntoMap(typeOf) {
+                    	var x = '';
+                    	x = document.getElementById(typeOf);
+                    	console.log(x);
+                    	var text = "";
+                    	var i;
+                    	for(i = 0; i < x.length; i++) {
+                    		map[x.elements[i].name] = x.elements[i].value;
+                    	}
+                    }
+
+
                         function showProcessPage(pid) {
                             console.log('entered function');
                             console.log(${param.pid == null});
@@ -1689,7 +1704,7 @@
                     <span class="closemodal">&times;</span>
                     <h3 style="margin-left:350px;">Executions details</h3>
                                 			<section>
-                                <form class="form-horizontal" role="form" id="fileFormat">
+                                <form class="form-horizontal" role="form" id="basic">
 
 
 
@@ -1724,9 +1739,9 @@
                                         </div>
                                     </div>
                                           <div class="form-group" >
-                                          <label class="control-label col-sm-2" for="comment">Comment</label>
+                                          <label class="control-label col-sm-2" for="master">Master</label>
                                           <div class="col-sm-10">
-                                           <input type="text" class="form-control"  id="comment" name="comment" value="" required>
+                                           <input type="text" class="form-control"  id="master" name="master" value="Yarn-standalone" required>
 
                                           </div>
                                         </div>
@@ -1744,7 +1759,7 @@
                                               <div class="col-sm-10">
                                                   <select class="form-control" id="deploymentMode" name="deploymentMode">
                                                   <option  value="CLUSTER" selected>CLUSTER</option>
-                                                  <option  value="LOCAL">LOCAL</option>
+                                                  <option  value="CLIENT">CLIENT</option>
                                                   </select>
                                               </div>
                                           </div>

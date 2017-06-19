@@ -287,7 +287,29 @@ angular.module('flowChart', ['dragging'] )
 	//
 	// Handle mousedown on a node.
 	//
+	 var modal = document.getElementById('myModal');
+	var span = document.getElementsByClassName("closemodal")[0];
+            span.onclick = function() {
+             modal.style.display = "none";
+            }
+
+$scope.nodeDoubleClick = function (evt, node) {
+   var chart = $scope.chart;
+   console.log("double mouse click event is called");
+        modal.style.display = "block";
+        chart.handleNodeClicked(node, evt.ctrlKey);
+
+}
+
+
+
+
+
+
+
 	$scope.nodeMouseDown = function (evt, node) {
+
+
 		var chart = $scope.chart;
 		var lastMouseCoords;
 		var xpos=0;
@@ -369,12 +391,7 @@ angular.module('flowChart', ['dragging'] )
 			//
 			// The node wasn't dragged... it was clicked.
 			//
-			clicked: function () {
 
-
-				chart.handleNodeClicked(node, evt.ctrlKey);
-
-			},
 
 		});
 	};

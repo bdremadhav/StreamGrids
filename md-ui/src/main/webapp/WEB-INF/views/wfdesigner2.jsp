@@ -59,6 +59,52 @@
                 <script src="../js/nanobar.min.js" type="text/javascript"></script>
 
                 <style>
+
+                     .modelwindow {
+                               display: none; /* Hidden by default */
+                               position: fixed; /* Stay in place */
+                               z-index: 1; /* Sit on top */
+                               padding-top: 40px; /* Location of the box */
+                               left: 0;
+                               top: 0;
+                               width: 100%; /* Full width */
+                               height: 100%; /* Full height */
+                               overflow: auto; /* Enable scroll if needed */
+                               background-color: rgb(0,0,0); /* Fallback color */
+                               background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+                           }
+
+                           /* Modal Content */
+                           .modal-content {
+                               background-color: #fefefe;
+                               margin: auto;
+                               padding: 20px;
+                               border: 1px solid #888;
+                               width: 60%;
+                           }
+
+                           /* The Close Button */
+                           .closemodal {
+                               color: #aaaaaa;
+                               float: right;
+                               font-size: 28px;
+                               font-weight: bold;
+                               margin-top: -25px;
+                               margin-right: -15px;
+
+                           }
+
+                           .close:hover,
+                           .close:focus {
+                               color: #000;
+                               text-decoration: none;
+                               cursor: pointer;
+                           }
+
+
+
+
+
                     /* make sidebar nav vertical */
 
                     .sidebar-nav {
@@ -151,7 +197,13 @@
 
 
                         <div class="row" style="background-color: #F8F9FB;padding-top: 2%;border-radius:5px;">
-                            <div class="col-md-3 sidebar-nav">
+
+                         <div id="myModal" class="modelwindow">
+
+                                          <!-- Modal content -->
+                                            <div class="modal-content">
+                                              <span class="closemodal">&times;</span>
+                            <div>
                                 <div class="panel panel-default" ng-if="chartViewModel.selectedProcess.processName == null" class="animate-if">
                                     <div class="panel-heading" data-toggle="collapse" data-parent="#accordion"><spring:message code="wfdesigner.page.panel_heading"/></div>
                                     <div class="panel-body"><spring:message code="wfdesigner.page.panel_body"/></div>
@@ -361,7 +413,7 @@
                                                     </div>
 
                                                     <div class="clearfix"></div>
-                                                     <button type="submit" ng-click="insertFilterProp(chartViewModel.selectedProcess.processId)" class="btn btn-primary  pull-right">Submit</button>
+                                                     <button type="submit" ng-click="insertFilterProp(chartViewModel.selectedProcess.processId)" class="btn btn-primary  pull-right">Save</button>
                                                 </form>
 
                                          <form class="form-horizontal" role="form" ng-if="genConfig.type == 'sort'">
@@ -383,7 +435,7 @@
 
 
                                                     <div class="clearfix"></div>
-                                                     <button type="submit" ng-click="insertSortProp(chartViewModel.selectedProcess.processId)" class="btn btn-primary  pull-right">Submit</button>
+                                                     <button type="submit" ng-click="insertSortProp(chartViewModel.selectedProcess.processId)" class="btn btn-primary  pull-right">Save</button>
                                                 </form>
 
 
@@ -513,7 +565,14 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-9">
+
+                            </div>
+                            </div>
+
+
+
+
+                            <div class="col-md-12">
                                 <div class="row">
                                     <div class="panel">
                                         <div class="panel-body">

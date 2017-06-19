@@ -215,6 +215,7 @@
     <g
             ng-repeat="node in chart.nodes"
             ng-mousedown="nodeMouseDown($event, node)"
+            ng-dblclick="nodeDoubleClick($event, node)"
             ng-attr-transform="translate({{node.x()}}, {{node.y()}})"
             >
 
