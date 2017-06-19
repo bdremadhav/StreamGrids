@@ -3,7 +3,7 @@
 	background-color: #3D525F !important;
 }
 .wizard>.steps li a:hover, .wizard>.steps li a {
-	padding: 4px !important;
+	padding: 8px !important;
 }
 .wizard>.steps .current a, .wizard>.steps .current a:hover, .wizard>.steps .current a:active{
 	background-color: #F2B30B !important;
@@ -52,7 +52,7 @@
 
 .wizard > .content {
 	background-color: #F8F9FB;
-	min-height: 38em;
+	min-height: 32em;
 }
 .wizard > .content{
 	margin: 0;
