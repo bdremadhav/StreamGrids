@@ -19,7 +19,7 @@
 	<!-- Jquery Core Js -->
         <script src="../MaterialDesign_css/jquery.min.js"></script>
 
-
+        <script src="../js/bootstrap.js"></script>
 
         <!-- Slimscroll Plugin Js -->
         <script src="../MaterialDesign_css/jquery.slimscroll.js"></script>
@@ -35,7 +35,7 @@
         <script src="../MaterialDesign_css/morris.js"></script>
 
 
-            <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
+
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <link rel="stylesheet" href="../css/css/bootstrap.min.css" />
             <link rel="stylesheet" href="../css/bootstrap.custom.css" />
@@ -275,7 +275,7 @@
                                  </li>
 
                                   <li>
-                                     <a  href="sessions.page"><i class="mdi mdi-24px mdi-watch"></i><span>Sessions</span></a>
+                                     <a  href="sessions.page"><i class="mdi mdi-24px mdi-forum"></i><span>Sessions</span></a>
                                   </li>
 
                                   <li>
@@ -311,7 +311,7 @@
 
                                      <!-- /.container-fluid -->
                                  </nav>
-
+                </div>
             <script>
                 var app = angular.module("myApp", []);
                 app.controller("myCtrl", function ($scope) {
