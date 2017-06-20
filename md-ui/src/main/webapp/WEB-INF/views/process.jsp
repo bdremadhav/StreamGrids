@@ -1196,6 +1196,78 @@
                                 		return $img2;
                                 	}
                                 },
+                                KillProcess: {                    
+                                        width: '5%',
+                                        sorting: false,
+                                        edit: false,
+                                        create: false,
+                                        title: 'Kill',
+                                        display: function(data) {
+                                            var $img2 = $('<span title=kill class="label-icons label-execute" ></span>');
+                                            $img2.click(function() {
+                                                console.log(data);
+                                                $("#kill-dialog-confirm").dialog({
+                                                    resizable: false,
+                                                    height: 'auto',
+                                                    modal: true,
+                                                    buttons: {
+                                                        Cancel: function() {
+                                                            $(this).dialog("close");
+                                                        },
+                                                        'Yes Kill': function() {
+                                                            $(this).dialog("close");
+                                                            return $.Deferred(function($dfd) {
+                                                                var processData = jQuery.param(data.record);
+                                                                console.log(processData);
+                                                                $.ajax({
+                                                                    url: '/mdrest/process/kill/',
+                                                                    type: 'POST',
+                                                                    data: processData,
+                                                                    dataType: 'json',
+                                                                    success: function(data) {
+                                                                        if(data.Result == "OK") {
+                                                                            console.log(data);
+                                                                            $("#kill-result").dialog({
+                                                                                resizable: false,
+                                                                                height: 'auto',
+                                                                                modal: true,
+                                                                                buttons: {
+                                                                                    "OK": function() {
+                                                                                        $(this).dialog("close");
+                                                                                    }
+                                                                                }
+                                                                            }).html('<p><span class="jtable-confirm-message"><spring:message code="process.page.title_process"/>'+' <b>' +data.Record.processId +'</b> '+' successfully killed</span></p>');
+                                                                        } else {
+                                                                               if(data.Message == "ACCESS DENIED")
+                                                                                {alert(data.Message);}
+                                                                                 else{
+                                                                            console.log(data);
+                                                                            $("#execute-fail").dialog({
+                                                                                resizable: false,
+                                                                                height: 'auto',
+                                                                                modal: true,
+                                                                                buttons: {
+                                                                                    "OK": function() {
+                                                                                        $(this).dialog("close");
+                                                                                    }
+                                                                                }
+                                                                            }).html('<p><span class="jtable-confirm-message">Attempt to kill failed</span></p>');
+                                                                        }}
+                                                                    },
+                                                                    error: function() {
+                                                                        $dfd.reject();
+                                                                    }
+
+                                                                });
+                                                            });
+                                                        }
+
+                                                    }
+                                                });
+                                            });
+                                            return $img2;
+                                        }
+                                    },
 
 
                                 InstanceExecs: {                    
@@ -1566,6 +1638,14 @@
 						</span>
 					</p>
 				</div>
+				<div id="kill-dialog-confirm" style="display: none;">
+                    <p>
+                        <span class="ui-icon-alert"></span>
+                        <span class="dialog-title-custom"><spring:message code="process.page.span_sure"/></span>
+                        <span class="jtable-confirm-message">This will kill the process in cluster.
+                        </span>
+                    </p>
+                </div>
 				<div id="alert-dialog" style="display: none;">
                 					<p>
                 						<span class="ui-icon-alert"></span>
@@ -1588,6 +1668,14 @@
 						<span class="jtable-confirm-message"><spring:message code="process.page.span_process_start"/></span>
 					</p>
 				</div>
+
+				<div id="kill-result" style="display: none;">
+                    <p>
+                        <span class="ui-icon ui-icon-alert"></span>
+                        <span class="jtable-confirm-message">Process Killed</span>
+                    </p>
+                </div>
+
 				<div id="execute-fail" style="display: none;">
 					<p>
 						<span class="ui-icon ui-icon-alert"></span>

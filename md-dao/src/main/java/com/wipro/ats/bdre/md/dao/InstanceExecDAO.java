@@ -102,6 +102,25 @@ public class InstanceExecDAO {
         return instanceExecList;
     }
 
+    public InstanceExec getLatestExecofProcess(Integer processId){
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        InstanceExec instanceExec = new InstanceExec();
+
+        try {
+            Criteria criteria=  session.createCriteria(InstanceExec.class).add(Restrictions.eq("process.processId", processId));
+            criteria.addOrder(Order.desc("instanceExecId"));
+            criteria.setMaxResults(1);
+            instanceExec = (InstanceExec) criteria.uniqueResult();
+
+        }catch (Exception e){
+            LOGGER.error(e);
+        }finally {
+            session.close();
+        }
+        return instanceExec;
+    }
+
     public Long totalRecordCount() {
         Session session = sessionFactory.openSession();
         session.beginTransaction();

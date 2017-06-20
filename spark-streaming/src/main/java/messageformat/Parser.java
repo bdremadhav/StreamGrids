@@ -11,7 +11,8 @@ import java.util.Properties;
  */
 public class Parser {
     public static final String MESSAGEFORMATPACKAGE = "messageformat.";
-    public static Object[] parseMessage(String record,Integer pid){
+    public static Object[] parseMessage(String record,Integer pid) throws Exception{
+        try {
         Object[] attributes = new Object[]{};
 
         String messageType="";
@@ -25,15 +26,18 @@ public class Parser {
 
         System.out.println("messageType = " + messageType);
         String messageClassName = MESSAGEFORMATPACKAGE+messageType+"Parser";
-        try {
+
             Class sourceClass = Class.forName(messageClassName);
             MessageParser messageObject = (MessageParser)sourceClass.newInstance();
             attributes = messageObject.parseRecord(record,pid);
             System.out.println("attributes = " + attributes);
+            return attributes;
         }catch (Exception e){
             e.printStackTrace();
+            System.out.println("e = " + e);
+            throw e;
         }
-        return attributes;
+
     }
 
 }
