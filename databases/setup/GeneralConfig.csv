@@ -74,27 +74,27 @@
 
 
 '41','param','Parameters','Additional parameters', 1,'true','text', 1
-'43','Filter','Filter','Filter', 1,'true','filter', 1
+'43','default','Filter','Filter', 1,'true','filter', 1
 '66','Sort','Sort','Sort', 1,'true','sort', 1
 
-'42','Kafka','Kafka Properties','Kafka', 1,'true','source', 1
-'46','Twitter','Twitter Properties','Twitter', 1,'true','source', 1
-'47','Kinesis','Kinesis Properties','Kinesis', 1,'true','source', 1
-'48','MQTT','MQTT Properties','MQTT', 1,'true','source', 1
-'49','RabbitMQ','RabbitMQ Properties','RabbitMQ', 1,'true','source', 1
-'50','Socket','Socket Properties','Socket', 1,'true','source', 1
-'51','S3','S3 Properties','S3', 1,'true','source', 1
+'42','message','Kafka Properties','Kafka', 1,'true','source', 1
+'46','message','Twitter Properties','Twitter', 1,'true','source', 1
+'47','message','Kinesis Properties','Kinesis', 1,'true','source', 1
+'48','message','MQTT Properties','MQTT', 1,'true','source', 1
+'49','message','RabbitMQ Properties','RabbitMQ', 1,'true','source', 1
+'50','message','Socket Properties','Socket', 1,'true','source', 1
+'51','message','S3 Properties','S3', 1,'true','source', 1
 
-'52','Kafka','Kafka Properties','Kafka', 1,'true','emitter', 1
-'53','Kinesis','Kinesis Properties','Kinesis', 1,'true','emitter', 1
-'54','MQTT','MQTT Properties','MQTT', 1,'true','emitter', 1
-'55','RabbitMQ','RabbitMQ Properties','RabbitMQ', 1,'true','emitter', 1
-'56','Socket','Socket Properties','Socket', 1,'true','emitter', 1
-'57','JDBC','JDBC Properties','JDBC', 1,'true','emitter', 1
+'52','connection','Kafka Properties','Kafka', 1,'true','emitter', 1
+'53','connection','Kinesis Properties','Kinesis', 1,'true','emitter', 1
+'54','connection','MQTT Properties','MQTT', 1,'true','emitter', 1
+'55','connection','RabbitMQ Properties','RabbitMQ', 1,'true','emitter', 1
+'56','connection','Socket Properties','Socket', 1,'true','emitter', 1
+'57','connection','JDBC Properties','JDBC', 1,'true','emitter', 1
 
-'44','HDFS','HDFS Properties','hdfs',1,'true','persistentStore',1
-'58','Hive','Hive Properties','Hive',1,'true','persistentStore',1
-'59','HBase','HBase Properties','HBase',1,'true','persistentStore',1
+'44','connection','HDFS Properties','hdfs',1,'true','persistentStore',1
+'58','connection','Hive Properties','Hive',1,'true','persistentStore',1
+'59','connection','HBase Properties','HBase',1,'true','persistentStore',1
 
 'column_transformation','no transformation','no transformation','no column transformation',1,'no transformation','text',1
 'column_transformation','upper','upper','changing column data in uppercase',1,'upper','text',1

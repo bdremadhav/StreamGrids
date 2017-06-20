@@ -102,6 +102,7 @@ var nodePropertiesCache = {},
 	},
 	getNPsC = function (arg) { //arg can take only pid or pid key pair
 		var returnresult;
+		console.log(arg[0] +"  " +arg[1]);
 		if (arg.length == 2) {
 			returnresult = nodePropertiesCache[arg[0].toString()][arg[1]];
 		}

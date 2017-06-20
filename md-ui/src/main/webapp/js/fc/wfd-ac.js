@@ -157,6 +157,7 @@ var propertiesAC = function(ajaxURL, type, arg) {
 					console.log('get process pid not found, calling ajax');
 					if (arg.length == 2) {
 						ajaxURL = ajaxURL + arg[0] + '/' + arg[1];
+						console.log("ajex url is "+ajaxURL);
 					}
 					else {
 						ajaxURL = ajaxURL + arg;
@@ -341,6 +342,7 @@ var ajaxCall = function (ajaxURL, type, putData, optionscall) {
 	    async: false,
 	    dataType: 'json',
 	    success: function(data) {
+	           console.log(data);
 	    	if (recordObjectError(data)) {
 	    		if (optionscall) {
 	    			returnObject = data.Options;
@@ -350,6 +352,7 @@ var ajaxCall = function (ajaxURL, type, putData, optionscall) {
 	    		}
 	    		else {
 	    			returnObject = data.Record;
+	    			console.log();
 	    			if (returnObject == null) {
 	    				returnObject = 'null'
 	    			}

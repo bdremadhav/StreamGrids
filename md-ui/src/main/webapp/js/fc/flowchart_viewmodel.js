@@ -647,10 +647,14 @@ var flowchart = {
 
                 this.configKeyVal;
                 this.getKeyValueFunction = function (val) {
+                console.log(val);
+                   console.log("in flowchart_viewmodel");
+                   console.log("processid is "+this.selectedProcess.processId);
                     this.configKeyVal = val;
                     var dataRecord = propertiesAC('/mdrest/properties/', 'GET', [this.selectedProcess.processId, val.key]);
                     if (dataRecord) {
                         this.selectedProcessConfigKeyValue = dataRecord;
+                        console.log(dataRecord);
                     } else {
                         alertBox('danger', 'Error has occured');
                     }
