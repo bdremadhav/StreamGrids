@@ -214,8 +214,10 @@
                 <!-- /.container-fluid -->
             </nav>
 
-            <div >
-                <iframe id="dframe" src=""  scrolling="yes" style="overflow-y:visible;width:100%; height: 800px; border: none;"></iframe>
+
+            <div>
+                <iframe id="dframe" src="welcome.page" scrolling="yes" style="overflow-y:visible;width:100%; height: 800px; border: none;"></iframe>
+
             </div>
 
      <!--

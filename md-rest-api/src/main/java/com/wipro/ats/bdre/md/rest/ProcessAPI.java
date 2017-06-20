@@ -30,6 +30,8 @@ import com.wipro.ats.bdre.md.dao.jpa.*;
 import com.wipro.ats.bdre.md.rest.beans.ProcessExport;
 import com.wipro.ats.bdre.md.rest.util.BindingResultError;
 import com.wipro.ats.bdre.md.rest.util.DateConverter;
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecutor;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -73,6 +75,8 @@ public class ProcessAPI extends MetadataAPIBase {
     PermissionTypeDAO appPermissionDAO;
     @Autowired
     UserRolesDAO userRolesDAO;
+    @Autowired
+    ExecStatusDAO execStatusDAO;
 
     /**
      * This method calls proc GetProcess and fetches a record corresponding to processId passed.
@@ -219,6 +223,10 @@ public class ProcessAPI extends MetadataAPIBase {
                 if(daoProcess.getUsers()!=null)
                 tableProcess.setUserName(daoProcess.getUsers().getUsername());
                 tableProcess.setCounter(counter);
+                InstanceExec instanceExec = instanceExecDAO.getLatestExecofProcess(daoProcess.getProcessId());
+                Integer execStatusId = instanceExec.getExecStatus().getExecStateId();
+                String execStatusDesc = execStatusDAO.get(execStatusId).getDescription();
+                tableProcess.setLatestExecStatus(execStatusDesc);
                 processes.add(tableProcess);
             }
             restWrapper = new RestWrapper(processes, RestWrapper.OK);
@@ -898,6 +906,39 @@ public class ProcessAPI extends MetadataAPIBase {
         } catch (IOException io) {
             LOGGER.error(io);
             restWrapper = new RestWrapper(io.getMessage(), RestWrapper.ERROR);
+        }
+        return restWrapper;
+    }
+
+    @RequestMapping(value = {"/kill", "/kill/"}, method = RequestMethod.POST)
+    @ResponseBody public
+    RestWrapper killProcess(@ModelAttribute("process")
+                               @Valid Process process, BindingResult bindingResult, Principal principal) {
+        RestWrapper restWrapper = null;
+        ExecutionInfo executionInfo = new ExecutionInfo();
+        executionInfo.setProcessId(process.getProcessId());
+        try {
+            InstanceExec instanceExec = instanceExecDAO.getLatestExecofProcess(process.getProcessId());
+            if(instanceExec.getExecStatus().getExecStateId() == 8 || instanceExec.getExecStatus().getExecStateId() == 7){
+                restWrapper = new RestWrapper("Already killed", RestWrapper.ERROR);
+            }else {
+                String command = "/usr/bin/yarn application -kill  " + instanceExec.getApplicationId();
+                CommandLine oCmdLine = CommandLine.parse(command);
+
+                DefaultExecutor oDefaultExecutor = new DefaultExecutor();
+                oDefaultExecutor.setExitValue(0);
+                int result = oDefaultExecutor.execute(oCmdLine);
+                System.out.println("result = " + result);
+                if (result == 0) {
+                    ExecStatus execStatus = execStatusDAO.get(7);
+                    instanceExec.setExecStatus(execStatus);
+                    instanceExecDAO.update(instanceExec);
+                }
+                restWrapper = new RestWrapper(executionInfo, RestWrapper.OK);
+            }
+        }catch (Exception e) {
+            LOGGER.error(e + " Executing workflow failed " + e.getCause());
+            restWrapper = new RestWrapper(e.getMessage(), RestWrapper.ERROR);
         }
         return restWrapper;
     }
