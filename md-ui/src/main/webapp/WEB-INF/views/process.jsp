@@ -1268,7 +1268,11 @@
                                             return $img2;
                                         }
                                     },
-
+                                 latestExecStatus: {
+                                    title: 'Status',
+                                    create:false,
+                                    edit:false
+                                 },
 
                                 InstanceExecs: {                    
                                     width: '10%',
