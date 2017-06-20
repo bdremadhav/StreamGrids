@@ -21,19 +21,24 @@ public class RabbitMQSource implements Source{
 
     @Override
     public JavaDStream execute(JavaStreamingContext ssc, Integer pid) throws Exception {
-        Map<String, String> rabbitMqConParams = new HashMap<String, String>();
-        rabbitMqConParams.put("host", "localhost");
-        rabbitMqConParams.put("queueName", "hello");
+        try {
+            Map<String, String> rabbitMqConParams = new HashMap<String, String>();
+            rabbitMqConParams.put("host", "localhost");
+            rabbitMqConParams.put("queueName", "hello");
 
-        JavaReceiverInputDStream<String> receiverStream = RabbitMQUtils.createJavaStream(ssc, String.class, rabbitMqConParams, new Function<QueueingConsumer.Delivery, String>() {
-            @Override
-            public String call(QueueingConsumer.Delivery delivery) throws Exception {
-                System.out.println("delivery.toString() = " + delivery.toString());
-                return delivery.toString();
-            }
-        });
-        System.out.println("receiverStream.toString() = " + receiverStream.toString());
-        return receiverStream;
+            JavaReceiverInputDStream<String> receiverStream = RabbitMQUtils.createJavaStream(ssc, String.class, rabbitMqConParams, new Function<QueueingConsumer.Delivery, String>() {
+                @Override
+                public String call(QueueingConsumer.Delivery delivery) throws Exception {
+                    System.out.println("delivery.toString() = " + delivery.toString());
+                    return delivery.toString();
+                }
+            });
+            System.out.println("receiverStream.toString() = " + receiverStream.toString());
+            return receiverStream;
+        }catch (Exception e){
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     //createJavaDistributedStream[R](javaSparkStreamingContext, params, JFunction[Array[Byte], R]);
