@@ -944,7 +944,7 @@ $scope.createFirstProcess = function() {
         'canRecover': '0',
         'nextProcessIds': '0',
         'enqProcessId': '0',
-        'busDomainId': '1',
+        'busDomainId': $('#domain').val(),
         'ownerRoleId':$('#ownerRoleId').val(),
          'permissionTypeByUserAccessId': $('#permissionTypeByUserAccessId').val(),
          'permissionTypeByGroupAccessId': $('#permissionTypeByGroupAccessId').val(),

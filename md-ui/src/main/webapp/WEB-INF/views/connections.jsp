@@ -506,7 +506,40 @@ function source()
     				    }
     			    });
     			    });
-    			    }
+    			    },
+                deleteAction: function(item) {
+                    console.log(item);
+                    return $.Deferred(function($dfd) {
+                        $.ajax({
+                            url: '/mdrest/connections/' + item.connectionName,
+                            type: 'DELETE',
+                            data: item,
+                            dataType: 'json',
+                            success: function(data) {
+                           if(data.Result == "OK") {
+
+                               $dfd.resolve(data);
+
+                           }
+                           else
+                           {
+                            if(data.Message == "ACCESS DENIED")
+                            {
+                            data.Result="OK";
+                            $dfd.resolve(data);
+                            alert(data.Message);
+
+                            }
+                            else
+                            $dfd.resolve(data);
+                           }
+                       },
+                            error: function() {
+                                $dfd.reject();
+                            }
+                        });
+                    });
+                }
     		    },
     		    fields: {
 
@@ -553,7 +586,33 @@ function source()
                                                     }
                                                 }); ;
                                             });
-                                        }
+                                        },
+
+
+                                         updateAction: function(postData) {
+                                                        console.log(postData);
+                                                       return $.Deferred(function($dfd) {
+                                                        $.ajax({
+                                                           url: '/mdrest/connections/update/'+item.record.connectionName,
+                                                           type: 'POST',
+                                                           data: postData,
+                                                           dataType: 'json',
+                                                            success: function(data) {
+                                                           if(data.Result == "OK") {
+
+                                                               $dfd.resolve(data);
+
+                                                           }
+                                                           }
+                                                         ,
+                                                           error: function() {
+                                                               $dfd.reject();
+                                                           }
+                                                       });
+                                                       });
+                                                    }
+
+
                                     },
                                     fields: {
 
@@ -585,22 +644,24 @@ function source()
                         return $img;
                     }
                 },
+
+                 connectionType: {
+                    width: '5%',
+                      key : true,
+                      list: true,
+                      create:false,
+                      edit: false,
+                      title: 'Connection Type'
+                  },
                 connectionName: {
                     width: '5%',
                     key : true,
                     list: true,
                     create:false,
-                    edit: true,
+                    edit: false,
                     title: 'Connection Name'
-                },
-                connectionType: {
-                    width: '5%',
-                      key : true,
-                      list: true,
-                      create:false,
-                      edit: true,
-                      title: 'Connection Type'
-                  }
+                }
+
     		    }
     	    });
     		    $('#Container').jtable('load');
