@@ -36,7 +36,7 @@
 	</script>
     </head>
     <body onload='document.loginForm.username.focus();'>
-	<div class="text-center text-info">Streaming Analytics Platform</div>
+	<div class="text-center text-info">STREAM GRIDS</div>
 	<div class="text-center text-footer"><spring:message code="login.page.footer_bdre"/></div>
 	<div id="login-box" class="center-block login-box">
 

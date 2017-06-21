@@ -233,10 +233,6 @@
         						-webkit-transform: rotate(90deg); /* Chrome, Safari, Opera */
         						transform: rotate(90deg);
         					}
-ul{
-  display:flex;
-  list-style:none;
-  }
 
   .btn-primary1 {
       background-color: #23C9A4 !important;
@@ -499,6 +495,25 @@ ul{
     };
 
 </script>
+<script type="text/javascript">
+             var workspace="";
+             function findWorkspace() {
+                 var location=window.location.href;
+                 console.log(window.location.href);
+                 var res = location.split("/");
+                 for (var i in res) {
+                  if(res[i].includes("mdui")==true)
+                     {
+                      workspace=res[i];
+                      console.log(workspace);
+                     }
+                 }
+
+                  if(workspace!="mdui")
+                  $('#logout').append(" from "+workspace.replace("mdui_"+""));
+             }
+             window.onload = findWorkspace;
+             </script>
 <script>
 function source()
       {
@@ -543,7 +558,6 @@ function source()
 </script>
 </head>
 <body>
- <div class="page-header">Connections</div>
 <body ng-app="myApp" ng-controller="myCtrl">
 
 <div class="sidebar-wrapper">
@@ -563,9 +577,11 @@ function source()
                                  <li>
                                     <a href="connections.page?type=persistance"><i class="mdi mdi-24px mdi-logout"></i><span>Sink Configuration</span></a>
                                  </li>
-
+<li>
+                                    <a  href="streamingmessage.page"><i class="mdi mdi-24px mdi-forum"></i><span>View Messages</span></a>
+                                 </li>
                                   <li>
-                                    <a  href="premessageconfig.page"><i class="mdi mdi-24px mdi-forum"></i><span>Messages</span></a>
+                                    <a  href="premessageconfig.page"><i class="mdi mdi-24px mdi-forum"></i><span>Create Messages</span></a>
                                  </li>
 
                                  <li>
@@ -608,7 +624,7 @@ function source()
                                               <ul class="nav navbar-nav navbar-right" >
                                                   <li class="dropdown user-icon-style"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="usericon"></span></a>
                                                       <ul class="dropdown-menu" role="menu">
-                                                          <li><a href="/auth/bdre/security/logout">Logout <security:authentication property="principal.username"/></a></li>
+                                                          <li><a href="/auth/bdre/security/logout" id="logout">Logout <security:authentication property="principal.username"/></a></li>
                                                       </ul>
                                                   </li>
                                               </ul>
@@ -617,14 +633,14 @@ function source()
 
                                       <!-- /.container-fluid -->
                                   </nav>
- <button type="button" class=" btn-primary1" id="createbutton" style="margin-left:1020px;margin-bottom: 5px;"onclick="create()">Create New Connection</button>
+ <button type="button" class=" btn-primary1" id="createbutton" style="margin-left:90%;margin-bottom: 5px;"onclick="create()">Create Connection</button>
    <div id="tabs" style="background:transparent" width="1000px">
    </div>
      <div id="source-tab" style="display:none;">
                 <section >
-                   <div id="sourceConnectionFields">
-                        <label style="left: 125px;" class="control-label col-sm-3">Source Configuration Type</label>
-                        <div id="dropdownSource" class="btn-group" style="left: 140px;" >
+                   <div id="sourceConnectionFields" style="padding-left: 11%;">
+                        <label  class="control-label col-sm-3" style="padding-left:0px;">Source Configuration Type</label>
+                        <div id="dropdownSource" class="btn-group"  >
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="false" aria-expanded="true" id="srcDropdown">
                                 <span>Select Source</span><span class="caret"></span>
                             </button>

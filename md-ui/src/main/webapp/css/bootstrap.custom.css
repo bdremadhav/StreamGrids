@@ -140,6 +140,7 @@ div.form-group:nth-child(odd) {
 .navbar-inverse {
 	border: none;
 	background-color:#2d89ef;
+	min-height: 55px;
 }
 .navbar-inverse .navbar-nav>li>a:hover {
 	color: #521818

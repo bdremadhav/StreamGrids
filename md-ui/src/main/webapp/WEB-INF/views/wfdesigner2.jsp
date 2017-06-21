@@ -194,11 +194,26 @@
 			</style>
 
             </head>
-            <div class="page-header"><spring:message code="wfdesigner.page.create_new_workflow"/></div>
 
+            <script type="text/javascript">
+                         var workspace="";
+                         function findWorkspace() {
+                             var location=window.location.href;
+                             console.log(window.location.href);
+                             var res = location.split("/");
+                             for (var i in res) {
+                              if(res[i].includes("mdui")==true)
+                                 {
+                                  workspace=res[i];
+                                  console.log(workspace);
+                                 }
+                             }
 
-
-
+                             if(workspace!="mdui")
+                             $('#logout').append(" from "+workspace.replace("mdui_"+""));
+                         }
+                         window.onload = findWorkspace;
+                         </script>
 
             <div class="sidebar-wrapper">
                                            <div class="logo-wrap">
@@ -216,9 +231,11 @@
                                                <li>
                                                   <a href="connections.page?type=persistance"><i class="mdi mdi-24px mdi-logout"></i><span>Sink Configuration</span></a>
                                                </li>
-
+                                                 <li>
+                                                  <a  href="streamingmessage.page"><i class="mdi mdi-24px mdi-forum"></i><span>View Messages</span></a>
+                                                 </li>
                                                 <li>
-                                                  <a  href="premessageconfig.page"><i class="mdi mdi-24px mdi-forum"></i><span>Messages</span></a>
+                                                  <a  href="premessageconfig.page"><i class="mdi mdi-24px mdi-forum"></i><span>Create Messages</span></a>
                                                </li>
 
                                                <li>
@@ -262,7 +279,7 @@
                                                <ul class="nav navbar-nav navbar-right" >
                                                    <li class="dropdown user-icon-style"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" style="color: white;" aria-expanded="false">Log Out<span class="usericon"></span></a>
                                                        <ul class="dropdown-menu" role="menu">
-                                                           <li><a href="/auth/bdre/security/logout">Logout <security:authentication property="principal.username"/></a></li>
+                                                           <li><a href="/auth/bdre/security/logout" id="logout">Logout <security:authentication property="principal.username"/></a></li>
                                                        </ul>
                                                    </li>
                                                </ul>
@@ -272,6 +289,10 @@
                                        <!-- /.container-fluid -->
                                    </nav>
                                     </div>
+
+
+
+
             <c:choose>
                 <c:when test="${not empty param.processId}">
 

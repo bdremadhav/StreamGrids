@@ -189,6 +189,28 @@
         <script src="../js/jquery-ui-1.10.3.custom.js" type="text/javascript"></script>
         <script src="../js/jquery.jtable.js" type="text/javascript"></script>
         <script src="../js/bootstrap.js"></script>
+
+
+        <script type="text/javascript">
+                     var workspace="";
+                     function findWorkspace() {
+                         var location=window.location.href;
+                         console.log(window.location.href);
+                         var res = location.split("/");
+                         for (var i in res) {
+                          if(res[i].includes("mdui")==true)
+                             {
+                              workspace=res[i];
+                              console.log(workspace);
+                             }
+                         }
+
+                  if(workspace!="mdui")
+                  $('#logout').append(" from "+workspace.replace("mdui_"+""));
+                     }
+                     window.onload = findWorkspace;
+                     </script>
+
         <script type="text/javascript">
 	    $(document).ready(function () {
 		$('#Container').jtable({
@@ -447,9 +469,11 @@
                                                      <li>
                                                         <a href="connections.page?type=persistance"><i class="mdi mdi-24px mdi-logout"></i><span>Sink Configuration</span></a>
                                                      </li>
-
+<li>
+                                    <a  href="streamingmessage.page"><i class="mdi mdi-24px mdi-forum"></i><span>View Messages</span></a>
+                                 </li>
                                                       <li>
-                                                        <a  href="premessageconfig.page"><i class="mdi mdi-24px mdi-forum"></i><span>Messages</span></a>
+                                                        <a  href="premessageconfig.page"><i class="mdi mdi-24px mdi-forum"></i><span>Create Messages</span></a>
                                                      </li>
 
                                                      <li>
@@ -490,12 +514,12 @@
                                                  </div>
 
                                                      <ul class="nav navbar-nav navbar-right" >
-                                                         <li class="dropdown user-icon-style"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="usericon"></span></a>
-                                                             <ul class="dropdown-menu" role="menu">
-                                                                 <li><a href="/auth/bdre/security/logout">Logout <security:authentication property="principal.username"/></a></li>
-                                                             </ul>
-                                                         </li>
-                                                     </ul>
+                                                      <li class="dropdown user-icon-style"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="usericon"></span></a>
+                                                          <ul class="dropdown-menu" role="menu">
+                                                              <li><a href="/auth/bdre/security/logout" id="logout">Logout <security:authentication property="principal.username"/></a></li>
+                                                          </ul>
+                                                      </li>
+                                                  </ul>
                                                  </div>
                                                  <!-- /.navbar-collapse -->
 
