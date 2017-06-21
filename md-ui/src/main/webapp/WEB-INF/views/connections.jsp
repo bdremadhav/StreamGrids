@@ -590,14 +590,14 @@ function source()
 
                                       <!-- /.container-fluid -->
                                   </nav>
- <button type="button" class=" btn-primary1" id="createbutton" style="margin-left:1020px;margin-bottom: 5px;"onclick="create()">Create New Connection</button>
+ <button type="button" class=" btn-primary1" id="createbutton" style="margin-left:90%;margin-bottom: 5px;"onclick="create()">Create Connection</button>
    <div id="tabs" style="background:transparent" width="1000px">
    </div>
      <div id="source-tab" style="display:none;">
                 <section >
-                   <div id="sourceConnectionFields">
-                        <label style="left: 125px;" class="control-label col-sm-3">Source Configuration Type</label>
-                        <div id="dropdownSource" class="btn-group" style="left: 140px;" >
+                   <div id="sourceConnectionFields" style="padding-left: 11%;">
+                        <label  class="control-label col-sm-3" style="padding-left:0px;">Source Configuration Type</label>
+                        <div id="dropdownSource" class="btn-group"  >
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="false" aria-expanded="true" id="srcDropdown">
                                 <span>Select Source</span><span class="caret"></span>
                             </button>
