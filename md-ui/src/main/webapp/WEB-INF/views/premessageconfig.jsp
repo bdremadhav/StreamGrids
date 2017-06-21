@@ -1019,7 +1019,7 @@ wizard = $(document).ready(function() {
                                        </li>
 
                                         <li>
-                                          <a  href="premessageconfig.page"><i class="mdi mdi-24px mdi-forum"></i><span>Messages</span></a>
+                                          <a  href="premessageconfig.page"><i class="mdi mdi-24px mdi-forum"></i><span>Create Messages</span></a>
                                        </li>
 
                                        <li>
