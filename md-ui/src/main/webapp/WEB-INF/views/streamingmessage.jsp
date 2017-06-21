@@ -115,7 +115,7 @@
                      }
                  }
                   if(workspace!="mdui")
-                  $('#logout').append(" from "+workspace.replace("mdui_"+""));
+                  $('#logout').append(" from "+workspace.substring(5,workspace.length));
              }
              window.onload = findWorkspace;
              </script>
