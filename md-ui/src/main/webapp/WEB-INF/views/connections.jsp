@@ -442,11 +442,8 @@
     <script src="../js/jquery.steps.min.js"></script>
     <script src="../js/jquery.jtable.js" type="text/javascript"></script>
     <script src="../js/bootstrap.js" type="text/javascript"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.js" type="text/javascript"></script>
-
-
-
-   <script type="text/javascript">
+	<script src="../js/angular.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
 
     var map = new Object();
     var selectedSourceType = '';

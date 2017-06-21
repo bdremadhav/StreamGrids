@@ -33,9 +33,6 @@
         <!-- Morris Plugin Js -->
         <script src="../MaterialDesign_css/raphael.min.js"></script>
         <script src="../MaterialDesign_css/morris.js"></script>
-
-
-
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <link rel="stylesheet" href="../css/css/bootstrap.min.css" />
             <link rel="stylesheet" href="../css/bootstrap.custom.css" />

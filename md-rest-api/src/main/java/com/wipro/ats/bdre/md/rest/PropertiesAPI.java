@@ -130,6 +130,8 @@ public class PropertiesAPI extends MetadataAPIBase {
                 PropertiesId propertiesId=new PropertiesId();
                 propertiesId.setProcessId(processId);
                 propertiesId.setPropKey(string);
+                com.wipro.ats.bdre.md.dao.jpa.Properties alreadyPresentProperties=propertiesDAO.get(propertiesId);
+                if(alreadyPresentProperties==null){
                 properties.setId(propertiesId);
                 properties.setConfigGroup("default");
                 if (string.equals("messageName"))
@@ -140,6 +142,13 @@ public class PropertiesAPI extends MetadataAPIBase {
                 properties.setPropValue(map.get(string));
                 properties.setDescription("addition of kafka properties");
                 propertiesDAO.insert(properties);
+                }
+                else
+                {
+                   alreadyPresentProperties.setPropValue(map.get(string));
+                    propertiesDAO.update(alreadyPresentProperties);
+                }
+
             }
 
             restWrapper = new RestWrapper(null, RestWrapper.OK);

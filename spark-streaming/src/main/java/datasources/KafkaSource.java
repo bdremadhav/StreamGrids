@@ -67,16 +67,22 @@ public class KafkaSource implements Source{
     }
 
     @Override
-    public JavaDStream execute(JavaStreamingContext ssc,Integer pid) {
-        System.out.println("pid = " + pid);
-        Map<String, String> kafkaParams = getKafkaParams(pid);
+    public JavaDStream execute(JavaStreamingContext ssc,Integer pid) throws Exception {
+        try {
+            System.out.println("pid = " + pid);
+            Map<String, String> kafkaParams = getKafkaParams(pid);
 
-        //TODO changenow
-        //Set<String> topics = getTopics(pid);
-        Set<String> topics = Collections.singleton("test");
-        System.out.println("topics = " + topics);
-        JavaPairInputDStream<String, String> directKafkaStream = KafkaUtils.createDirectStream(ssc, String.class, String.class, StringDecoder.class, StringDecoder.class, kafkaParams, topics);
-        return directKafkaStream.map(Tuple2::_2);
+            //TODO changenow
+            Set<String> topics = getTopics(pid);
+            //Set<String> topics = Collections.singleton("test");
+            System.out.println("topics = " + topics);
+            JavaPairInputDStream<String, String> directKafkaStream = KafkaUtils.createDirectStream(ssc, String.class, String.class, StringDecoder.class, StringDecoder.class, kafkaParams, topics);
+            return directKafkaStream.map(Tuple2::_2);
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("e = " + e);
+            throw e;
+        }
     }
 
 }

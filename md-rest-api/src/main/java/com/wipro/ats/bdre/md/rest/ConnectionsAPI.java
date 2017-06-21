@@ -256,4 +256,46 @@ public class ConnectionsAPI {
     }
 
 
+
+    @RequestMapping(value = {"/{id}"}, method = RequestMethod.DELETE)
+    @ResponseBody
+    public RestWrapper deleteConnection(@PathVariable("id") String connectionName,
+                                             Principal principal) {
+
+        RestWrapper restWrapper = null;
+        try {
+            connectionsDAO.delete(connectionName);
+            restWrapper = new RestWrapper("success", RestWrapper.OK);
+        }
+        catch (Exception e) {
+            LOGGER.error(e);
+            restWrapper = new RestWrapper(e.getMessage(), RestWrapper.ERROR);
+        }
+        return restWrapper;
+    }
+
+
+
+    @RequestMapping(value = {"/update/{id}"}, method = RequestMethod.POST)
+    @ResponseBody
+    public RestWrapper updateConnection(@PathVariable("id") String connectionName,
+                                        @RequestParam(value = "propKey") String key,
+                                        @RequestParam(value = "propValue") String value,
+                                        Principal principal) {
+
+        RestWrapper restWrapper = null;
+        try {
+            LOGGER.info("connectionName is "+connectionName);
+            LOGGER.info("propKey is "+key);
+            LOGGER.info("propValue is "+value);
+            restWrapper = new RestWrapper("success", RestWrapper.OK);
+        }
+        catch (Exception e) {
+            LOGGER.error(e);
+            restWrapper = new RestWrapper(e.getMessage(), RestWrapper.ERROR);
+        }
+        return restWrapper;
+    }
+
+
 }

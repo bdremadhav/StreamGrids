@@ -27,24 +27,30 @@ public class SchemaReader {
     //TODO: update the schema automatically
     //String schemaString = "ipAddress clientIdentd userID dateTimeString method endpoint protocol responseCode contentSize";
 
-    public StructType generateSchema(int pid){
-        GetProcess getProcess=new GetProcess();
-        ProcessInfo processInfo=getProcess.getProcess(pid);
-        GetProperties getProperties=new GetProperties();
+    public StructType generateSchema(int pid) throws Exception{
+        try {
+            GetProcess getProcess = new GetProcess();
+            ProcessInfo processInfo = getProcess.getProcess(pid);
+            GetProperties getProperties = new GetProperties();
 
-        Properties properties=  getProperties.getProperties(processInfo.getProcessId().toString(),"message");
-        String messageName = properties.getProperty("messageName");
-        StreamingMessagesAPI streamingMessagesAPI = new StreamingMessagesAPI();
-        Messages messages = streamingMessagesAPI.getMessage(messageName);
-        String schemaString=messages.getMessageSchema();
-        //Generate the schema based on the string of schema
-        List<StructField> fields = new ArrayList<>();
-        for (String fieldName : schemaString.split(",")) {
-            String columnName = fieldName.split(":")[0];
-            StructField field = DataTypes.createStructField(columnName, DataTypes.StringType, true);
-            fields.add(field);
+            Properties properties = getProperties.getProperties(processInfo.getProcessId().toString(), "message");
+            String messageName = properties.getProperty("messageName");
+            StreamingMessagesAPI streamingMessagesAPI = new StreamingMessagesAPI();
+            Messages messages = streamingMessagesAPI.getMessage(messageName);
+            String schemaString = messages.getMessageSchema();
+            //Generate the schema based on the string of schema
+            List<StructField> fields = new ArrayList<>();
+            for (String fieldName : schemaString.split(",")) {
+                String columnName = fieldName.split(":")[0];
+                StructField field = DataTypes.createStructField(columnName, DataTypes.StringType, true);
+                fields.add(field);
+            }
+            StructType schema = DataTypes.createStructType(fields);
+            return schema;
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("e = " + e);
+            throw e;
         }
-        StructType schema = DataTypes.createStructType(fields);
-        return schema;
     }
 }

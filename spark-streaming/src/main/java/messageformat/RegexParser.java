@@ -17,15 +17,21 @@ public class RegexParser implements MessageParser{
     private static final Pattern PATTERN = Pattern.compile(LOG_ENTRY_PATTERN);
 
     @Override
-    public String[] parseRecord(String record,Integer pid) {
-        Matcher m = PATTERN.matcher(record);
+    public String[] parseRecord(String record,Integer pid) throws Exception{
+        try {
+            Matcher m = PATTERN.matcher(record);
 
-        if (!m.find()) {
-            logger.log(Level.ALL, "Cannot parse logline" + record);
-            throw new RuntimeException("Error parsing logline");
+            if (!m.find()) {
+                logger.log(Level.ALL, "Cannot parse logline" + record);
+                throw new RuntimeException("Error parsing logline");
+            }
+            String[] arguments = {m.group(1), m.group(2), m.group(3), m.group(4),
+                    m.group(5), m.group(6), m.group(7), m.group(8), m.group(9)};
+            return arguments;
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("e = " + e);
+            throw e;
         }
-        String[] arguments = {m.group(1), m.group(2), m.group(3), m.group(4),
-                m.group(5), m.group(6), m.group(7), m.group(8), m.group(9)};
-        return arguments;
     }
 }

@@ -19,16 +19,19 @@ import com.wipro.ats.bdre.exception.MetadataException;
 import com.wipro.ats.bdre.md.api.Export;
 import com.wipro.ats.bdre.md.api.Import;
 import com.wipro.ats.bdre.md.api.base.MetadataAPIBase;
-import com.wipro.ats.bdre.md.beans.*;
+import com.wipro.ats.bdre.md.beans.ExecutionBean;
+import com.wipro.ats.bdre.md.beans.ExecutionInfo;
+import com.wipro.ats.bdre.md.beans.SLAMonitoringBean;
+import com.wipro.ats.bdre.md.beans.SameProcessCodeProcess;
 import com.wipro.ats.bdre.md.beans.table.Process;
 import com.wipro.ats.bdre.md.beans.table.Properties;
 import com.wipro.ats.bdre.md.dao.*;
 import com.wipro.ats.bdre.md.dao.jpa.*;
-import com.wipro.ats.bdre.md.dao.jpa.Users;
-import com.wipro.ats.bdre.md.dao.jpa.PermissionType;
 import com.wipro.ats.bdre.md.rest.beans.ProcessExport;
 import com.wipro.ats.bdre.md.rest.util.BindingResultError;
 import com.wipro.ats.bdre.md.rest.util.DateConverter;
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecutor;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -46,6 +49,9 @@ import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.security.Principal;
 import java.util.*;
+
+import com.wipro.ats.bdre.md.beans.table.Process;
+import com.wipro.ats.bdre.md.beans.table.Properties;
 
 /**
  * Created by arijit on 1/9/15.
@@ -69,6 +75,8 @@ public class ProcessAPI extends MetadataAPIBase {
     PermissionTypeDAO appPermissionDAO;
     @Autowired
     UserRolesDAO userRolesDAO;
+    @Autowired
+    ExecStatusDAO execStatusDAO;
 
     /**
      * This method calls proc GetProcess and fetches a record corresponding to processId passed.
@@ -215,6 +223,10 @@ public class ProcessAPI extends MetadataAPIBase {
                 if(daoProcess.getUsers()!=null)
                 tableProcess.setUserName(daoProcess.getUsers().getUsername());
                 tableProcess.setCounter(counter);
+                InstanceExec instanceExec = instanceExecDAO.getLatestExecofProcess(daoProcess.getProcessId());
+                Integer execStatusId = instanceExec.getExecStatus().getExecStateId();
+                String execStatusDesc = execStatusDAO.get(execStatusId).getDescription();
+                tableProcess.setLatestExecStatus(execStatusDesc);
                 processes.add(tableProcess);
             }
             restWrapper = new RestWrapper(processes, RestWrapper.OK);
@@ -898,29 +910,72 @@ public class ProcessAPI extends MetadataAPIBase {
         return restWrapper;
     }
 
-    @RequestMapping(value = {"/execute", "/execute/"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/kill", "/kill/"}, method = RequestMethod.POST)
     @ResponseBody public
-    RestWrapper executeProcess(@ModelAttribute("process")
+    RestWrapper killProcess(@ModelAttribute("process")
                                @Valid Process process, BindingResult bindingResult, Principal principal) {
         RestWrapper restWrapper = null;
         ExecutionInfo executionInfo = new ExecutionInfo();
         executionInfo.setProcessId(process.getProcessId());
         try {
-            processDAO.securityCheck(process.getProcessId(),principal.getName(),"execute");
-            String[] command=new String[5];
-            LOGGER.info("workflow typeid  is "+process.getWorkflowId());
-            if (process.getWorkflowId()==3)
-            command[0]=MDConfig.getProperty("execute.script-path") + "/job-executor-airflow.sh";
-            else
-                command[0]=MDConfig.getProperty("execute.script-path") + "/job-executor.sh";
-            command[1]=process.getBusDomainId().toString();
-            command[2]=process.getProcessTypeId().toString();
-            command[3]=process.getProcessId().toString();
+            InstanceExec instanceExec = instanceExecDAO.getLatestExecofProcess(process.getProcessId());
+            if(instanceExec.getExecStatus().getExecStateId() == 8 || instanceExec.getExecStatus().getExecStateId() == 7){
+                restWrapper = new RestWrapper("Already killed", RestWrapper.ERROR);
+            }else {
+                String command = "/usr/bin/yarn application -kill  " + instanceExec.getApplicationId();
+                CommandLine oCmdLine = CommandLine.parse(command);
+
+                DefaultExecutor oDefaultExecutor = new DefaultExecutor();
+                oDefaultExecutor.setExitValue(0);
+                int result = oDefaultExecutor.execute(oCmdLine);
+                System.out.println("result = " + result);
+                if (result == 0) {
+                    ExecStatus execStatus = execStatusDAO.get(7);
+                    instanceExec.setExecStatus(execStatus);
+                    instanceExecDAO.update(instanceExec);
+                }
+                restWrapper = new RestWrapper(executionInfo, RestWrapper.OK);
+            }
+        }catch (Exception e) {
+            LOGGER.error(e + " Executing workflow failed " + e.getCause());
+            restWrapper = new RestWrapper(e.getMessage(), RestWrapper.ERROR);
+        }
+        return restWrapper;
+    }
+
+    @RequestMapping(value = {"/execute", "/execute/"}, method = RequestMethod.POST)
+    @ResponseBody public
+    RestWrapper executeProcess(@ModelAttribute("executionBean")
+                               @Valid ExecutionBean executionBean, BindingResult bindingResult, Principal principal) {
+        RestWrapper restWrapper = null;
+        ExecutionInfo executionInfo = new ExecutionInfo();
+        executionInfo.setProcessId(executionBean.getProcessId());
+        try {
+            processDAO.securityCheck(executionBean.getProcessId(),principal.getName(),"execute");
+            com.wipro.ats.bdre.md.dao.jpa.Process process=processDAO.get(executionBean.getProcessId());
+            LOGGER.info("process id is"+executionBean.getProcessId());
+            LOGGER.info(executionBean.toString());
+            String[] command=new String[13];
+            command[0]=MDConfig.getProperty("execute.script-path") + "/job-executor.sh";
+            command[1]= String.valueOf(process.getBusDomain().getBusDomainId());
+            command[2]= String.valueOf(process.getProcessType().getProcessTypeId());
+            command[3]= String.valueOf(executionBean.getProcessId());
             command[4]=principal.getName();
-            LOGGER.info("Running the command : -- " + command[0] + " " + command[1] + " " + command[2] + " " + command[3]+" "+command[4]);
-            ProcessBuilder processBuilder = new ProcessBuilder(command[0], command[1], command[2], command[3], command[4]);
-            processBuilder.redirectOutput(new File(MDConfig.getProperty("execute.log-path") + process.getProcessId().toString()));
-            LOGGER.info("The output is redirected to " + MDConfig.getProperty("execute.log-path") + process.getProcessId().toString());
+            command[5]= String.valueOf(executionBean.getDriverCores());
+            command[6]= String.valueOf(executionBean.getDriverMemory());
+            command[7]=String.valueOf(executionBean.getExecutorCores());
+            command[8]=String.valueOf(executionBean.getExecutorMemory());
+            command[9]=String.valueOf(executionBean.getReceiverMaxRate());
+            command[10]=String.valueOf(executionBean.isEventLogging());
+            command[11]=String.valueOf(executionBean.getTaskMaxFailures());
+            command[12]=String.valueOf(executionBean.isDynamicAllocation());
+            LOGGER.info("Running the command : -- " + command[0] + " " + command[1] + " " + command[2] + " " + command[3]+" "+command[4]+
+                    " "+command[5]+" "+command[6]+" "+command[7]+" "+command[8]+" "+command[9]+" "+command[10]+" "+
+            command[11]+" "+command[12]);
+            ProcessBuilder processBuilder = new ProcessBuilder(command[0], command[1], command[2], command[3], command[4]
+            ,command[5],command[6], command[7], command[8], command[9], command[10],command[11],command[12]);
+            processBuilder.redirectOutput(new File(MDConfig.getProperty("execute.log-path") + executionBean.getProcessId()));
+            LOGGER.info("The output is redirected to " + MDConfig.getProperty("execute.log-path") + executionBean.getProcessId());
             processBuilder.redirectErrorStream(true);
             java.lang.Process osProcess = processBuilder.start();
             try {
@@ -942,7 +997,7 @@ public class ProcessAPI extends MetadataAPIBase {
         }catch (SecurityException e) {
             LOGGER.error(e + " security check failed " + e.getCause());
             restWrapper = new RestWrapper(e.getMessage(), RestWrapper.ERROR);
-        }catch (IOException e) {
+        }catch (Exception e) {
             LOGGER.error(e + " Executing workflow failed " + e.getCause());
             restWrapper = new RestWrapper(e.getMessage(), RestWrapper.ERROR);
         }

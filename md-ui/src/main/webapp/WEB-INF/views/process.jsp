@@ -10,6 +10,46 @@
                 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
                 <title><spring:message code="common.page.title_bdre_1"/></title>
                 <style>
+
+                   .modelwindow {
+                       display: none; /* Hidden by default */
+                       position: fixed; /* Stay in place */
+                       z-index: 1; /* Sit on top */
+                       padding-top: 40px; /* Location of the box */
+                       left: 0;
+                       top: 0;
+                       width: 100%; /* Full width */
+                       height: 100%; /* Full height */
+                       overflow: auto; /* Enable scroll if needed */
+                       background-color: rgb(0,0,0); /* Fallback color */
+                       background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+                   }
+
+                   /* Modal Content */
+                   .modal-content {
+                       background-color: #fefefe;
+                       margin: auto;
+                       padding: 20px;
+                       border: 1px solid #888;
+                       width: 60%;
+                   }
+
+                   /* The Close Button */
+                   .closemodal {
+                       color: #aaaaaa;
+                       float: right;
+                       font-size: 28px;
+                       font-weight: bold;
+                   }
+
+                   .close:hover,
+                   .close:focus {
+                       color: #000;
+                       text-decoration: none;
+                       cursor: pointer;
+                   }
+
+
 					div.jtable-main-container>table.jtable>tbody>tr.jtable-data-row>td:nth-child(2){
 						color: #F75C17;
 						font-size: 24px;
@@ -1297,6 +1337,28 @@
                                 		var $img2 = $('<span title=<spring:message code="process.page.img_execute_process"/> class="label-icons label-execute" ></span>');
                                 		$img2.click(function() {
                                 			console.log(data);
+
+                                			var modal = document.getElementById('myModal');
+                                			modal.style.display = "block";
+                                            var span = document.getElementsByClassName("closemodal")[0];
+                                            var submit=document.getElementById('submit');
+                                            var cancel=document.getElementById('cancel');
+
+                                            cancel.onclick = function() {
+                                             modal.style.display = "none";
+                                            }
+                                            span.onclick = function() {
+                                             modal.style.display = "none";
+                                            }
+
+                                           submit.onclick = function() {
+                                             modal.style.display = "none";
+                                             formIntoMap("basic");
+                                             formIntoMap("advanceProperties");
+                                             var processData = data.record;
+                                             console.log(processData.processId);
+                                             map["processId"]=processData.processId;
+                                              console.log(map);
                                 			$("#execute-dialog-confirm").dialog({
                                 				resizable: false,
                                 				height: 'auto',
@@ -1313,7 +1375,7 @@
                                 							$.ajax({
                                 								url: '/mdrest/process/execute/',
                                 								type: 'POST',
-                                								data: processData,
+                                								data: jQuery.param(map),
                                 								dataType: 'json',
                                 								success: function(data) {
                                 									if(data.Result == "OK") {
@@ -1355,11 +1417,89 @@
 
                                 				}
                                 			});
+
+                                		}
                                 		});
                                 		return $img2;
                                 	}
                                 },
+                                KillProcess: {                    
+                                        width: '5%',
+                                        sorting: false,
+                                        edit: false,
+                                        create: false,
+                                        title: 'Kill',
+                                        display: function(data) {
+                                            var $img2 = $('<span title=kill class="label-icons label-execute" ></span>');
+                                            $img2.click(function() {
+                                                console.log(data);
+                                                $("#kill-dialog-confirm").dialog({
+                                                    resizable: false,
+                                                    height: 'auto',
+                                                    modal: true,
+                                                    buttons: {
+                                                        Cancel: function() {
+                                                            $(this).dialog("close");
+                                                        },
+                                                        'Yes Kill': function() {
+                                                            $(this).dialog("close");
+                                                            return $.Deferred(function($dfd) {
+                                                                var processData = jQuery.param(data.record);
+                                                                console.log(processData);
+                                                                $.ajax({
+                                                                    url: '/mdrest/process/kill/',
+                                                                    type: 'POST',
+                                                                    data: processData,
+                                                                    dataType: 'json',
+                                                                    success: function(data) {
+                                                                        if(data.Result == "OK") {
+                                                                            console.log(data);
+                                                                            $("#kill-result").dialog({
+                                                                                resizable: false,
+                                                                                height: 'auto',
+                                                                                modal: true,
+                                                                                buttons: {
+                                                                                    "OK": function() {
+                                                                                        $(this).dialog("close");
+                                                                                    }
+                                                                                }
+                                                                            }).html('<p><span class="jtable-confirm-message"><spring:message code="process.page.title_process"/>'+' <b>' +data.Record.processId +'</b> '+' successfully killed</span></p>');
+                                                                        } else {
+                                                                               if(data.Message == "ACCESS DENIED")
+                                                                                {alert(data.Message);}
+                                                                                 else{
+                                                                            console.log(data);
+                                                                            $("#execute-fail").dialog({
+                                                                                resizable: false,
+                                                                                height: 'auto',
+                                                                                modal: true,
+                                                                                buttons: {
+                                                                                    "OK": function() {
+                                                                                        $(this).dialog("close");
+                                                                                    }
+                                                                                }
+                                                                            }).html('<p><span class="jtable-confirm-message">Attempt to kill failed</span></p>');
+                                                                        }}
+                                                                    },
+                                                                    error: function() {
+                                                                        $dfd.reject();
+                                                                    }
 
+                                                                });
+                                                            });
+                                                        }
+
+                                                    }
+                                                });
+                                            });
+                                            return $img2;
+                                        }
+                                    },
+                                 latestExecStatus: {
+                                    title: 'Status',
+                                    create:false,
+                                    edit:false
+                                 },
 
                                 InstanceExecs: {                    
                                     width: '10%',
@@ -1515,6 +1655,23 @@
                     function fetchLineageInfo(ied) {
                         location.href = '<c:url value="/pages/batchlineagebyinstanceexec.page?ied="/>' + ied;
                     }
+                    var visible='false';
+                    function showmore()
+                    {
+                    console.log("showmore is being called"+visible);
+                    if(visible=='false'){
+                     document.getElementById('advanceProperties').style.display='block';
+                     jQuery('#more').text("- MORE");
+                     visible='true';
+                     }
+                     else
+                     {
+                     document.getElementById('advanceProperties').style.display='none';
+                     jQuery('#more').text("+ MORE");
+                     visible='false';
+                     }
+                    }
+
 
                 </script>
 
@@ -1678,6 +1835,20 @@
                 </script>
                 <%--  --%>
                     <script>
+                    var map = new Object();
+
+                    function formIntoMap(typeOf) {
+                    	var x = '';
+                    	x = document.getElementById(typeOf);
+                    	console.log(x);
+                    	var text = "";
+                    	var i;
+                    	for(i = 0; i < x.length; i++) {
+                    		map[x.elements[i].name] = x.elements[i].value;
+                    	}
+                    }
+
+
                         function showProcessPage(pid) {
                             console.log('entered function');
                             console.log(${param.pid == null});
@@ -1803,6 +1974,14 @@
 						</span>
 					</p>
 				</div>
+				<div id="kill-dialog-confirm" style="display: none;">
+                    <p>
+                        <span class="ui-icon-alert"></span>
+                        <span class="dialog-title-custom"><spring:message code="process.page.span_sure"/></span>
+                        <span class="jtable-confirm-message">This will kill the process in cluster.
+                        </span>
+                    </p>
+                </div>
 				<div id="alert-dialog" style="display: none;">
                 					<p>
                 						<span class="ui-icon-alert"></span>
@@ -1825,6 +2004,14 @@
 						<span class="jtable-confirm-message"><spring:message code="process.page.span_process_start"/></span>
 					</p>
 				</div>
+
+				<div id="kill-result" style="display: none;">
+                    <p>
+                        <span class="ui-icon ui-icon-alert"></span>
+                        <span class="jtable-confirm-message">Process Killed</span>
+                    </p>
+                </div>
+
 				<div id="execute-fail" style="display: none;">
 					<p>
 						<span class="ui-icon ui-icon-alert"></span>
@@ -1837,7 +2024,202 @@
 						<span class="jtable-confirm-message"><spring:message code="process.page.span_process_not_found"/></span>
 					</p>
 				</div>
-				</div>
+
+
+				<div id="myModal" class="modelwindow">
+
+                  <!-- Modal content -->
+                  <div class="modal-content">
+                    <span class="closemodal">&times;</span>
+                    <h3 style="margin-left:350px;">Executions details</h3>
+                                			<section>
+                                <form class="form-horizontal" role="form" id="basic">
+
+
+
+                                        <div id="rawTablDetailsDB">
+
+                                        <div class="form-group" >
+                                            <label class="control-label col-sm-2" for="batchDuration">Batch Duration</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control"  id="batchDuration" name="batchDuration" placeholder="Batch Duration" value="" required>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                       <label class="control-label col-sm-2" for="hdfsUser">HDFS User</label>
+                                          <div class="col-sm-10">
+                                          <select class="form-control" id="hdfsUser" name="hdfsUser" >
+                                            <option  value="No" selected>No</option>
+                                            <option  value="Yes">Yes</option>
+                                            </select>
+                                          </div>
+                                        </div>
+
+
+
+
+
+                                      <div class="form-group" >
+                                        <label class="control-label col-sm-2" for="logLevel">Log Level</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control"  id="logLevel" name="logLevel" value="" required>
+                                        </div>
+                                    </div>
+                                          <div class="form-group" >
+                                          <label class="control-label col-sm-2" for="master">Master</label>
+                                          <div class="col-sm-10">
+                                           <input type="text" class="form-control"  id="master" name="master" value="Yarn-standalone" required>
+
+                                          </div>
+                                        </div>
+
+                                        <div class="clearfix"></div>
+                                        </div>
+                                        </form>
+                                        <button id="more" onclick="showmore()" style="margin-left:687px;" class="btn btn-default">+ MORE</button>
+
+                                        <form class="form-horizontal" role="form" id="advanceProperties" style="display:none;">
+                                          <div id="advanceForm">
+
+                                          <div class="form-group" >
+                                              <label class="control-label col-sm-2" for="deploymentMode">Deployment Mode</label>
+                                              <div class="col-sm-10">
+                                                  <select class="form-control" id="deploymentMode" name="deploymentMode">
+                                                  <option  value="CLUSTER" selected>CLUSTER</option>
+                                                  <option  value="CLIENT">CLIENT</option>
+                                                  </select>
+                                              </div>
+                                          </div>
+
+                                           <div class="form-group" >
+                                            <label class="control-label col-sm-2" for="driverCores">Driver Cores</label>
+                                            <div class="col-sm-10">
+                                             <input type="text" class="form-control"  id="driverCores" name="driverCores" value="1" required>
+
+                                            </div>
+                                          </div>
+
+                                          <div class="form-group" >
+                                          <label class="control-label col-sm-2" for="driverMemory">Driver Memory</label>
+                                          <div class="col-sm-10">
+                                           <input type="text" class="form-control"  id="driverMemory" name="driverMemory" value="512" required>
+                                          </div>
+                                        </div>
+
+
+                           <div class="form-group" >
+                               <label class="control-label col-sm-2" for="driverPermgen">Driver PermGen Size</label>
+                               <div class="col-sm-10">
+                                <input type="text" class="form-control"  id="driverPermgen" name="driverPermgen" value="512" required>
+                               </div>
+                             </div>
+
+
+                             <div class="form-group" >
+                                <label class="control-label col-sm-2" for="executorCores">Executor Cores</label>
+                                <div class="col-sm-10">
+                                 <input type="text" class="form-control"  id="executorCores" name="executorCores" value="3" required>
+                                </div>
+                              </div>
+
+
+                               <div class="form-group" >
+                                  <label class="control-label col-sm-2" for="executorMemory">Executor Memory</label>
+                                  <div class="col-sm-10">
+                                   <input type="text" class="form-control"  id="executorMemory" name="executorMemory" value="1024" required>
+                                  </div>
+                                </div>
+
+
+                                <div class="form-group" >
+                                  <label class="control-label col-sm-2" for="inputRateController">Input Rate Controller</label>
+                                  <div class="col-sm-10">
+                                   <select class="form-control" id="inputRateController" name="inputRateController">
+                                    <option value="none" selected>None</option>
+                                   <option value="dynamic">Dynamic</option>
+                                   <option value="configRate">Static</option>
+
+
+                                     </select>
+                                  </div>
+                                </div>
+
+
+                                <div class="form-group" >
+                                  <label class="control-label col-sm-2" for="receiverMaxRate">Receiver Max Rate</label>
+                                  <div class="col-sm-10">
+                                   <input type="text" class="form-control"  id="receiverMaxRate" name="receiverMaxRate" value="100" required>
+                                  </div>
+                                </div>
+
+
+                                 <div class="form-group" >
+                                   <label class="control-label col-sm-2" for="isCheckPoint">Enable Check Point</label>
+                                   <div class="col-sm-10">
+                                    <select class="form-control" id="isCheckPoint" name="isCheckPoint">
+                                      <option  value="false" selected>FALSE</option>
+                                      <option  value="true">TRUE</option>
+                                      </select>
+                                   </div>
+                                 </div>
+
+
+                                 <div class="form-group" >
+                                   <label class="control-label col-sm-2" for="isEventLogging">Enable Event Logging</label>
+                                   <div class="col-sm-10">
+                                    <select class="form-control" id="isEventLogging" name="isEventLogging">
+                                     <option  value="false" selected>FALSE</option>
+                                     <option  value="true">TRUE</option>
+                                      </select>
+                                   </div>
+                                 </div>
+
+
+                              <div class="form-group" >
+                                <label class="control-label col-sm-2" for="taskMaxFailures">Task Max Failures</label>
+                                <div class="col-sm-10">
+                                 <input type="text" class="form-control"  id="taskMaxFailures" name="taskMaxFailures" value="4" required>
+                                </div>
+                              </div>
+
+                          <div class="form-group" >
+                         <label class="control-label col-sm-2" for="isDynamicAllocation">Dynamic Allocation Enabled</label>
+                         <div class="col-sm-10">
+                          <select class="form-control" id="isDynamicAllocation" name="isDynamicAllocation">
+                           <option  value="false" selected>FALSE</option>
+                           <option  value="true">TRUE</option>
+                            </select>
+                         </div>
+                       </div>
+
+                        <div class="form-group" >
+                        <label class="control-label col-sm-2" for="executorInstances">Executor Instances</label>
+                        <div class="col-sm-10">
+                         <input type="text" class="form-control"  id="executorInstances" name="executorInstances" value="1" required>
+                        </div>
+                      </div>
+
+                      <div class="form-group" >
+                      <label class="control-label col-sm-2" for="yarnQueue">Yarn Queue</label>
+                      <div class="col-sm-10">
+                       <input type="text" class="form-control"  id="yarnQueue" name="yarnQueue" value="default" required>
+                      </div>
+                    </div>
+
+                                        <div class="clearfix"></div>
+                                        </div>
+                                    </form>
+                                    <div style="display:inline-block;">
+                                   <button  style="margin-left:330px;" id="submit" class="btn btn-default">Submit</button>
+                                   <button   style="margin-left:50px;" id="cancel" class="btn btn-default">Cancel</button>
+                                    </div>
+                                	</section>
+                  </div>
+
+                </div>
+            </div>
 			</body>
 
             </html>

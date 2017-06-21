@@ -9,6 +9,7 @@ unitTest*.workflow.xml
 md-ui/src/main/webapp/css/.DS_Store
 md-commons/src/main/resources/ENVIRONMENT
 bdre-app.iml
+stream-grids.iml
 nb-configuration.xml
 glassfish-web.xml
 /md-rest-api/src/main/webapp/META-INF/context.xml

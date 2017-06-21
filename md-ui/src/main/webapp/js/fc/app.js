@@ -467,6 +467,8 @@ console.log("property6 is "+value6);
 							data: jQuery.param(map),
 							success: function(data) {
 								if(data.Result == "OK") {
+								    var modal = document.getElementById('myModal');
+                                    modal.style.display = "none";
 									alertBox("info","kafka properties added");
 								}
 								else
@@ -495,6 +497,8 @@ map["filtervalue"]=value3;
             data: jQuery.param(map),
             success: function(data) {
                 if(data.Result == "OK") {
+                   var modal = document.getElementById('myModal');
+                    modal.style.display = "none";
                     alertBox("info","filter properties added");
                 }
                 else
@@ -519,6 +523,8 @@ map["order"]=value2;
             data: jQuery.param(map),
             success: function(data) {
                 if(data.Result == "OK") {
+                  var modal = document.getElementById('myModal');
+                  modal.style.display = "none";
                     alertBox("info","sort properties added");
                 }
                 else
@@ -542,6 +548,8 @@ map["connectionName"]=value1;
             data: jQuery.param(map),
             success: function(data) {
                 if(data.Result == "OK") {
+                    var modal = document.getElementById('myModal');
+                    modal.style.display = "none";
                     alertBox("info","Emitter properties added");
                 }
                 else
@@ -564,6 +572,8 @@ map["connectionName"]=value1;
             data: jQuery.param(map),
             success: function(data) {
                 if(data.Result == "OK") {
+                   var modal = document.getElementById('myModal');
+                    modal.style.display = "none";
                     alertBox("info","PersistentStore properties added");
                 }
                 else
@@ -934,7 +944,7 @@ $scope.createFirstProcess = function() {
         'canRecover': '0',
         'nextProcessIds': '0',
         'enqProcessId': '0',
-        'busDomainId': '1',
+        'busDomainId': $('#domain').val(),
         'ownerRoleId':$('#ownerRoleId').val(),
          'permissionTypeByUserAccessId': $('#permissionTypeByUserAccessId').val(),
          'permissionTypeByGroupAccessId': $('#permissionTypeByGroupAccessId').val(),
