@@ -6,20 +6,20 @@
 	<link href="../../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 	<title><spring:message code="login.page.title"/></title>
 	<style>
-	     body{background:transparent;width: 100%;height: 100%;background-size: cover;overflow: hidden;}
+	     body{background-image: url("../../css/images/background.png");width: 100%;height: 100%;background-size: cover;overflow: hidden;}
 		.login-box{width: 425px;height: 315px;margin: auto;border-radius: 5px;position: absolute;top: 55%;bottom: 50%;left:0;right:0;}
 		.logo{width: 110px;top: -51px;position: absolute;left: 0;right:0;}
 		.btn-signin{background-color: #530000;height: 37px;width: 111px;padding-top: 0px;padding-bottom: 0px;float:right;margin-bottom:20px}
 		.form-group-pdiv .form-control{height: 38px;width: 95%;margin:0 auto;padding: 6px 38px;}
 		.form-group-pdiv .form-group {position: relative;margin-bottom:30px;margin-left:13px;}
-		.loginForm{margin: 4% 15px 0px 15px;}
+		.loginForm{margin: 24% 20px 0px 20px;}
 		.icon-circle{width: 40px;height: 40px;border-radius: 80px;background: #530000 no-repeat center;}
 	    .pwordicon{background-image:  url("../../css/images/password-icon.png")  ;background-size: 65% 65%;position: absolute;left: -5px;}
 	    .usericon{background-image: url("../../css/images/user.png");background-size: 55% 55%;position: absolute;left: -5px;}
 	    .login-links{width: 95%;margin: 0 auto;}
 	    .login-fp{float: left;color: #000000;font-family: sans-serif;font-weight: 500; margin-left:13px;margin-top: 2%;}
-	    .text-info{color: #000000;font-size:30px;border-radius: 5px;margin-top: 5%;padding-top: 4%;padding-bottom: 0%;}
-	    .text-footer{color: #000000;font-size:30px;border-radius: 5px;padding-top: 0%;padding-bottom: 2%;}
+	    .text-info{color: #FFFFFF;font-size:60px;border-radius: 5px;padding-top: 4%;padding-bottom: 0%;}
+	    .text-footer{color: #FFFFFF;font-size:30px;border-radius: 5px;padding-top: 0%;padding-bottom: 2%;}
 	    .login-alert-danger{border: none;background: none;position: absolute;top: 18%;margin-left:16px}
 
 

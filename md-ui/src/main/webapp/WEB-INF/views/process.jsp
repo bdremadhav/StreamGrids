@@ -1884,7 +1884,9 @@
                                                      <li>
                                                         <a href="connections.page?type=persistance"><i class="mdi mdi-24px mdi-logout"></i><span>Sink Configuration</span></a>
                                                      </li>
-
+<li>
+                                    <a  href="streamingmessage.page"><i class="mdi mdi-24px mdi-forum"></i><span>View Messages</span></a>
+                                 </li>
                                                       <li>
                                                         <a  href="premessageconfig.page"><i class="mdi mdi-24px mdi-forum"></i><span>Messages</span></a>
                                                      </li>
