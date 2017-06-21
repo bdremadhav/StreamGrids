@@ -10,6 +10,163 @@
 
 <head>
     <title><spring:message code="common.page.title_bdre_2"/></title>
+    	        					<style>
+    	        					html,body {
+                                      height:100%;
+                                      min-height:100%;
+                                      max-height:100%;
+                                    }
+                					body.container-fluid{
+                                        padding-left: 0px;
+                                        padding-right: 0px;
+                                    }
+
+
+                                    				body {
+                                    					overflow: visible;
+                                    				}
+
+                                    				#footer {
+                                    					background: #f5f5f5;
+                                    					border-top: 1px solid #EDE4BF;
+                                    					bottom: 0;
+                                    					left: 0;
+                                    					position: fixed;
+                                    					right: 0;
+                                    				}
+
+                                    				.activs, .activs:hover {
+                                    					border-left: 3px solid #f91;
+                                    					font-weight: bold;
+                                    					padding-left: 17px;
+                                    					color: black;
+                                    					margin-left: 0;
+                                    				}
+
+                                    				.activ, .activ:hover {
+                                    					/* border-left: 3px solid #f91; */
+                                    					font-weight: bold;
+                                    					padding-left: 17px;
+                                    					color: black;
+                                    					margin-left: 0;
+                                    				}
+                                    				.navbar-inverse .navbar-nav>li>a {
+                                                        color: #FFFFFF;
+                                                        font-weight
+                                                    }
+                                                    .navbar.navbar-inverse {
+                                                        height:60px;
+                                                    }
+
+                                    				#foot {
+                                    					background: #2F4F4F;
+                                    				}
+
+                                    				.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:hover,
+                                    					.navbar-default .navbar-nav>.open>a:focus {
+                                    					background-color: LightSalmon;
+                                    					font-weight: bold;
+                                    				}
+
+                                    				.level1, .level2, .level3 {
+                                    					font-style: normal;
+                                    				}
+
+                                    				.B1, .B2 {
+                                    					font-weight: bold;
+                                    					border-left: 3px solid #f91;
+                                    				}
+
+                                    				.sideheight {
+                                    					height: 63%;
+                                    				}
+
+                                    				.sideimg {
+                                    					width: 11px;
+                                    					left: 23px;
+                                    					top: 40%;
+                                    					height: 30px;
+                                    					padding: 0;
+                                    				}
+
+                                    				.left {
+                                    					height: 97%;
+                                    				}
+
+                                    				.headerbor {
+                                    					border-bottom: 1px solid #EDEDED;
+                                    				}
+
+                                    				::-webkit-scrollbar {
+                                    					width: 8px;
+                                    				}
+
+                                    				::-webkit-scrollbar-track {
+                                    					-webkit-border-radius: 5px;
+                                    					border-radius: 5px;
+                                    					background: rgba(0, 0, 0, 0.02);
+                                    				}
+
+                                    				::-webkit-scrollbar-thumb {
+                                    					-webkit-border-radius: 5px;
+                                    					border-radius: 5px;
+                                    					background: rgba(0, 0, 0, 0.02);
+                                    				}
+
+                                    				::-webkit-scrollbar-thumb:hover {
+                                    					background: rgba(0, 0, 0, 0.4);
+                                    				}
+
+                                    				::-webkit-scrollbar-thumb:window-inactive {
+                                    					background: rgba(0, 0, 0, 0.0);
+                                    				}
+
+                                    				.col-bdre-collapsed {
+                                    					width: 2px;
+                                    					position: relative;
+                                    					min-height: 1px;
+                                    					padding-right: 15px;
+                                    					padding-left: 15px;
+                                    					float: left;
+                                    				}
+
+                                    				.bdre-full-body {
+                                    					width: 100% !important;
+                                    				}
+
+                                    				/* HEADER and NAV-BAR*/
+                                    				.input-sm {
+                                    					width: 250px !important;
+                                    				}
+
+                                    				.usericon {
+                                    					display: block;
+                                    					width: 30px;
+                                    					height: 30px;
+                                    					border-radius: 80px;
+                                    					background: #FFF no-repeat center;
+                                    					background-image: url("../css/images/user_icon.png");
+                                    					background-size: 65% 65%;
+                                    				}
+
+                                    				.bdretextlogo {
+                                    					color: #FFFFFF;
+                                    					position: relative;
+                                    					font-size: 2em;
+                                    					top: 11px;
+                                    					right: 10px;
+                                    				}
+
+                                    				.dropdown-toggle {
+                                    					padding-top: 9px !important;
+                                    				}
+                                    				.dropdown-menu {
+                                    				position:initial;
+                                    				}
+                                                    .side-container{
+                                                       padding-left:75px;
+                                                    }
+        </style>
     <style>
         					div.jtable-main-container>table.jtable>tbody>tr.jtable-data-row>td:nth-child(2){
         						color: #F75C17;
@@ -102,7 +259,177 @@ ul{
 }
 
 
+                              .btn-primary1 {
+                                  background-color: #23C9A4 !important;
+                                  color: #404040 !important;
+                                  border-radius: 4px !important;
+                                  border-color: transparent;
+                                  font-size: 18px;
+                              }   left: 420px;
 
+
+                            .form-horizontal .form-group {
+                                 margin-right: auto;
+                                 margin-left:  auto;
+                            }
+
+                            .form-group {
+
+                                margin-bottom: auto;
+
+                            }
+
+
+                            body.container-fluid{
+                               padding-left: 0px;
+                               padding-right: 0px;
+                            }
+
+                            body {
+                                overflow: visible;
+                            }
+
+                            #footer {
+                                background: #f5f5f5;
+                                border-top: 1px solid #EDE4BF;
+                                bottom: 0;
+                                left: 0;
+                                position: fixed;
+                                right: 0;
+                            }
+
+                            .activs, .activs:hover {
+                                border-left: 3px solid #f91;
+                                font-weight: bold;
+                                padding-left: 17px;
+                                color: black;
+                                margin-left: 0;
+                            }
+
+                            .activ, .activ:hover {
+                                /* border-left: 3px solid #f91; */
+                                font-weight: bold;
+                                padding-left: 17px;
+                                color: black;
+                                margin-left: 0;
+                            }
+                            .navbar-inverse .navbar-nav>li>a {
+                                color: #FFFFFF;
+                                font-weight
+                            }
+                            .navbar.navbar-inverse {
+                                height:60px;
+                            }
+
+                            #foot {
+                                background: #2F4F4F;
+                            }
+
+                            .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:hover,
+                                .navbar-default .navbar-nav>.open>a:focus {
+                                background-color: LightSalmon;
+                                font-weight: bold;
+                            }
+
+                            .level1, .level2, .level3 {
+                                font-style: normal;
+                            }
+
+                            .B1, .B2 {
+                                font-weight: bold;
+                                border-left: 3px solid #f91;
+                            }
+
+                            .sideheight {
+                                height: 63%;
+                            }
+
+                            .sideimg {
+                                width: 11px;
+                                left: 23px;
+                                top: 40%;
+                                height: 30px;
+                                padding: 0;
+                            }
+
+                            .left {
+                                height: 97%;
+                            }
+
+                            .headerbor {
+                                border-bottom: 1px solid #EDEDED;
+                            }
+
+                            ::-webkit-scrollbar {
+                                width: 8px;
+                            }
+
+                            ::-webkit-scrollbar-track {
+                                -webkit-border-radius: 5px;
+                                border-radius: 5px;
+                                background: rgba(0, 0, 0, 0.02);
+                            }
+
+                            ::-webkit-scrollbar-thumb {
+                                -webkit-border-radius: 5px;
+                                border-radius: 5px;
+                                background: rgba(0, 0, 0, 0.02);
+                            }
+
+                            ::-webkit-scrollbar-thumb:hover {
+                                background: rgba(0, 0, 0, 0.4);
+                            }
+
+                            ::-webkit-scrollbar-thumb:window-inactive {
+                                background: rgba(0, 0, 0, 0.0);
+                            }
+
+                            .col-bdre-collapsed {
+                                width: 2px;
+                                position: relative;
+                                min-height: 1px;
+                                padding-right: 15px;
+                                padding-left: 15px;
+                                float: left;
+                            }
+
+                            .bdre-full-body {
+                                width: 100% !important;
+                            }
+
+                            /* HEADER and NAV-BAR*/
+                            .input-sm {
+                                width: 250px !important;
+                            }
+
+                            .usericon {
+                                display: block;
+                                width: 30px;
+                                height: 30px;
+                                border-radius: 80px;
+                                background: #FFF no-repeat center;
+                                background-image: url("../css/images/user_icon.png");
+                                background-size: 65% 65%;
+                            }
+
+                            .bdretextlogo {
+                                color: #FFFFFF;
+                                position: relative;
+                                font-size: 2em;
+                                top: 11px;
+                                right: 10px;
+                            }
+
+                            .dropdown-toggle {
+                                padding-top: 9px !important;
+                            }
+                            .dropdown-menu {
+                            position:initial;
+                            }
+                            #createConnectionButton{
+                            text-align:center;
+                            margin:auto;
+                            }
 
     </style>
 	<script>
@@ -116,24 +443,31 @@ ul{
 	</script>
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+
+    <link href="../css/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../css/jtables-bdre.css" rel="stylesheet" type="text/css" />
+    <link href="../css/jquery-ui-1.10.3.custom.css" rel="stylesheet" type="text/css" />
+    <link href="../css/bootstrap.custom.css" rel="stylesheet" />
+    <link href="../StreamAnalytix_files/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css">
+    <link href="../StreamAnalytix_files/bootstrap.min.css" rel="stylesheet">
+    <link href="../StreamAnalytix_files/bootstrap-material-design.min.css" rel="stylesheet">
+    <link href="../StreamAnalytix_files/ripples.min.css" rel="stylesheet">
+    <link href="../StreamAnalytix_files/sax-fonts.css" class="include" rel="stylesheet" type="text/css">
+    <link href="../StreamAnalytix_files/toastr.min.css" rel="stylesheet">
+    <link href="../StreamAnalytix_files/datatables.min.css" rel="stylesheet">
+    <link href="../StreamAnalytix_files/theme.css" rel="stylesheet" type="text/css">
+    <link href="../StreamAnalytix_files/style.css" rel="stylesheet" type="text/css">
+    <link href="../StreamAnalytix_files/select2.4.0.css" rel="stylesheet">
+    <link href="../StreamAnalytix_files/select2-bootstrap.css" rel="stylesheet">
     <script src="../js/jquery.min.js"></script>
-    <link href="../css/jquery-ui-1.10.3.custom.css" rel="stylesheet">
-    <link href="../css/css/bootstrap.min.css" rel="stylesheet" />
     <script src="../js/jquery-ui-1.10.3.custom.js"></script>
     <script src="../js/jquery.steps.min.js"></script>
-
-    <link rel="stylesheet" href="../css/jquery.steps.css" />
-
-    <script src="../js/bootstrap.js" type="text/javascript"></script>
     <script src="../js/jquery.jtable.js" type="text/javascript"></script>
-    <link href="../css/jtables-bdre.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="../css/jquery.steps.custom.css" />
-    <link href="../css/bootstrap.custom.css" rel="stylesheet" type="text/css" />
+    <script src="../js/bootstrap.js" type="text/javascript"></script>
 	<script src="../js/angular.min.js" type="text/javascript"></script>
-
-
-
-   <script type="text/javascript">
+    <script type="text/javascript">
 
     var map = new Object();
     var selectedSourceType = '';
@@ -169,6 +503,7 @@ ul{
 function source()
       {
        console.log("function call is happening in source");
+       document.getElementById('createbutton').style.display='none';
        document.getElementById('source-tab').style.display='block';
        document.getElementById('emitter-tab').style.display='none';
        document.getElementById('persistent-stores-tab').style.display='none';
@@ -207,8 +542,81 @@ function source()
             }
 </script>
 </head>
+<body>
  <div class="page-header">Connections</div>
 <body ng-app="myApp" ng-controller="myCtrl">
+
+<div class="sidebar-wrapper">
+
+                             <div class="logo-wrap">
+                                 <a id="" href="content.page">
+                                     <img src="../StreamAnalytix_files/logo.png" border="0" width="30px">
+                                     <span><img src="../StreamAnalytix_files/sax.png" border="0" width="200px"></span>
+                                 </a>
+                             </div>
+
+                             <ul>
+                                 <li>
+                                    <a  href="connections.page?type=source"><i class="mdi mdi-24px mdi-login"></i><span>Source Configuration</span></a>
+                                 </li>
+
+                                 <li>
+                                    <a href="connections.page?type=persistance"><i class="mdi mdi-24px mdi-logout"></i><span>Sink Configuration</span></a>
+                                 </li>
+
+                                  <li>
+                                    <a  href="premessageconfig.page"><i class="mdi mdi-24px mdi-forum"></i><span>Messages</span></a>
+                                 </li>
+
+                                 <li>
+                                   <a href="wfdesigner2.page"><i class="mdi mdi-24px mdi-steam"></i><span>Workflow Creator</span></a>
+                                 </li>
+
+                                 <li>
+                                    <a  href="process.page"><i class="mdi mdi-24px mdi-webhook"></i><span>Manage Workflows</span></a>
+                                 </li>
+
+                                 <li>
+                                    <a  href="users.page"><i class="mdi mdi-24px mdi-account-settings-variant"></i><span>Security</span></a>
+                                 </li>
+
+                                  <li>
+                                     <a  href="sessions.page"><i class="mdi mdi-24px mdi-watch"></i><span>Sessions</span></a>
+                                  </li>
+
+                                  <li>
+                                     <a  href="settings.page"><i class="mdi mdi-24px mdi-tune"></i><span>Settings</span></a>
+                                  </li>
+
+                           </ul>
+                         </div>
+ <div class="side-container">
+ <nav class="navbar navbar-inverse">
+                                      <div class="container-fluid">
+                                          <!-- Brand and toggle get grouped for better mobile display -->
+                                          <div class="navbar-header">
+                                              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                                                  <span class="sr-only">Toggle navigation</span>
+                                                  <span class="icon-bar"></span>
+                                                  <span class="icon-bar"></span>
+                                                  <span class="icon-bar"></span>
+                                              </button>
+
+                      						<span class="bdretextlogo"></span>
+                                          </div>
+
+                                              <ul class="nav navbar-nav navbar-right" >
+                                                  <li class="dropdown user-icon-style"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="usericon"></span></a>
+                                                      <ul class="dropdown-menu" role="menu">
+                                                          <li><a href="/auth/bdre/security/logout">Logout <security:authentication property="principal.username"/></a></li>
+                                                      </ul>
+                                                  </li>
+                                              </ul>
+                                          </div>
+                                          <!-- /.navbar-collapse -->
+
+                                      <!-- /.container-fluid -->
+                                  </nav>
  <button type="button" class=" btn-primary1" id="createbutton" style="margin-left:1020px;margin-bottom: 5px;"onclick="create()">Create New Connection</button>
    <div id="tabs" style="background:transparent" width="1000px">
    </div>
@@ -732,6 +1140,7 @@ function source()
 
 
 <div id="div-dialog-warning"/>
+</div>
 </body>
 
 </html>

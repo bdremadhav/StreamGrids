@@ -22,7 +22,17 @@
             </script>
 
                 <!-- Include one of jTable styles. -->
-
+                <link href="../StreamAnalytix_files/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css">
+                <link href="../StreamAnalytix_files/bootstrap.min.css" rel="stylesheet">
+                <link href="../StreamAnalytix_files/bootstrap-material-design.min.css" rel="stylesheet">
+                <link href="../StreamAnalytix_files/ripples.min.css" rel="stylesheet">
+                <link href="../StreamAnalytix_files/sax-fonts.css" class="include" rel="stylesheet" type="text/css">
+                <link href="../StreamAnalytix_files/toastr.min.css" rel="stylesheet">
+                <link href="../StreamAnalytix_files/datatables.min.css" rel="stylesheet">
+                <link href="../StreamAnalytix_files/theme.css" rel="stylesheet" type="text/css">
+                <link href="../StreamAnalytix_files/style.css" rel="stylesheet" type="text/css">
+                <link href="../StreamAnalytix_files/select2.4.0.css" rel="stylesheet">
+                <link href="../StreamAnalytix_files/select2-bootstrap.css" rel="stylesheet">
                 <link href="../css/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
                 <link href="../css/jtables-bdre.css" rel="stylesheet" type="text/css" />
                 <link rel="stylesheet" href="../css/jquery.steps.custom.css" />
@@ -60,6 +70,9 @@
 
                 <style>
 
+                     .side-container{
+                                            padding-left:75px;
+                                    }
                      .modelwindow {
                                display: none; /* Hidden by default */
                                position: fixed; /* Stay in place */
@@ -182,6 +195,83 @@
 
             </head>
             <div class="page-header"><spring:message code="wfdesigner.page.create_new_workflow"/></div>
+
+
+
+
+
+            <div class="sidebar-wrapper">
+                                           <div class="logo-wrap">
+                                               <a id="" href="content.page">
+                                                   <img src="../StreamAnalytix_files/logo.png" border="0" width="30px">
+                                                   <span><img src="../StreamAnalytix_files/sax.png" border="0" width="200px"></span>
+                                               </a>
+                                           </div>
+
+                                           <ul>
+                                               <li>
+                                                  <a  href="connections.page?type=source"><i class="mdi mdi-24px mdi-login"></i><span>Source Configuration</span></a>
+                                               </li>
+
+                                               <li>
+                                                  <a href="connections.page?type=persistance"><i class="mdi mdi-24px mdi-logout"></i><span>Sink Configuration</span></a>
+                                               </li>
+
+                                                <li>
+                                                  <a  href="premessageconfig.page"><i class="mdi mdi-24px mdi-forum"></i><span>Messages</span></a>
+                                               </li>
+
+                                               <li>
+                                                 <a href="wfdesigner2.page"><i class="mdi mdi-24px mdi-steam"></i><span>Workflow Creator</span></a>
+                                               </li>
+
+                                               <li>
+                                                  <a  href="process.page"><i class="mdi mdi-24px mdi-webhook"></i><span>Manage Workflows</span></a>
+                                               </li>
+
+                                               <li>
+                                                  <a  href="users.page"><i class="mdi mdi-24px mdi-account-settings-variant"></i><span>Security</span></a>
+                                               </li>
+
+                                                <li>
+                                                   <a  href="sessions.page"><i class="mdi mdi-24px mdi-watch"></i><span>Sessions</span></a>
+                                                </li>
+
+                                                <li>
+                                                   <a  href="settings.page"><i class="mdi mdi-24px mdi-tune"></i><span>Settings</span></a>
+                                                </li>
+
+                                         </ul>
+
+                                       </div>
+                                    <div id="side-container">
+                                    <nav class="navbar navbar-inverse">
+                                       <div class="container-fluid">
+                                           <!-- Brand and toggle get grouped for better mobile display -->
+                                           <div class="navbar-header">
+                                               <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                                                   <span class="sr-only">Toggle navigation</span>
+                                                   <span class="icon-bar"></span>
+                                                   <span class="icon-bar"></span>
+                                                   <span class="icon-bar"></span>
+                                               </button>
+
+                                            <span class="bdretextlogo"></span>
+                                           </div>
+
+                                               <ul class="nav navbar-nav navbar-right" >
+                                                   <li class="dropdown user-icon-style"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" style="color: white;" aria-expanded="false">Log Out<span class="usericon"></span></a>
+                                                       <ul class="dropdown-menu" role="menu">
+                                                           <li><a href="/auth/bdre/security/logout">Logout <security:authentication property="principal.username"/></a></li>
+                                                       </ul>
+                                                   </li>
+                                               </ul>
+                                           </div>
+                                           <!-- /.navbar-collapse -->
+
+                                       <!-- /.container-fluid -->
+                                   </nav>
+                                    </div>
             <c:choose>
                 <c:when test="${not empty param.processId}">
 
@@ -572,7 +662,7 @@
 
 
 
-                            <div class="col-md-12">
+                            <div class="col-md-12" style="margin-left:4%;">
                                 <div class="row">
                                     <div class="panel">
                                         <div class="panel-body">

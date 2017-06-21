@@ -223,10 +223,10 @@ public class ProcessAPI extends MetadataAPIBase {
                 if(daoProcess.getUsers()!=null)
                 tableProcess.setUserName(daoProcess.getUsers().getUsername());
                 tableProcess.setCounter(counter);
-                InstanceExec instanceExec = instanceExecDAO.getLatestExecofProcess(daoProcess.getProcessId());
-                Integer execStatusId = instanceExec.getExecStatus().getExecStateId();
-                String execStatusDesc = execStatusDAO.get(execStatusId).getDescription();
-                tableProcess.setLatestExecStatus(execStatusDesc);
+                //InstanceExec instanceExec = instanceExecDAO.getLatestExecofProcess(daoProcess.getProcessId());
+                //Integer execStatusId = instanceExec.getExecStatus().getExecStateId();
+                //String execStatusDesc = execStatusDAO.get(execStatusId).getDescription();
+                //tableProcess.setLatestExecStatus(execStatusDesc);
                 processes.add(tableProcess);
             }
             restWrapper = new RestWrapper(processes, RestWrapper.OK);
