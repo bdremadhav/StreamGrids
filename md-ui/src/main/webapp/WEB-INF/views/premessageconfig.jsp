@@ -52,7 +52,7 @@
                     display: none;
                 }
                 #Process{
-                position:absolute;
+                float: right;
                 bottom:30px;
                 right:0;
                 }
@@ -598,12 +598,13 @@ wizard = $(document).ready(function() {
 			if(currentIndex == 1 && priorIndex == 0) {
 				{
                     $('#rawTableColumnDetails').jtable('load');
-                     var connection_name = $('[ng-controller="myCtrl"]').scope().connectionName;
-                     console.log("connection_name is "+connection_name);
+                      console.log("$scope.connectionName is "+con_name);
+                      map["fileformat_connectionName"]=con_name;
+                      console.log(map);
 					$('#createjobs').on('click', function(e) {
                          formIntoMap('fileformat_', 'fileFormat');
                          jtableIntoMap('rawtablecolumn_', 'rawTableColumnDetails');
-                         map["fileformat_connectionName"]=connection_name;
+                        console.log(map);
 						$.ajax({
 							type: "POST",
 							url: "/mdrest/message/createjobs",
@@ -1024,7 +1025,7 @@ wizard = $(document).ready(function() {
 
                                    <div class="logo-wrap">
                                        <a id="" href="content.page">
-                                           <img src="../StreamAnalytix_files/logo.png" border="0" width="30px">
+
                                            <span><img src="../StreamAnalytix_files/sax.png" border="0" width="200px"></span>
                                        </a>
                                    </div>
@@ -1234,6 +1235,7 @@ wizard = $(document).ready(function() {
 
 
 <script>
+                var con_name="";
                 var app = angular.module('app', []);
                    app.controller('myCtrl', function($scope) {
                     $scope.fileformats= getGenConfigMap('file_format');
@@ -1261,6 +1263,8 @@ wizard = $(document).ready(function() {
                     {
                     console.log("function change is being called");
                     console.log("value of connectionName is "+$scope.connectionName);
+                    con_name=$scope.connectionName;
+                    console.log(con_name);
                     $.ajax({
                        url: '/mdrest/connections/'+$scope.connectionName+"/"+"topicName",
                            type: 'GET',
@@ -1564,7 +1568,6 @@ function jtableIntoMap(typeProp, typeDiv) {
 function formIntoMap(typeProp, typeOf) {
 	var x = '';
 	x = document.getElementById(typeOf);
-	console.log(x);
 	var text = "";
 	var i;
 	for(i = 0; i < x.length; i++) {

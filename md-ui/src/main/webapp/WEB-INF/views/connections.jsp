@@ -528,6 +528,7 @@ function source()
       function emitter()
             {
              console.log("function call is happening in emitter");
+             document.getElementById('createbutton').style.display='none';
              document.getElementById('source-tab').style.display='none';
              document.getElementById('emitter-tab').style.display='block';
              document.getElementById('persistent-stores-tab').style.display='none';
@@ -538,6 +539,7 @@ function source()
        function persistance()
           {
            console.log("function call is happening in persistance");
+           document.getElementById('createbutton').style.display='none';
            document.getElementById('source-tab').style.display='none';
            document.getElementById('emitter-tab').style.display='none';
            document.getElementById('persistent-stores-tab').style.display='block';
@@ -557,14 +559,13 @@ function source()
             }
 </script>
 </head>
-<body>
 <body ng-app="myApp" ng-controller="myCtrl">
 
 <div class="sidebar-wrapper">
 
                              <div class="logo-wrap">
                                  <a id="" href="content.page">
-                                     <img src="../StreamAnalytix_files/logo.png" border="0" width="30px">
+
                                      <span><img src="../StreamAnalytix_files/sax.png" border="0" width="200px"></span>
                                  </a>
                              </div>
@@ -633,12 +634,13 @@ function source()
 
                                       <!-- /.container-fluid -->
                                   </nav>
+                                  </div>
  <button type="button" class=" btn-primary1" id="createbutton" style="margin-left:90%;margin-bottom: 5px;"onclick="create()">Create Connection</button>
    <div id="tabs" style="background:transparent" width="1000px">
    </div>
      <div id="source-tab" style="display:none;">
                 <section >
-                   <div id="sourceConnectionFields" style="padding-left: 11%;">
+                   <div id="sourceConnectionFields" style="padding-left: 15%;">
                         <label  class="control-label col-sm-3" style="padding-left:0px;">Source Configuration Type</label>
                         <div id="dropdownSource" class="btn-group"  >
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="false" aria-expanded="true" id="srcDropdown">
@@ -651,30 +653,29 @@ function source()
                             </ul>
                          </div>
                       </div>
-
-
+                      </section>
+                      </div>
+                    <div style="background: white;margin-left: 15%;margin-right: 15%;">
                     <form class="form-horizontal" role="form" id="sourceConnectionForm">
-                    <div class="form-group">
-                        <label class="control-label col-sm-3">Source Connection Name</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control" name="sourceConnectionName">
-                        </div>
+
+                    </form>
+                    <div id="button_sourceConnectionForm">
+                     </div>
+                    <div class="clearfix"></div>
                     </div>
 
 
 
 
-          </form>
-           </section>
-      </div>
+
 
 
       <div id="emitter-tab" style="display:none;">
              <section >
 
-                <div id="emitterConnectionFields">
-                <label style="left: 125px;" class="control-label col-sm-3">Emitter Configuration Type</label>
-                <div id="dropdownEmitter" class="btn-group" style="left: 140px;" >
+                <div id="emitterConnectionFields" style="padding-left: 15%;">
+                <label style="padding-left:0px;" class="control-label col-sm-3">Emitter Configuration Type</label>
+                <div id="dropdownEmitter" class="btn-group" >
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="false" aria-expanded="true" id="emitterDropdown">
                         <span>Select Emitter</span><span class="caret"></span>
                     </button>
@@ -685,30 +686,28 @@ function source()
                     </ul>
                  </div>
               </div>
+              </section>
+              </div>
 
 
-
-
-                    <form class="form-horizontal" role="form" id="emitterConnectionForm">
-                     <div class="form-group">
-                         <label class="control-label col-sm-3">Emitter Configuration Name</label>
-                         <div class="col-sm-9">
-                             <input type="text" class="form-control" name="emitterConnectionName">
-                         </div>
-                     </div>
+            <div style="background: white;margin-left: 15%;margin-right: 15%;">
+            <form class="form-horizontal" role="form" id="emitterConnectionForm">
 
              </form>
-         </section>
-        </div>
+             <div id="button_emitterConnectionFields">
+              </div>
+             <div class="clearfix"></div>
+             </div>
+
 
 
          <div id="persistent-stores-tab" style="display:none;">
                <section >
 
 
-           <div id="persistentStoresConnectionDetails">
-                <label style="left: 125px;" class="control-label col-sm-3">PersistentStore Configuration Type</label>
-                <div id="dropdownPersistentStores" class="btn-group" style="left: 140px;" >
+           <div id="persistentStoresConnectionDetails" style="padding-left: 15%;">
+                <label style="padding-left: 0px;" class="control-label col-sm-3">PersistentStore Configuration Type</label>
+                <div id="dropdownPersistentStores" class="btn-group" >
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="false" aria-expanded="true" id="persistentStoresDropdown">
                         <span>Select Persistent Store</span><span class="caret"></span>
                     </button>
@@ -719,20 +718,20 @@ function source()
                     </ul>
                  </div>
               </div>
+              </section>
+              </div>
 
 
-
-
+                       <div style="background: white;margin-left: 15%;margin-right: 15%;">
                        <form class="form-horizontal" role="form" id="persistentStoresConnectionForm">
-                       <div class="form-group">
-                           <label class="control-label col-sm-3">PersistentStore Configuration Name</label>
-                           <div class="col-sm-9">
-                               <input type="text" class="form-control" name="persistentStoresConnectionName">
-                           </div>
-                       </div>
+
            </form>
-           </section>
-         </div>
+            <div id="button_persistentStoresConnectionForm">
+             </div>
+            <div class="clearfix"></div>
+            </div>
+
+
 
       <div id="saved-connections">
         <section style="width:100%;text-align:center;">
@@ -1128,21 +1127,46 @@ function source()
                     var div = document.getElementById(typeDiv);
 
                     console.log(data[root]);
-                    $('.buildForm').hide();
+                    $('.buildForm').remove();
+                    var key="";
+                    var value="";
+                       console
+                       if(typeOf.includes("Source")==true)
+                          {
+                          key="sourceConnectionName";
+                          value="Source Configuration Name";
+                          }
+                         else if(typeOf.includes("Emitter")==true)
+                          {
+                          key="emitterConnectionName";
+                          value="Emitter Configuration Name";
+                          }
+                          else
+                          {
+                          key="persistentStoresConnectionName";
+                          value="PersistentStore Configuration Name";
+                          }
 
+
+                      var inputHTML = '';
+                      inputHTML = inputHTML + '<div class="form-group buildForm">';
+                      inputHTML = inputHTML +  '<label class="control-label col-sm-2 for="' + key + '">' + value + '</label>';
+                      inputHTML = inputHTML + '<div class="col-sm-10"> <input name="' + key +'" type="' + "text" + '" class="form-control" id="' + key + '"></div>';
+                      inputHTML = inputHTML + '</div>';
+                     $('#'+typeDiv).append(inputHTML);
                     $.each(data[root], function(i, v) {
-                         var inputHTML = '';
+                         inputHTML = '';
                          inputHTML = inputHTML + '<div class="form-group buildForm">';
-                            inputHTML = inputHTML +  '<label class="control-label col-sm-3 for="' + v.key + '">' + v.value + '</label>';
-                            inputHTML = inputHTML + '<div class="col-sm-9"> <input name="' + v.key + '" value="' + v.defaultVal + '" type="' + v.type + '" class="form-control" id="' + v.key + '"></div>';
+                            inputHTML = inputHTML +  '<label class="control-label col-sm-2 for="' + v.key + '">' + v.value + '</label>';
+                            inputHTML = inputHTML + '<div class="col-sm-10"> <input name="' + v.key + '" value="' + v.defaultVal + '" type="' + v.type + '" class="form-control" id="' + v.key + '"></div>';
                             inputHTML = inputHTML + '</div>';
                            $('#'+typeDiv).append(inputHTML);
                       });
-
-                      buttonHTML = '';
-                      buttonHTML = buttonHTML + '<div class="actions text-center pull-right buildForm">';
-                      buttonHTML = buttonHTML + '<button onclick="createConnectionFunction(\''+connectionType+ '\');" type="button" id="createConnectionButton" class="btn btn-primary">Create Connection</button> </div>';
-                     $('#'+typeDiv).append(buttonHTML);
+                       $('#'+typeDiv).append('<div class="clearfix"></div>');
+                      var buttonHTML = '';
+                      buttonHTML = buttonHTML + '<div class="actions text-center buildForm">';
+                      buttonHTML = buttonHTML + '<button onclick="createConnectionFunction(\''+connectionType+ '\');" type="button" id="createConnectionButton" class="btn btn-primary">&nbsp;Create Connection</button> </div>';
+                     $('#button_'+typeDiv).append(buttonHTML);
                     console.log(div);
                 }
             });

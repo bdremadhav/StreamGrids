@@ -110,14 +110,17 @@
 'Source_Connection_Type','RabbitMQ','RabbitMQ','', 0, 'RabbitMQ','text', 1
 'Source_Connection_Type','Socket','Socket','', 0, 'Socket','text', 1
 'Source_Connection_Type','S3','S3','', 0, 'S3','text', 1
+
 'Kafka_Source_Connection','zookeeper.connect','Zookeeper URL','', 1,'','text', 1
 'Kafka_Source_Connection','bootstrap.servers','List of Kafka Brokers','', 1,'','text', 1
 'Kafka_Source_Connection','topicName','Topic Name','config- Topicname', 1,'','text', 1
+
 'Twitter_Source_Connection','consumerKey','Consumer Key','OAuth consumer key', 1,'','password', 1
 'Twitter_Source_Connection','consumerSecret','Consumer Secret','OAuth consumer secret', 1,'','password', 1
 'Twitter_Source_Connection','accessToken','Access Token','OAuth access token', 1,'','password', 1
 'Twitter_Source_Connection','accessTokenSecret','Access Token Secret','OAuth toekn secret', 1,'','password', 1
 'Twitter_Source_Connection','keywords','HASHTAGS','config - keywords based on which you want filter your tweets', 1,'#BigData','text', 1
+
 'Kinesis_Source_Connection','appName','App Name','', 1,'','text', 1
 'Kinesis_Source_Connection','streamName','Stream Name','config- Name of kenisis stream', 1,'','text', 1
 'Kinesis_Source_Connection','endPointURL','End Point URL','', 1,'config- ','text', 1
@@ -125,9 +128,11 @@
 'Kinesis_Source_Connection','initialPosition','Initial Position','config- ', 1,'','text', 1
 'Kinesis_Source_Connection','checkpointInterval','Checkpoint Interval','config- ', 1,'','text', 1
 'Kinesis_Source_Connection','storageLevel','Storage Level','config- ', 1,'','text', 1
+
 'MQTT_Source_Connection','brokerUrl','Broker Url','', 1,'','text', 1
 'MQTT_Source_Connection','storageLevel','Storage Level','', 1,'','text', 1
 'MQTT_Source_Connection','topicName','Topic Name','config-', 1,'','text', 1
+
 'RabbitMQ_Source_Connection','host','Host','', 1,'','text', 1
 'RabbitMQ_Source_Connection','username','Username','', 1,'','text', 1
 'RabbitMQ_Source_Connection','password','Password','', 1,'','text', 1
@@ -139,8 +144,10 @@
 'RabbitMQ_Source_Connection','queueName','Queue Name','config- Name of the RabbitMQ queue.', 1,'','text', 1
 'RabbitMQ_Source_Connection','queueDurable','Queue Durable','config- TRUE for a durable queue.', 1,'','text', 1
 'RabbitMQ_Source_Connection','queueAutoDelete','Queue Auto Delete','config- TRUE to enable auto-delete.', 1,'','text', 1
+
 'Socket_Source_Connection','host','Host','IP address of the machine where Socket is running', 1,'','text', 1
 'Socket_Source_Connection','port','Port','Port of the machine where Socket is running', 1,'','text', 1
+
 'S3_Source_Connection','awsKeyId','AWS KeyId','', 1,'','text', 1
 'S3_Source_Connection','secretAccesKey','Secret Acces Key','', 1,'','text', 1
 'S3_Source_Connection','bucketName','Bucket Name','config- ', 1,'','text', 1
@@ -152,9 +159,11 @@
 'Emitter_Connection_Type','MQTT','MQTT','', 0, 'MQTT','text', 1
 'Emitter_Connection_Type','RabbitMQ','RabbitMQ','', 0, 'RabbitMQ','text', 1
 'Emitter_Connection_Type','socket','Socket','', 0,'Socket','text', 1
+
 'Kafka_Emitter_Connection','topicName','Topic Name','', 1,'','text', 1
 'Kafka_Emitter_Connection','zookeeper.connect','Zookeeper URL','', 1,'','text', 1
 'Kafka_Emitter_Connection','bootstrap.servers','List of Kafka Brokers','', 1,'','text', 1
+
 'Kinesis_Emitter_Connection','appName','App Name','', 1,'','text', 1
 'Kinesis_Emitter_Connection','streamName','Stream Name','config- Name of kenisis stream', 1,'','text', 1
 'Kinesis_Emitter_Connection','endPointURL','End Point URL','', 1,'config- ','text', 1
@@ -162,9 +171,11 @@
 'Kinesis_Emitter_Connection','initialPosition','Initial Position','config- ', 1,'','text', 1
 'Kinesis_Emitter_Connection','checkpointInterval','Checkpoint Interval','config- ', 1,'','text', 1
 'Kinesis_Emitter_Connection','storageLevel','Storage Level','config- ', 1,'','text', 1
+
 'MQTT_Emitter_Connection','brokerUrl','Broker Url','', 1,'','text', 1
 'MQTT_Emitter_Connection','storageLevel','Storage Level','', 1,'','text', 1
 'MQTT_Emitter_Connection','topicName','Topic Name','config-', 1,'','text', 1
+
 'RabbitMQ_Emitter_Connection','host','Host','', 1,'','text', 1
 'RabbitMQ_Emitter_Connection','username','Username','', 1,'','text', 1
 'RabbitMQ_Emitter_Connection','password','Password','', 1,'','text', 1
@@ -176,24 +187,30 @@
 'RabbitMQ_Emitter_Connection','queueName','Queue Name','config- Name of the RabbitMQ queue.', 1,'','text', 1
 'RabbitMQ_Emitter_Connection','queueDurable','Queue Durable','config- TRUE for a durable queue.', 1,'','text', 1
 'RabbitMQ_Emitter_Connection','queueAutoDelete','Queue Auto Delete','config- TRUE to enable auto-delete.', 1,'','text', 1
+
 'Socket_Emitter_Connection','host','Host','IP address of the machine where Socket is running', 1,'','text', 1
 'Socket_Emitter_Connection','port','Port','Port of the machine where Socket is running', 1,'','text', 1
+
 'JDBC_Emitter_Connection','jdbcDriver','JDBC Driver','', 1,'','text', 1
 'JDBC_Emitter_Connection','jdbcUrl','JDBC URL','', 1,'','text', 1
 'JDBC_Emitter_Connection','username','Username','', 1,'','text', 1
 'JDBC_Emitter_Connection','password','Password','', 1,'','text', 1
 'JDBC_Emitter_Connection','schema','Schema','', 1,'','text', 1
 'JDBC_Emitter_Connection','table','Table Name','config- ', 1,'','text', 1
+
 'PersistentStores_Connection_Type','hdfs','HDFS','', 0,'HDFS','text', 1
 'PersistentStores_Connection_Type','hive','Hive','', 0,'Hive','text', 1
 'PersistentStores_Connection_Type','hbase','HBase','', 0,'HBase','text', 1
+
 'HDFS_PersistentStores_Connection','nameNodeHost','Name Node Host','', 1,'','text', 1
 'HDFS_PersistentStores_Connection','nameNodePort','Name Node Port','', 1,'','text', 1
 'HDFS_PersistentStores_Connection','hdfsPath','HDFS PATH','', 1,'','text', 1
+
 'Hive_PersistentStores_Connection','connectionUrl','Connection Url','', 1,'','text', 1
 'Hive_PersistentStores_Connection','dbName','Database Name','', 1,'','text', 1
 'Hive_PersistentStores_Connection','username','Username','', 1,'','text', 1
 'Hive_PersistentStores_Connection','password','Password','', 1,'','text', 1
+
 'HBase_PersistentStores_Connection','hdfsUser','HDFS User','HDFS user name.', 1,'','text', 1
 'HBase_PersistentStores_Connection','zKHost','Zookeeper Host','Zookeeper host name for hbase cluster.', 1,'','text', 1
 'HBase_PersistentStores_Connection','zK Port','Zookeeper Port','Zookeeper port for hbase cluster.', 1,'','text', 1

@@ -70,6 +70,17 @@
 
                 <style>
 
+
+                      .usericon {
+                            display: block;
+                            width: 30px;
+                            height: 30px;
+                            border-radius: 80px;
+                            background: #FFF no-repeat center;
+                            background-image: url("../css/images/user_icon.png");
+                            background-size: 65% 65%;
+                        }
+
                      .side-container{
                                             padding-left:75px;
                                     }
@@ -218,7 +229,7 @@
             <div class="sidebar-wrapper">
                                            <div class="logo-wrap">
                                                <a id="" href="content.page">
-                                                   <img src="../StreamAnalytix_files/logo.png" border="0" width="30px">
+
                                                    <span><img src="../StreamAnalytix_files/sax.png" border="0" width="200px"></span>
                                                </a>
                                            </div>
@@ -277,7 +288,7 @@
                                            </div>
 
                                                <ul class="nav navbar-nav navbar-right" >
-                                                   <li class="dropdown user-icon-style"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" style="color: white;" aria-expanded="false">Log Out<span class="usericon"></span></a>
+                                                   <li class="dropdown user-icon-style"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" style="background: #3f51b5;" aria-expanded="false"><span class="usericon navbar-right"></span></a>
                                                        <ul class="dropdown-menu" role="menu">
                                                            <li><a href="/auth/bdre/security/logout" id="logout">Logout <security:authentication property="principal.username"/></a></li>
                                                        </ul>
@@ -327,14 +338,14 @@
                                         <div id="processdetails" class="panel-collapse collapse in">
                                             <div class="panel-body">
                                                 <form role="form" class="form-horizontal">
-                                                    <div class="form-group">
+                                                    <div class="form-group" style="display:none;">
                                                         <label class="control-label col-md-4"><spring:message code="wfdesigner.page.id"/></label>
                                                         <div class="col-md-8">
                                                             <h5><span class="label label-info">{{ chartViewModel.selectedProcess.processId }}</span></h5>
                                                         </div>
                                                     </div>
 
-                                                    <div class="form-group">
+                                                    <div class="form-group" style="display:none;">
                                                         <label class="control-label col-md-4"><spring:message code="wfdesigner.page.type"/></label>
                                                         <div class="col-md-8">
                                                             <h5><span class="label label-default">{{ chartViewModel.selectedProcess.processTypeId }}</span></h5>

@@ -275,7 +275,7 @@ fieldset > legend { font-size: 16px; }
 .sidebar-wrapper li.active > a,
 .sidebar-wrapper a:active,
 .sidebar-wrapper a:focus,
-.sidebar-wrapper a:hover { color: #FFFFFF; background: #EC407A; font-weight: 600; }
+.sidebar-wrapper a:hover { color: #FFFFFF; background: rgba(236, 64, 64, 0.83); font-weight: 600; }
 .sidebar-wrapper li.active > a i,
 .sidebar-wrapper a:active i,
 .sidebar-wrapper a:focus i,

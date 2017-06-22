@@ -259,7 +259,7 @@
 
                              <div class="logo-wrap">
                                  <a id="" href="content.page">
-                                     <img src="../StreamAnalytix_files/logo.png" border="0" width="30px">
+
                                      <span><img src="../StreamAnalytix_files/sax.png" border="0" width="200px"></span>
                                  </a>
                              </div>
@@ -317,7 +317,7 @@
                                          </div>
 
                                              <ul class="nav navbar-nav navbar-right" >
-                                                 <li class="dropdown user-icon-style"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="usericon"></span></a>
+                                                 <li class="dropdown user-icon-style"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="usericon navbar-right"></span></a>
                                                      <ul class="dropdown-menu" role="menu">
                                                          <li><a href="/auth/bdre/security/logout" id="logout">Logout <security:authentication property="principal.username"/></a></li>
                                                      </ul>

@@ -292,7 +292,7 @@
 
                      <div class="logo-wrap">
                          <a id="" href="content.page">
-                             <img src="../StreamAnalytix_files/logo.png" border="0" width="30px">
+
                              <span><img src="../StreamAnalytix_files/sax.png" border="0" width="200px"></span>
                          </a>
                      </div>
