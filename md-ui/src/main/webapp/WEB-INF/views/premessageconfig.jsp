@@ -97,9 +97,7 @@
                 nav.navbar.navbar-inverse{
                 min-height:60px;
                 }
-                .side-container{
-                   padding-left:75px;
-                }
+
                        </style>
 
 
@@ -259,9 +257,7 @@
                                                            				.dropdown-menu {
                                                            				position:initial;
                                                            				}
-                                                                           .side-container{
-                                                                              padding-left:75px;
-                                                                           }
+
                                </style>
                            <style>
                                					div.jtable-main-container>table.jtable>tbody>tr.jtable-data-row>td:nth-child(2){
@@ -1025,7 +1021,7 @@ wizard = $(document).ready(function() {
 
                                    <div class="logo-wrap">
                                        <a id="" href="content.page">
-
+                                            <img src="../StreamAnalytix_files/wipro-logo.png" border="0" width="35px">
                                            <span><img src="../StreamAnalytix_files/sax.png" border="0" width="200px"></span>
                                        </a>
                                    </div>

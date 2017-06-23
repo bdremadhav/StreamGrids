@@ -155,9 +155,7 @@
                                 				.dropdown-menu {
                                 				position:initial;
                                 				}
-                                                .side-container{
-                                                   padding-left:75px;
-                                                }
+
     </style>
 	<script>
 	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -525,6 +523,7 @@
 
                      <div class="logo-wrap">
                          <a id="" href="content.page">
+                             <img src="../StreamAnalytix_files/wipro-logo.png" border="0" width="35px">
                              <span><img src="../StreamAnalytix_files/sax.png" border="0" width="200px"></span>
                          </a>
                      </div>
@@ -594,7 +593,7 @@
                                              <!-- /.container-fluid -->
                                          </nav>
     <section style="width:100%;text-align:center;">
-	<div id="Container"></div>
+	<div id="Container" style="margin-left:4%;"></div>
     </section>
 
 

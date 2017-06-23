@@ -163,9 +163,7 @@
                                     				.dropdown-menu {
                                     				position:initial;
                                     				}
-                                                    .side-container{
-                                                       padding-left:75px;
-                                                    }
+
         </style>
     <style>
         					div.jtable-main-container>table.jtable>tbody>tr.jtable-data-row>td:nth-child(2){
@@ -565,7 +563,7 @@ function source()
 
                              <div class="logo-wrap">
                                  <a id="" href="content.page">
-
+                                      <img src="../StreamAnalytix_files/wipro-logo.png" border="0" width="35px">
                                      <span><img src="../StreamAnalytix_files/sax.png" border="0" width="200px"></span>
                                  </a>
                              </div>
@@ -735,7 +733,7 @@ function source()
 
       <div id="saved-connections">
         <section style="width:100%;text-align:center;">
-        <div id="Container"></div>
+        <div id="Container" style="margin-left:4%;"></div>
         </section>
        </div>
 

@@ -55,10 +55,6 @@
 
 
         <style>
-
-.side-container{
-                   padding-left:75px;
-                }
           div.jtable-main-container>table.jtable>tbody>tr.jtable-data-row>td:nth-child(2){
                 color: #F75C17;
                 font-size: 24px;
@@ -260,7 +256,7 @@
 
                              <div class="logo-wrap">
                                  <a id="" href="content.page">
-
+                                      <img src="../StreamAnalytix_files/wipro-logo.png" border="0" width="35px">
                                      <span><img src="../StreamAnalytix_files/sax.png" border="0" width="200px"></span>
                                  </a>
                              </div>
@@ -331,7 +327,7 @@
                                  </nav>
 <div class='col-md-12' id="messageDetails" style="padding-left:0px;padding-right:0px">
     <section style="width:100%;text-align:center;">
-	    <div id="Container"></div>
+	    <div id="Container" style="margin-left:4%;"></div>
     </section>
 	<div style="display:none" id="div-dialog-warning">
 			<p><span class="ui-icon ui-icon-alert" style="float:left;"></span></p>

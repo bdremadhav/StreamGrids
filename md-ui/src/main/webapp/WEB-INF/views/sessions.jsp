@@ -155,9 +155,7 @@
                                 				.dropdown-menu {
                                 				position:initial;
                                 				}
-                                                .side-container{
-                                                   padding-left:75px;
-                                                }
+
     </style>
 	<title><spring:message code="common.page.title_bdre_1"/></title>
 	<script>
@@ -292,7 +290,7 @@
 
                      <div class="logo-wrap">
                          <a id="" href="content.page">
-
+                              <img src="../StreamAnalytix_files/wipro-logo.png" border="0" width="35px">
                              <span><img src="../StreamAnalytix_files/sax.png" border="0" width="200px"></span>
                          </a>
                      </div>
@@ -363,7 +361,7 @@
                                          </nav>
 
     <section style="width:100%;text-align:center;">
-	<div id="Container"></div>
+	<div id="Container" style="margin-left:4%;"></div>
     </section>
 </div>
 

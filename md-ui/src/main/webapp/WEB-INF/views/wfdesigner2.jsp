@@ -229,7 +229,7 @@
             <div class="sidebar-wrapper">
                                            <div class="logo-wrap">
                                                <a id="" href="content.page">
-
+                                                    <img src="../StreamAnalytix_files/wipro-logo.png" border="0" width="35px">
                                                    <span><img src="../StreamAnalytix_files/sax.png" border="0" width="200px"></span>
                                                </a>
                                            </div>

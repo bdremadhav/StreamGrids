@@ -933,9 +933,9 @@
                                                         },
                                                         tableAddTS: {
                                                             title: '<spring:message code="process.page.title_add_ts"/>',
-                                                            list: true,
+                                                            list: false,
                                                             create: false,
-                                                            edit: true
+                                                            edit: false
                                                         },
                                                         tableEditTS: {
                                                             title: '<spring:message code="process.page.title_edit_ts"/>',
@@ -1010,8 +1010,8 @@
                                 tableAddTS: {
                                     title: '<spring:message code="process.page.title_add_ts"/>',
                                     create: false,
-                                    edit: true,
-                                    list: true
+                                    edit: false,
+                                    list: false
                                 },
                                 tableEditTS: {
                                     title: '<spring:message code="process.page.title_edit_ts"/>',
@@ -1329,7 +1329,7 @@
                                 	sorting: false,
                                 	edit: false,
                                 	create: false,
-                                	title: 'Execute Workflow',
+                                	title: 'Execute',
                                 	display: function(data) {
                                 		var $img2 = $('<span title=<spring:message code="process.page.img_execute_process"/> class="label-icons label-execute" ></span>');
                                 		$img2.click(function() {
@@ -1363,6 +1363,7 @@
                                 				buttons: {
                                 					Cancel: function() {
                                 						$(this).dialog("close");
+                                						$("#myModal").show();
                                 					},
                                 					'<spring:message code="process.page.fun_execute"/>': function() {
                                 						$(this).dialog("close");
@@ -1887,7 +1888,7 @@
 
                      <div class="logo-wrap">
                          <a id="" href="content.page">
-
+                              <img src="../StreamAnalytix_files/wipro-logo.png" border="0" width="35px">
                              <span><img src="../StreamAnalytix_files/sax.png" border="0" width="200px"></span>
                          </a>
                      </div>
@@ -1943,6 +1944,7 @@
 
              						<span class="bdretextlogo"></span>
                                  </div>
+
                                     <div>
                                      <ul class="nav navbar-nav navbar-right" >
                                          <li class="dropdown user-icon-style"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="usericon"></span></a>
@@ -1960,7 +1962,7 @@
 
 
                 <section style="width:100%;text-align:center;">
-                    <div id="Container"></div>
+                    <div id="Container" style="margin-left:4%;"></div>
                 </section>
                 <div id="input-box-button-filter" class="input-box-button-filter">
                 	<span class="filter-icon"></span><span class="filter-text search"><spring:message code="process.page.span_filter"/></span>
@@ -2060,36 +2062,19 @@
                                         <div class="form-group" >
                                             <label class="control-label col-sm-2" for="batchDuration">Batch Duration</label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control"  id="batchDuration" name="batchDuration" placeholder="Batch Duration" value="" required>
+                                                <input type="text" class="form-control"  id="batchDuration" name="batchDuration" placeholder="Batch Duration" value="30000" required>
                                             </div>
                                         </div>
 
 
-                                        <div class="form-group">
-                                       <label class="control-label col-sm-2" for="hdfsUser">HDFS User</label>
-                                          <div class="col-sm-10">
-                                          <select class="form-control" id="hdfsUser" name="hdfsUser" >
-                                            <option  value="No" selected>No</option>
-                                            <option  value="Yes">Yes</option>
-                                            </select>
-                                          </div>
-                                        </div>
-
-
-
-
-
-                                      <div class="form-group" >
-                                        <label class="control-label col-sm-2" for="logLevel">Log Level</label>
-                                        <div class="col-sm-10">
-                                            <input type="text" class="form-control"  id="logLevel" name="logLevel" value="" required>
-                                        </div>
-                                    </div>
                                           <div class="form-group" >
                                           <label class="control-label col-sm-2" for="master">Master</label>
                                           <div class="col-sm-10">
-                                           <input type="text" class="form-control"  id="master" name="master" value="Yarn-standalone" required>
-
+                                             <select class="form-control" id="master" name="master">
+                                              <option  value="yarn-cluster" selected>yarn-cluster</option>
+                                              <option  value="yarn-client">yarn-client</option>
+                                              <option  value="local">local</option>
+                                              </select>
                                           </div>
                                         </div>
 
@@ -2100,16 +2085,6 @@
 
                                         <form class="form-horizontal" role="form" id="advanceProperties" style="display:none;">
                                           <div id="advanceForm">
-
-                                          <div class="form-group" >
-                                              <label class="control-label col-sm-2" for="deploymentMode">Deployment Mode</label>
-                                              <div class="col-sm-10">
-                                                  <select class="form-control" id="deploymentMode" name="deploymentMode">
-                                                  <option  value="CLUSTER" selected>CLUSTER</option>
-                                                  <option  value="CLIENT">CLIENT</option>
-                                                  </select>
-                                              </div>
-                                          </div>
 
                                            <div class="form-group" >
                                             <label class="control-label col-sm-2" for="driverCores">Driver Cores</label>
@@ -2226,14 +2201,24 @@
                       </div>
                     </div>
 
-                                        <div class="clearfix"></div>
-                                        </div>
-                                    </form>
-                                    <div style="display:inline-block;">
-                                   <button  style="margin-left:330px;" id="submit" class="btn btn-default">Submit</button>
-                                   <button   style="margin-left:50px;" id="cancel" class="btn btn-default">Cancel</button>
-                                    </div>
-                                	</section>
+
+                     <div class="form-group" >
+                    <label class="control-label col-sm-2" for="logLevel">Log Level</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control"  id="logLevel" name="logLevel" value="log-level" required>
+                    </div>
+                </div>
+
+
+
+                <div class="clearfix"></div>
+                </div>
+            </form>
+            <div style="display:inline-block;">
+           <button  style="margin-left:330px;" id="submit" class="btn btn-default">Submit</button>
+           <button   style="margin-left:50px;" id="cancel" class="btn btn-default">Cancel</button>
+            </div>
+            </section>
                   </div>
 
                 </div>

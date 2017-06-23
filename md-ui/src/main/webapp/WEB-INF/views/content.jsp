@@ -62,11 +62,10 @@
 
 
             <style>
-            .side-container{
-                   padding-left:75px;
-                }
+
 				body {
 					overflow: visible;
+					background-image: url("../css/images/background.png");
 				}
 				
 				#footer {
@@ -259,7 +258,7 @@
 
                              <div class="logo-wrap">
                                  <a id="" href="content.page">
-
+                                     <img src="../StreamAnalytix_files/wipro-logo.png" border="0" width="35px">
                                      <span><img src="../StreamAnalytix_files/sax.png" border="0" width="200px"></span>
                                  </a>
                              </div>
@@ -331,12 +330,6 @@
                 </div>
                 <!-- /.container-fluid -->
             </nav>
-
-
-            <div>
-                <iframe id="dframe" src="welcome.page" scrolling="yes" style="overflow-y:visible;width:100%; height: 800px; border: none;"></iframe>
-
-            </div>
 
      <!--
 	<div id="foot" class="row">
