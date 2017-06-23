@@ -29,7 +29,7 @@
     font-weight: 800;
     font-style: normal;
 }
-body, html { font-family:'SourceSansPro', sans-serif; overflow-x: hidden; color: #212121; background: #e5e5e5; }
+body, html { font-family:'SourceSansPro', sans-serif; overflow-x: hidden; color: #212121; }
 html.login_pg {
 	background: #fff;
 	width: 100%;

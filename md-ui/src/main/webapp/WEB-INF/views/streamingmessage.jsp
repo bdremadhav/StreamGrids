@@ -64,6 +64,23 @@
                 width: 15px;
                 height: 15px;
             }
+             .dropdown-menu {
+                        position:initial;
+                        }
+
+                        .dropdown-toggle {
+                            padding-top: 9px !important;
+                        }
+
+            .usericon {
+                    display: block;
+                    width: 30px;
+                    height: 30px;
+                    border-radius: 80px;
+                    background: #FFF no-repeat center;
+                    background-image: url("../css/images/user_icon.png");
+                    background-size: 65% 65%;
+                }
 
         .label-icons {
                     margin: 0 auto;

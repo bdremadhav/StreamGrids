@@ -112,7 +112,10 @@
                                 				::-webkit-scrollbar-thumb:window-inactive {
                                 					background: rgba(0, 0, 0, 0.0);
                                 				}
-
+                                                body {
+                                                					overflow: visible;
+                                                					background-image: url("../css/images/background.png");
+                                                				}
                                 				.col-bdre-collapsed {
                                 					width: 2px;
                                 					position: relative;
@@ -566,7 +569,7 @@
                                                 </ul>
                  </div>
                 <div class="side-container">
-                                         <nav class="navbar navbar-inverse">
+                                         <nav class="navbar navbar-inverse" style="margin-left: 0px;margin-bottom: 0px;">
                                              <div class="container-fluid">
                                                  <!-- Brand and toggle get grouped for better mobile display -->
                                                  <div class="navbar-header">

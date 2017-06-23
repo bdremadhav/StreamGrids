@@ -15,8 +15,9 @@
 
 
                                 				body {
-                                					overflow: visible;
-                                				}
+                                                					overflow: visible;
+                                                					background-image: url("../css/images/background.png");
+                                                				}
 
                                 				#footer {
                                 					background: #f5f5f5;
@@ -333,7 +334,7 @@
                                                 </ul>
                  </div>
                 <div class="side-container">
-                                         <nav class="navbar navbar-inverse">
+                                         <nav class="navbar navbar-inverse" style="margin-left: 0px;margin-bottom: 0px;">
                                              <div class="container-fluid">
                                                  <!-- Brand and toggle get grouped for better mobile display -->
                                                  <div class="navbar-header">

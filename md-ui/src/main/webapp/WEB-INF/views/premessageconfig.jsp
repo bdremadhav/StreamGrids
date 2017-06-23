@@ -118,6 +118,7 @@
 
                                                            				body {
                                                            					overflow: visible;
+
                                                            				}
 
                                                            				#footer {
@@ -1093,7 +1094,7 @@ wizard = $(document).ready(function() {
 
                                        <!-- /.container-fluid -->
                                    </nav>
-<div class='col-md-3'>
+<div class='col-md-3' style=" margin-left: 5%;">
  <form  role="form" id="connectionDetails">
   <div class="form-group">
     <label for="connectionName">Connection Configuration</label>
