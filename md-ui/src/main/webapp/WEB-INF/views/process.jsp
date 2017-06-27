@@ -84,7 +84,7 @@
 						background: -ms-linear-gradient(#4A4B4B 50%, #3A3B3B 50%);
 						background: linear-gradient(#4A4B4B 50%, #3A3B3B 50%);
 						position: absolute;
-						top: 0;
+						top: 8%;
 						right: 134px;
 						color: white;
 						padding: 5px;
@@ -724,7 +724,7 @@
                                                         processId: {
                                                             key: true,
                                                             width: '5%',
-                                                            list: true,
+                                                            list: false,
                                                             create: false,
                                                             edit: false,
                                                             title: 'Id'
@@ -959,10 +959,12 @@
                                                             defaultValue: "1"
                                                         },
                                                         nextProcessIds: {
+                                                            list:false,
                                                             title: '<spring:message code="process.page.title_next"/>'
 
                                                         },
                                                         enqProcessId: {
+
                                                             title: '<spring:message code="process.page.title_enqueued_by"/>',
                                                             defaultValue: '0',
                                                             edit: true
@@ -972,6 +974,7 @@
                                                             defaultValue: item.record.busDomainId,
                                                         },
                                                         processTypeId: {
+                                                            list:false,
                                                             title: '<spring:message code="process.page.title_type"/>',
                                                             type: 'combobox',
                                                             options: '/mdrest/processtype/options/' + item.record.processTypeId,
@@ -1042,6 +1045,7 @@
                                     defaultValue: "0"
                                 },
                                 nextProcessIds: {
+                                    list:false,
                                     title: '<spring:message code="process.page.title_next"/>'
 
                                 },
@@ -1917,14 +1921,14 @@
                                                      </li>
 
                                                      <li>
-                                                        <a  href="users.page"><i class="mdi mdi-24px mdi-account-settings-variant"></i><span>Security</span></a>
+                                                        <a  href="users.page"><i class="mdi mdi-24px mdi-account-settings-variant"></i><span>Manage Users</span></a>
                                                      </li>
 
                                                       <li>
                                                          <a  href="sessions.page"><i class="mdi mdi-24px mdi-watch"></i><span>Sessions</span></a>
                                                       </li>
 
-                                                      <li>
+                                                      <li style="display:none;">
                                                          <a  href="settings.page"><i class="mdi mdi-24px mdi-tune"></i><span>Settings</span></a>
                                                       </li>
 
@@ -2078,52 +2082,72 @@
                                           </div>
                                         </div>
 
-                                        <div class="clearfix"></div>
-                                        </div>
-                                        </form>
-                                        <button id="more" onclick="showmore()" style="margin-left:687px;" class="btn btn-default">+ MORE</button>
+                                         <div class="form-group" >
+                                                                                     <label class="control-label col-sm-2" for="driverCores">Driver Cores</label>
+                                                                                     <div class="col-sm-10">
+                                                                                      <input type="text" class="form-control"  id="driverCores" name="driverCores" value="1" required>
 
-                                        <form class="form-horizontal" role="form" id="advanceProperties" style="display:none;">
-                                          <div id="advanceForm">
+                                                                                     </div>
+                                                                                   </div>
 
-                                           <div class="form-group" >
-                                            <label class="control-label col-sm-2" for="driverCores">Driver Cores</label>
-                                            <div class="col-sm-10">
-                                             <input type="text" class="form-control"  id="driverCores" name="driverCores" value="1" required>
-
-                                            </div>
-                                          </div>
-
-                                          <div class="form-group" >
-                                          <label class="control-label col-sm-2" for="driverMemory">Driver Memory</label>
-                                          <div class="col-sm-10">
-                                           <input type="text" class="form-control"  id="driverMemory" name="driverMemory" value="512" required>
-                                          </div>
-                                        </div>
+                                                                                   <div class="form-group" >
+                                                                                   <label class="control-label col-sm-2" for="driverMemory">Driver Memory</label>
+                                                                                   <div class="col-sm-10">
+                                                                                    <input type="text" class="form-control"  id="driverMemory" name="driverMemory" value="512" required>
+                                                                                   </div>
+                                                                                 </div>
 
 
-                           <div class="form-group" >
-                               <label class="control-label col-sm-2" for="driverPermgen">Driver PermGen Size</label>
-                               <div class="col-sm-10">
-                                <input type="text" class="form-control"  id="driverPermgen" name="driverPermgen" value="512" required>
-                               </div>
-                             </div>
+                                                                    <div class="form-group" >
+                                                                        <label class="control-label col-sm-2" for="driverPermgen">Driver PermGen Size</label>
+                                                                        <div class="col-sm-10">
+                                                                         <input type="text" class="form-control"  id="driverPermgen" name="driverPermgen" value="512" required>
+                                                                        </div>
+                                                                      </div>
 
 
-                             <div class="form-group" >
-                                <label class="control-label col-sm-2" for="executorCores">Executor Cores</label>
+                                                                      <div class="form-group" >
+                                                                         <label class="control-label col-sm-2" for="executorCores">Executor Cores</label>
+                                                                         <div class="col-sm-10">
+                                                                          <input type="text" class="form-control"  id="executorCores" name="executorCores" value="3" required>
+                                                                         </div>
+                                                                       </div>
+
+
+                                                                        <div class="form-group" >
+                                                                           <label class="control-label col-sm-2" for="executorMemory">Executor Memory</label>
+                                                                           <div class="col-sm-10">
+                                                                            <input type="text" class="form-control"  id="executorMemory" name="executorMemory" value="1024" required>
+                                                                           </div>
+                                                                         </div>
+                              <div class="form-group" >
+                                <label class="control-label col-sm-2" for="taskMaxFailures">Task Max Failures</label>
                                 <div class="col-sm-10">
-                                 <input type="text" class="form-control"  id="executorCores" name="executorCores" value="3" required>
+                                 <input type="text" class="form-control"  id="taskMaxFailures" name="taskMaxFailures" value="4" required>
                                 </div>
                               </div>
 
 
-                               <div class="form-group" >
-                                  <label class="control-label col-sm-2" for="executorMemory">Executor Memory</label>
-                                  <div class="col-sm-10">
-                                   <input type="text" class="form-control"  id="executorMemory" name="executorMemory" value="1024" required>
-                                  </div>
-                                </div>
+
+                                        <div class="clearfix"></div>
+                                        </div>
+                                        </form>
+                                        <button id="more" onclick="showmore()" style="margin-left:79.5%;" class="btn btn-default">+ MORE</button>
+
+                                        <form class="form-horizontal" role="form" id="advanceProperties" style="display:none;">
+                                          <div id="advanceForm">
+
+                                <div class="form-group" >
+                                      <label class="control-label col-sm-2" for="deploymentMode">Deployment Mode</label>
+                                      <div class="col-sm-10">
+                                         <select class="form-control" id="deploymentMode" name="deploymentMode">
+                                          <option  value="cluster" selected>cluster</option>
+                                          <option  value="client">client</option>
+                                          </select>
+                                      </div>
+                                    </div>
+
+
 
 
                                 <div class="form-group" >
@@ -2170,12 +2194,7 @@
                                  </div>
 
 
-                              <div class="form-group" >
-                                <label class="control-label col-sm-2" for="taskMaxFailures">Task Max Failures</label>
-                                <div class="col-sm-10">
-                                 <input type="text" class="form-control"  id="taskMaxFailures" name="taskMaxFailures" value="4" required>
-                                </div>
-                              </div>
+
 
                           <div class="form-group" >
                          <label class="control-label col-sm-2" for="isDynamicAllocation">Dynamic Allocation Enabled</label>
@@ -2214,9 +2233,9 @@
                 <div class="clearfix"></div>
                 </div>
             </form>
-            <div style="display:inline-block;">
-           <button  style="margin-left:330px;" id="submit" class="btn btn-default">Submit</button>
-           <button   style="margin-left:50px;" id="cancel" class="btn btn-default">Cancel</button>
+            <div >
+           <button  style="margin-left:38%" id="submit" class="btn btn-default">Submit</button>
+           <button   style="margin-left:6%;" id="cancel" class="btn btn-default">Cancel</button>
             </div>
             </section>
                   </div>
