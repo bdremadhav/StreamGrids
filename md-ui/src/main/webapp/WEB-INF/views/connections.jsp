@@ -592,14 +592,14 @@ function source()
                                  </li>
 
                                  <li>
-                                    <a  href="users.page"><i class="mdi mdi-24px mdi-account-settings-variant"></i><span>Security</span></a>
+                                    <a  href="users.page"><i class="mdi mdi-24px mdi-account-settings-variant"></i><span>Manage Users</span></a>
                                  </li>
 
                                   <li>
                                      <a  href="sessions.page"><i class="mdi mdi-24px mdi-watch"></i><span>Sessions</span></a>
                                   </li>
 
-                                  <li>
+                                 <li style="display:none;">
                                      <a  href="settings.page"><i class="mdi mdi-24px mdi-tune"></i><span>Settings</span></a>
                                   </li>
 
