@@ -765,7 +765,7 @@
                                                     <ul class="dropdown-menu">
                                                         <li><a ng-click='confirmDialog(<spring:message code="wfdesigner.page.dropdown_confirm_msg"/>, "deleteSelected")'><spring:message code="wfdesigner.page.dropdown_delete"/></a></li>
                                                         <li><a ng-click="duplicateSelected()"><spring:message code="wfdesigner.page.dropdown_duplicate"/></a></li>
-                                                        <li><a onclick="goToPage('process-page')"><spring:message code="wfdesigner.page.dropdown_process"/></a></li>
+                                                        <li><a onclick="goToPage('process-page')">Go to Workflow Page</a></li>
                                                         <li><a onclick="goToPage('wfdesigner-page')"><spring:message code="wfdesigner.page.dropdown_wfdesigner"/></a></li>
                                                     </ul>
                                                 </div>

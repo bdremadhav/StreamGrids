@@ -633,21 +633,51 @@ wizard = $(document).ready(function() {
 			}
 		},
 		onFinished: function(event, currentIndex) {
-			if(created == 1) {
-				location.href = '<c:url value="/pages/premessageconfig.page"/>';
-			} else {
-				$("#div-dialog-warning").dialog({
-					title: "",
-					resizable: false,
-					height: 'auto',
-					modal: true,
-					buttons: {
-						"Ok": function() {
-							$(this).dialog("close");
-						}
-					}
-				}).html('<p><span class="jtable-confirm-message">Message is not created</span></p>');
-			}
+                                 title:"create message",
+
+		                         formIntoMap('fileformat_', 'fileFormat');
+                                 jtableIntoMap('rawtablecolumn_', 'rawTableColumnDetails');
+                                 console.log(map);
+        						$.ajax({
+        							type: "POST",
+        							url: "/mdrest/message/createjobs",
+        							data: jQuery.param(map),
+        							success: function(data) {
+        								if(data.Result == "OK") {
+        									created = 1;
+        									$("#div-dialog-warning").dialog({
+        										title: "",
+        										resizable: false,
+        										height: 'auto',
+        										modal: true,
+        										buttons: {
+        											"Ok": function() {
+        											    $('#Container').jtable('load');
+        												$(this).dialog("close");
+        												location.href = '<c:url value="/pages/premessageconfig.page"/>';
+        											}
+        										}
+        									}).html('<p><span class="jtable-confirm-message">Message successfully created </span></p>');
+        								}
+
+        							else{
+                                      $("#div-dialog-warning").dialog({
+                                        title: "",
+                                        resizable: false,
+                                        height: 'auto',
+                                        modal: true,
+                                        buttons: {
+                                            "Ok": function() {
+                                                $(this).dialog("close");
+                                            }
+                                        }
+                                    }).html('<p><span class="jtable-confirm-message">Message is not created</span></p>');
+
+        								}
+        							}
+
+        						});
+                            return false;
 		},
 		onCanceled: function(event) {
 			location.href = '<c:url value="/pages/premessageconfig.page"/>';
@@ -1210,9 +1240,6 @@ wizard = $(document).ready(function() {
 			<h3>Message Schema</h3>
 			<section>
 			    <div id="rawTableColumnDetails"></div>
-			    <div id="Process">
-                <button id="createjobs" type="button" class="btn btn-primary btn-lg">Create Message</button>
-            </div>
 			    </section>
 		</div>
         </div>
