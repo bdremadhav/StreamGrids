@@ -111,6 +111,11 @@ public class StreamAnalyticsDriver implements Serializable {
             SparkConf conf = new SparkConf().setAppName("Log Analyzer");
             JavaSparkContext sc = new JavaSparkContext(conf);
             Broadcast<Map<Integer, String>> broadcastVar = sc.broadcast(pidMessageTypeMap);
+            String applicationId = sc.sc().applicationId();
+            System.out.println("applicationId = " + applicationId);
+            InstanceExecAPI instanceExecAPI = new InstanceExecAPI();
+            InstanceExec instanceExec = new InstanceExec();
+            instanceExecAPI.insertInstanceExec(parentProcessId, applicationId);
 
             long batchDuration = 30000;
 
@@ -122,11 +127,7 @@ public class StreamAnalyticsDriver implements Serializable {
 
             JavaStreamingContext ssc = new JavaStreamingContext(sc, new Duration(batchDuration));
             StreamAnalyticsDriver streamAnalyticsDriver = new StreamAnalyticsDriver();
-            String applicationId = sc.sc().applicationId();
-            System.out.println("applicationId = " + applicationId);
-            InstanceExecAPI instanceExecAPI = new InstanceExecAPI();
-            InstanceExec instanceExec = new InstanceExec();
-            instanceExecAPI.insertInstanceExec(parentProcessId, applicationId);
+
 
             //iterate till the list contains only one element and the element must be the parent pid indicating we have reached the end of pipeline
             while (!currentUpstreamList.isEmpty()) {
