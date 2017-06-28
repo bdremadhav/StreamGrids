@@ -634,7 +634,7 @@
                     }
                 };
 
-                // Receives open, close and message command from the parent
+                // Receives open, close and record command from the parent
                 function listener(string) {
                     var command = jQuery.parseJSON(string), data = command.data;
 
@@ -660,7 +660,7 @@
                                     }
                                 }
                                 break;
-                            case "message":
+                            case "record":
                                 _prepareCallback(data, "messageReceived", 200, request.transport);
                                 break;
                             case "localMessage":
@@ -847,7 +847,7 @@
                 }
 
                 _localSocketF = function propagateMessageEvent(context) {
-                    storageService.signal("message", context);
+                    storageService.signal("record", context);
                 };
 
                 function leaveTrace() {
@@ -978,12 +978,12 @@
                             if (rq.maxRequest === -1 || rq.requestCount++ < rq.maxRequest) {
                                 _readHeaders(_jqxhr, rq);
 
-                                var msg = json.message;
+                                var msg = json.record;
                                 if (msg != null && typeof msg !== 'string') {
                                     try {
                                         msg = jQuery.stringifyJSON(msg);
                                     } catch (err) {
-                                        // The message was partial
+                                        // The record was partial
                                     }
                                 }
 
@@ -1190,10 +1190,10 @@
                     }
                 };
 
-                _sse.onmessage = function (message) {
+                _sse.onmessage = function (record) {
                     _debug("websocket.onmessage");
                     _timeout(_request);
-                    if (!_request.enableXDR && message.origin !== window.location.protocol + "//" + window.location.host) {
+                    if (!_request.enableXDR && record.origin !== window.location.protocol + "//" + window.location.host) {
                         jQuery.atmosphere.log(_request.logLevel, ["Origin was not " + window.location.protocol + "//" + window.location.host]);
                         return;
                     }
@@ -1201,8 +1201,8 @@
                     _response.state = 'messageReceived';
                     _response.status = 200;
 
-                    message = message.data;
-                    var skipCallbackInvocation = _trackMessageSize(message, _request, _response);
+                    record = record.data;
+                    var skipCallbackInvocation = _trackMessageSize(record, _request, _response);
                     if (!skipCallbackInvocation) {
                         _invokeCallback();
                         _response.responseBody = '';
@@ -1210,7 +1210,7 @@
                     }
                 };
 
-                _sse.onerror = function (message) {
+                _sse.onerror = function (record) {
                     _debug("websocket.onerror");
                     clearTimeout(_request.id);
 
@@ -1296,7 +1296,7 @@
                     }, _request.connectTimeout);
                 }
 
-                _websocket.onopen = function (message) {
+                _websocket.onopen = function (record) {
                     _debug("websocket.onopen");
                     _timeout(_request);
                     if (_canLog('debug')) {
@@ -1327,8 +1327,8 @@
                     }
                 };
 
-                _websocket.onmessage = function (message) {
-                    _debug("websocket.onmessage: " + message);
+                _websocket.onmessage = function (record) {
+                    _debug("websocket.onmessage: " + record);
                     _timeout(_request);
 
                     // We only consider it opened if we get the handshake data
@@ -1340,27 +1340,27 @@
                     _response.state = 'messageReceived';
                     _response.status = 200;
 
-                    message = message.data;
-                    var isString = typeof (message) === 'string';
+                    record = record.data;
+                    var isString = typeof (record) === 'string';
                     if (isString) {
-                        var skipCallbackInvocation = _trackMessageSize(message, _request, _response);
+                        var skipCallbackInvocation = _trackMessageSize(record, _request, _response);
                         if (!skipCallbackInvocation) {
                             _invokeCallback();
                             _response.responseBody = '';
                             _response.messages = [];
                         }
                     } else {
-                        message = _handleProtocol(_request, message);
-                        if (message === "")
+                        record = _handleProtocol(_request, record);
+                        if (record === "")
                             return;
 
-                        _response.responseBody = message;
+                        _response.responseBody = record;
                         _invokeCallback();
                         _response.responseBody = null;
                     }
                 };
 
-                _websocket.onerror = function (message) {
+                _websocket.onerror = function (record) {
                     _debug("websocket.onerror");
                     clearTimeout(_request.id);
 
@@ -1369,15 +1369,15 @@
                     }
                 };
 
-                _websocket.onclose = function (message) {
+                _websocket.onclose = function (record) {
                     _debug("websocket.onclose");
                     if (_response.state === 'closed')
                         return;
                     clearTimeout(_request.id);
 
-                    var reason = message.reason;
+                    var reason = record.reason;
                     if (reason === "") {
-                        switch (message.code) {
+                        switch (record.code) {
                             case 1000:
                                 reason = "Normal closure; the connection successfully completed whatever purpose for which it was created.";
                                 break;
@@ -1406,7 +1406,7 @@
 
                     if (_canLog('warn')) {
                         jQuery.atmosphere.warn("Websocket closed, reason: " + reason);
-                        jQuery.atmosphere.warn("Websocket closed, wasClean: " + message.wasClean);
+                        jQuery.atmosphere.warn("Websocket closed, wasClean: " + record.wasClean);
                     }
 
                     if (_response.closedByClientTimeout || jQuery.atmosphere.offline) {
@@ -1426,7 +1426,7 @@
                     } else if (!webSocketOpened) {
                         _reconnectWithFallbackTransport("Websocket failed. Downgrading to Comet and resending");
 
-                    } else if (_request.reconnect && _response.transport === 'websocket' && message.code !== 1001) {
+                    } else if (_request.reconnect && _response.transport === 'websocket' && record.code !== 1001) {
                         _clearState();
                         if (_requestCount++ < _request.maxReconnectOnClose) {
                             _open('re-connecting', _request.transport, _request);
@@ -1444,7 +1444,7 @@
                         } else {
                             jQuery.atmosphere.log(_request.logLevel, ["Websocket reconnect maximum try reached " + _request.requestCount]);
                             if (_canLog('warn')) {
-                                jQuery.atmosphere.warn("Websocket error, reason: " + message.reason);
+                                jQuery.atmosphere.warn("Websocket error, reason: " + record.reason);
                             }
                             _onError(0, "maxReconnectOnClose reached");
                         }
@@ -1462,16 +1462,16 @@
                 }
             }
 
-            function _handleProtocol(request, message) {
-                var nMessage = message;
+            function _handleProtocol(request, record) {
+                var nMessage = record;
                 if (request.transport === 'polling') return nMessage;
 
-                if (request.enableProtocol && request.firstMessage && jQuery.trim(message).length !== 0) {
+                if (request.enableProtocol && request.firstMessage && jQuery.trim(record).length !== 0) {
                     var pos = request.trackMessageLength ? 1 : 0;
-                    var messages = message.split(request.messageDelimiter);
+                    var messages = record.split(request.messageDelimiter);
 
                     if (messages.length <= pos + 1) {
-                        // Something went wrong, normally with IE or when a message is written before the
+                        // Something went wrong, normally with IE or when a record is written before the
                         // handshake has been received.
                         return nMessage;
                     }
@@ -1552,46 +1552,46 @@
             }
 
             /**
-             * Track received message and make sure callbacks/functions are only invoked when the complete message has been received.
+             * Track received record and make sure callbacks/functions are only invoked when the complete record has been received.
              *
-             * @param message
+             * @param record
              * @param request
              * @param response
              */
-            function _trackMessageSize(message, request, response) {
-                message = _handleProtocol(request, message);
-                if (message.length === 0)
+            function _trackMessageSize(record, request, response) {
+                record = _handleProtocol(request, record);
+                if (record.length === 0)
                     return true;
 
-                response.responseBody = message;
+                response.responseBody = record;
 
                 if (request.trackMessageLength) {
                     // prepend partialMessage if any
-                    message = response.partialMessage + message;
+                    record = response.partialMessage + record;
 
                     var messages = [];
-                    var messageStart = message.indexOf(request.messageDelimiter);
+                    var messageStart = record.indexOf(request.messageDelimiter);
                     if (messageStart != -1) {
                         while (messageStart !== -1) {
-                            var str = message.substring(0, messageStart);
+                            var str = record.substring(0, messageStart);
                             var messageLength = parseInt(str, 10);
                             if (isNaN(messageLength))
-                                throw 'message length "' + str + '" is not a number';
+                                throw 'record length "' + str + '" is not a number';
                             messageStart += request.messageDelimiter.length;
-                            if (messageStart + messageLength > message.length) {
-                                // message not complete, so there is no trailing messageDelimiter
+                            if (messageStart + messageLength > record.length) {
+                                // record not complete, so there is no trailing messageDelimiter
                                 messageStart = -1;
                             } else {
-                                // message complete, so add it
-                                messages.push(message.substring(messageStart, messageStart + messageLength));
+                                // record complete, so add it
+                                messages.push(record.substring(messageStart, messageStart + messageLength));
                                 // remove consumed characters
-                                message = message.substring(messageStart + messageLength, message.length);
-                                messageStart = message.indexOf(request.messageDelimiter);
+                                record = record.substring(messageStart + messageLength, record.length);
+                                messageStart = record.indexOf(request.messageDelimiter);
                             }
                         }
 
                         /* keep any remaining data */
-                        response.partialMessage = message;
+                        response.partialMessage = record;
 
                         if (messages.length !== 0) {
                             response.responseBody = messages.join(request.messageDelimiter);
@@ -1604,8 +1604,8 @@
                         }
                     }
                 }
-                response.responseBody = message;
-                response.messages = [message];
+                response.responseBody = record;
+                response.messages = [record];
                 return false;
             }
 
@@ -1909,8 +1909,8 @@
 
                             if (rq.transport === 'streaming') {
                                 if (!jQuery.browser.opera) {
-                                    var message = responseText.substring(rq.lastIndex, responseText.length);
-                                    skipCallbackInvocation = _trackMessageSize(message, rq, _response);
+                                    var record = responseText.substring(rq.lastIndex, responseText.length);
+                                    skipCallbackInvocation = _trackMessageSize(record, rq, _response);
 
                                     rq.lastIndex = responseText.length;
                                     if (skipCallbackInvocation) {
@@ -1931,10 +1931,10 @@
                                             _timeout(_request);
 
                                             _response.state = "messageReceived";
-                                            var message = ajaxRequest.responseText.substring(rq.lastIndex);
+                                            var record = ajaxRequest.responseText.substring(rq.lastIndex);
                                             rq.lastIndex = ajaxRequest.responseText.length;
 
-                                            skipCallbackInvocation = _trackMessageSize(message, rq, _response);
+                                            skipCallbackInvocation = _trackMessageSize(record, rq, _response);
                                             if (!skipCallbackInvocation) {
                                                 _invokeCallback();
                                             }
@@ -1944,7 +1944,7 @@
                                                 return;
                                             }
                                         } else if (_response.status > 400) {
-                                            // Prevent replaying the last message.
+                                            // Prevent replaying the last record.
                                             rq.lastIndex = ajaxRequest.responseText.length;
                                             return false;
                                         }
@@ -2145,7 +2145,7 @@
                         return url;
                     };
 
-                // Handles open and message event
+                // Handles open and record event
                 xdr.onprogress = function () {
                     handle(xdr);
                 };
@@ -2176,17 +2176,17 @@
 
                 var handle = function (xdr) {
                     clearTimeout(rq.id);
-                    var message = xdr.responseText;
+                    var record = xdr.responseText;
 
-                    message = message.substring(lastIndex);
-                    lastIndex += message.length;
+                    record = record.substring(lastIndex);
+                    lastIndex += record.length;
 
                     if (transport !== 'polling') {
                         _timeout(rq);
 
-                        var skipCallbackInvocation = _trackMessageSize(message, rq, _response);
+                        var skipCallbackInvocation = _trackMessageSize(record, rq, _response);
 
-                        if (transport === 'long-polling' && jQuery.trim(message).length === 0)
+                        if (transport === 'long-polling' && jQuery.trim(record).length === 0)
                             return;
 
                         if (rq.executeCallbackBeforeReconnect) {
@@ -2328,7 +2328,7 @@
                                     rq.isReopen = true;
                                 }
 
-                                // Handles message and close event
+                                // Handles record and close event
                                 stop = jQuery.atmosphere.iterate(function () {
                                     var text = readResponse();
                                     if (text.length > rq.lastIndex) {
@@ -2397,46 +2397,46 @@
             }
 
             /**
-             * Send message. <br>
+             * Send record. <br>
              * Will be automatically dispatch to other connected.
              *
              * @param {Object, string} Message to send.
              * @private
              */
-            function _push(message) {
+            function _push(record) {
 
                 if (_localStorageService != null) {
-                    _pushLocal(message);
+                    _pushLocal(record);
                 } else if (_activeRequest != null || _sse != null) {
-                    _pushAjaxMessage(message);
+                    _pushAjaxMessage(record);
                 } else if (_ieStream != null) {
-                    _pushIE(message);
+                    _pushIE(record);
                 } else if (_jqxhr != null) {
-                    _pushJsonp(message);
+                    _pushJsonp(record);
                 } else if (_websocket != null) {
-                    _pushWebSocket(message);
+                    _pushWebSocket(record);
                 } else {
                     _onError(0, "No suspended connection available");
                     jQuery.atmosphere.error("No suspended connection available. Make sure atmosphere.subscribe has been called and request.onOpen invoked before invoking trying to push data");
                 }
             }
 
-            function _pushLocal(message) {
-                _localStorageService.send(message);
+            function _pushLocal(record) {
+                _localStorageService.send(record);
             }
 
-            function _intraPush(message) {
+            function _intraPush(record) {
                 // IE 9 will crash if not.
-                if (message.length === 0)
+                if (record.length === 0)
                     return;
 
                 try {
                     if (_localStorageService) {
-                        _localStorageService.localSend(message);
+                        _localStorageService.localSend(record);
                     } else if (_storageService) {
                         _storageService.signal("localMessage", jQuery.stringifyJSON({
                             id: guid,
-                            event: message
+                            event: record
                         }));
                     }
                 } catch (err) {
@@ -2445,59 +2445,59 @@
             }
 
             /**
-             * Send a message using currently opened ajax request (using http-streaming or long-polling). <br>
+             * Send a record using currently opened ajax request (using http-streaming or long-polling). <br>
              *
-             * @param {string, Object} Message to send. This is an object, string message is saved in data member.
+             * @param {string, Object} Message to send. This is an object, string record is saved in data member.
              * @private
              */
-            function _pushAjaxMessage(message) {
-                var rq = _getPushRequest(message);
+            function _pushAjaxMessage(record) {
+                var rq = _getPushRequest(record);
                 _executeRequest(rq);
             }
 
             /**
-             * Send a message using currently opened ie streaming (using http-streaming or long-polling). <br>
+             * Send a record using currently opened ie streaming (using http-streaming or long-polling). <br>
              *
-             * @param {string, Object} Message to send. This is an object, string message is saved in data member.
+             * @param {string, Object} Message to send. This is an object, string record is saved in data member.
              * @private
              */
-            function _pushIE(message) {
+            function _pushIE(record) {
                 if (_request.enableXDR && jQuery.atmosphere.checkCORSSupport()) {
-                    var rq = _getPushRequest(message);
+                    var rq = _getPushRequest(record);
                     // Do not reconnect since we are pushing.
                     rq.reconnect = false;
                     _jsonp(rq);
                 } else {
-                    _pushAjaxMessage(message);
+                    _pushAjaxMessage(record);
                 }
             }
 
             /**
-             * Send a message using jsonp transport. <br>
+             * Send a record using jsonp transport. <br>
              *
-             * @param {string, Object} Message to send. This is an object, string message is saved in data member.
+             * @param {string, Object} Message to send. This is an object, string record is saved in data member.
              * @private
              */
-            function _pushJsonp(message) {
-                _pushAjaxMessage(message);
+            function _pushJsonp(record) {
+                _pushAjaxMessage(record);
             }
 
-            function _getStringMessage(message) {
-                var msg = message;
+            function _getStringMessage(record) {
+                var msg = record;
                 if (typeof (msg) === 'object') {
-                    msg = message.data;
+                    msg = record.data;
                 }
                 return msg;
             }
 
             /**
-             * Build request use to push message using method 'POST' <br>. Transport is defined as 'polling' and 'suspend' is set to false.
+             * Build request use to push record using method 'POST' <br>. Transport is defined as 'polling' and 'suspend' is set to false.
              *
-             * @return {Object} Request object use to push message.
+             * @return {Object} Request object use to push record.
              * @private
              */
-            function _getPushRequest(message) {
-                var msg = _getStringMessage(message);
+            function _getPushRequest(record) {
+                var msg = _getStringMessage(record);
 
                 var rq = {
                     connected: false,
@@ -2528,19 +2528,19 @@
                     heartbeat: _request.heartbeat
                 };
 
-                if (typeof (message) === 'object') {
-                    rq = jQuery.extend(rq, message);
+                if (typeof (record) === 'object') {
+                    rq = jQuery.extend(rq, record);
                 }
 
                 return rq;
             }
 
             /**
-             * Send a message using currently opened websocket. <br>
+             * Send a record using currently opened websocket. <br>
              *
              */
-            function _pushWebSocket(message) {
-                var msg = jQuery.atmosphere.isBinary(message) ? message : _getStringMessage(message);
+            function _pushWebSocket(record) {
+                var msg = jQuery.atmosphere.isBinary(record) ? record : _getStringMessage(record);
                 var data;
                 try {
                     if (_request.dispatchUrl != null) {
@@ -2557,17 +2557,17 @@
                     _websocket.send(data);
 
                 } catch (e) {
-                    _websocket.onclose = function (message) {
+                    _websocket.onclose = function (record) {
                     };
                     _clearState();
 
-                    _reconnectWithFallbackTransport("Websocket failed. Downgrading to Comet and resending " + message);
-                    _pushAjaxMessage(message);
+                    _reconnectWithFallbackTransport("Websocket failed. Downgrading to Comet and resending " + record);
+                    _pushAjaxMessage(record);
                 }
             }
 
-            function _localMessage(message) {
-                var m = jQuery.parseJSON(message);
+            function _localMessage(record) {
+                var m = jQuery.parseJSON(record);
                 if (m.id !== guid) {
                     if (typeof (_request.onLocalMessage) !== 'undefined') {
                         _request.onLocalMessage(m.event);
@@ -2751,7 +2751,7 @@
              * @private
              */
             function _verifyStreamingLength(ajaxRequest, rq) {
-                // Wait to be sure we have the full message before closing.
+                // Wait to be sure we have the full record before closing.
                 if (_response.partialMessage === "" && (rq.transport === 'streaming') && (ajaxRequest.responseText.length > rq.maxStreamingLength)) {
                     return true;
                 }
@@ -2908,14 +2908,14 @@
                 return _request.url;
             };
 
-            this.push = function (message, dispatchUrl) {
+            this.push = function (record, dispatchUrl) {
                 if (dispatchUrl != null) {
                     var originalDispatchUrl = _request.dispatchUrl;
                     _request.dispatchUrl = dispatchUrl;
-                    _push(message);
+                    _push(record);
                     _request.dispatchUrl = originalDispatchUrl;
                 } else {
-                    _push(message);
+                    _push(record);
                 }
             };
 
@@ -2923,11 +2923,11 @@
                 return _request.uuid;
             };
 
-            this.pushLocal = function (message) {
-                _intraPush(message);
+            this.pushLocal = function (record) {
+                _intraPush(record);
             };
 
-            this.enableProtocol = function (message) {
+            this.enableProtocol = function (record) {
                 return _request.enableProtocol;
             };
 

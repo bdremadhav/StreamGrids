@@ -467,9 +467,9 @@
 		return !!(m._a && (m._tzm === undefined));
 	}
 
-	function logError (message) {
+	function logError (record) {
 		if (typeof console !== 'undefined' && typeof console.error === 'function') {
-			console.error(message);
+			console.error(record);
 		}
 	}
 

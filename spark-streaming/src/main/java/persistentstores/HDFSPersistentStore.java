@@ -8,6 +8,8 @@ import org.apache.hadoop.fs.FileUtil;
 import org.apache.hadoop.fs.Path;
 import org.apache.spark.sql.DataFrame;
 import org.apache.spark.sql.catalyst.plans.logical.Except;
+import org.apache.spark.sql.types.StructType;
+import org.apache.spark.streaming.api.java.JavaDStream;
 
 import java.util.Date;
 import java.util.Enumeration;
@@ -20,7 +22,7 @@ import java.util.Properties;
 public class HDFSPersistentStore implements PersistentStore {
 
     @Override
-    public void persist(DataFrame df, Integer pid, Integer prevPid) throws Exception {
+    public void persist(JavaDStream dStream, Integer pid, Integer prevPid, StructType schema) throws Exception {
         try {
             String hdfsPath = new String();
             System.out.println("Inside emitter hdfs, persisting pid = " + prevPid);
@@ -32,8 +34,9 @@ public class HDFSPersistentStore implements PersistentStore {
             if (hdfsPath == null || hdfsPath.isEmpty()) {
                 hdfsPath = "/user/cloudera/spark-streaming-data/";
             }
-            long date = new Date().getTime();
-            if (df.rdd().isEmpty())
+            Long date = new Date().getTime();
+            dStream.dstream().saveAsTextFiles(hdfsPath,date.toString());
+           /* if (df.rdd().isEmpty())
                 System.out.println("dataframe is empty");
             else {
                 System.out.println("Not empty - dataframe is non empty");
@@ -57,9 +60,9 @@ public class HDFSPersistentStore implements PersistentStore {
                 Configuration configuration = new Configuration();
                 FileSystem fileSystem = inputPath.getFileSystem(configuration);
                 boolean result = FileUtil.copyMerge(fileSystem, inputPath, fileSystem, finalOutputPath, true, configuration, null);
-                System.out.println("merged result = " + result);
+                System.out.println("merged result = " + result);*/
 
-            }
+
         } catch (Exception e) {
             e.printStackTrace();
             throw e;

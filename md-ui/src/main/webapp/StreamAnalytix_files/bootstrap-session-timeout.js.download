@@ -12,7 +12,7 @@
     jQuery.sessionTimeout = function(options) {
         var defaults = {
             title: 'Your Session is About to Expire!',
-            message: 'Your session is about to expire.',
+            record: 'Your session is about to expire.',
             logoutButton: 'Logout',
             keepAliveButton: 'Stay Connected',
             keepAliveUrl: '/keep-alive',
@@ -57,7 +57,7 @@
 
         // Unless user set his own callback function, prepare bootstrap modal elements and events
         if (typeof opt.onWarn !== 'function') {
-            // If opt.countdownMessage is defined add a coundown timer message to the modal dialog
+            // If opt.countdownMessage is defined add a coundown timer record to the modal dialog
             var countdownMessage = opt.countdownMessage ?
             '<p>' + opt.countdownMessage.replace(/{timer}/g, '<span class="countdown-holder"></span>') + '</p>' : '';
             var coundownBarHtml = opt.countdownBar ?
@@ -76,7 +76,7 @@
                     <h4 class="modal-title">' + opt.title + '</h4> \
                   </div> \
                   <div class="modal-body"> \
-                    <p>' + opt.message + '</p> \
+                    <p>' + opt.record + '</p> \
                     ' + countdownMessage + ' \
                     ' + coundownBarHtml + ' \
                   </div> \
@@ -213,7 +213,7 @@
             } else if (opt.countdownBar && type === 'session') {
                 countdown.percentLeft = Math.floor(countdown.timeLeft / (opt.redirAfter / 1000) * 100);
             }
-            // Set countdown message time value
+            // Set countdown record time value
             var countdownEl = $('.countdown-holder');
             var secondsLeft = countdown.timeLeft >= 0 ? countdown.timeLeft : 0;
             if (opt.countdownSmart) {
@@ -227,7 +227,7 @@
                 countdownEl.text(secondsLeft + "s");
             }
 
-            // Set countdown message time value
+            // Set countdown record time value
             if (opt.countdownBar) {
                 $('.countdown-bar').css('width', countdown.percentLeft + '%');
             }

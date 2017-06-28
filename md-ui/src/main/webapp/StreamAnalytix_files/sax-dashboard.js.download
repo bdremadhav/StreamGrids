@@ -126,7 +126,7 @@ var saxDashboardClass = new function() {
 					var params = '/'+selTen+'/'+ssId+'?engine=spark';
 					var response = saxApp.ajaxPOSTSync(subSystemDeleteUrl + params);
 					if ( response ) {
-						bootbox.alert(response.message);
+						bootbox.alert(response.record);
 						if ( response.status == 'SUCCESS' ) {
 							var params = selTen + '/?engineType=spark';
 							_this.ajaxGETASync('inspect', inspectPipelinesListUrl+'/'+params, ["#inspectPipelineList"], ["#inspectPipelineListError"]);
@@ -148,7 +148,7 @@ var saxDashboardClass = new function() {
 					var param = "?name="+ssId+"&engine=spark&action=kill";
 					var response = saxApp.ajaxPOSTSync(setStausUrl+'/'+ selTen + param);
 					if ( response ) {
-						bootbox.alert(response.message);
+						bootbox.alert(response.record);
 						if ( response.status == 'SUCCESS' ) {
 							var params = selTen+'?engineType=spark';
 							_this.ajaxGETASync('inspect', inspectPipelinesListUrl+'/'+params, ["#inspectPipelineList"], ["#inspectPipelineListError"]);
@@ -479,7 +479,7 @@ var saxDashboardClass = new function() {
 				_vio.FailType == 'VIOLATED' ||
 				_vio.FailType == 'GRACE_TO_EXP')
 			) {
-				$("#licenseViolationCont").text(_vio.message.replace("<br/>","")+' '+_vio.SupportEmail);
+				$("#licenseViolationCont").text(_vio.record.replace("<br/>","")+' '+_vio.SupportEmail);
 			} else {
 				$("#licenseViolationCont").text(_vio.FailType);
 			}

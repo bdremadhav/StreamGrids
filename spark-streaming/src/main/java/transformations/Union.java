@@ -1,6 +1,8 @@
 package transformations;
 
 import org.apache.spark.sql.DataFrame;
+import org.apache.spark.sql.types.StructType;
+import org.apache.spark.streaming.api.java.JavaDStream;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +14,7 @@ import java.util.Set;
  */
 public class Union implements Transformation {
     @Override
-    public DataFrame transform(Map<Integer,DataFrame> prevDataFrameMap, Map<Integer,Set<Integer>> prevMap, Integer pid){
+    public JavaDStream transform(Map<Integer,JavaDStream> prevDataFrameMap, Map<Integer,Set<Integer>> prevMap, Integer pid,StructType schema){
         List<Integer> prevPidList = new ArrayList<>();
         prevPidList.addAll(prevMap.get(pid));
         Integer prevPid1 = prevPidList.get(0);
@@ -37,6 +39,7 @@ public class Union implements Transformation {
 
         }
         return unionedDF;
+        return null;
     }
 }
 
