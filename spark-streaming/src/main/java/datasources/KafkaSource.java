@@ -67,7 +67,7 @@ public class KafkaSource implements Source{
     }
 
     @Override
-    public JavaDStream execute(JavaStreamingContext ssc,Integer pid) throws Exception {
+    public JavaDStream<String> execute(JavaStreamingContext ssc,Integer pid) throws Exception {
         try {
             System.out.println("pid = " + pid);
             Map<String, String> kafkaParams = getKafkaParams(pid);

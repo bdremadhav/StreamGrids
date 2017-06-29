@@ -25,55 +25,8 @@ import java.util.*;
  * Created by cloudera on 5/21/17.
  */
 public class Filter implements Transformation {
-    private static int getIndexInRow(StructType schema, String colName) {
-        String[] colNames = schema.fieldNames();
-        Map<String, String> result = new HashMap<String, String>();
-        int index = -1;
-        for (int i = 0; i < colNames.length; i++) {
-            if (colNames[i].equals(colName)) {
-                index = i;
-            }
-        }
-
-        return index;
-    }
-
-    public JavaDStream<WrapperMessage> convertToWrapperDStream(Map<Integer, JavaDStream> prevDStreamMap, Map<Integer, Set<Integer>> prevMap, Integer pid, StructType schema) {
-        List<Integer> prevPidList = new ArrayList<>();
-        prevPidList.addAll(prevMap.get(pid));
-        Integer prevPid = prevPidList.get(0);
-        System.out.println("Inside filter prevPid = " + prevPid);
-        JavaDStream prevDStream = prevDStreamMap.get(prevPid);
-        JavaDStream filteredDStream = null;
-
-        GetProperties getProperties = new GetProperties();
-        Properties filterProperties = getProperties.getProperties(String.valueOf(pid), "default");
-        final String check = filterProperties.getProperty("operator");
-
-        final String filterValue = filterProperties.getProperty("filtervalue");
-        final String colName = filterProperties.getProperty("column");
-
-        System.out.println("operator = " + check);
-
-        System.out.println("filtervalue = " + filterValue);
-        //colName = filterProperties.getProperty("column");
-        System.out.println("colName = " + colName);
-
-        JavaDStream<WrapperMessage> prevDStream1 = prevDStream.map(new Function<String, WrapperMessage>() {
-            @Override
-            public WrapperMessage call(String record) throws Exception {
-                Object[] attributes = new Object[]{};
-                attributes = Parser.parseMessage(record, pid);
-                return new WrapperMessage(RowFactory.create(attributes));
-            }
-        });
-        return prevDStream1;
-    }
-
     @Override
-    public JavaDStream<WrapperMessage> transform(Map<Integer, JavaDStream> prevDStreamMap, Map<Integer, Set<Integer>> prevMap, Integer pid, StructType schema) {
-        //TODO: fetch the filter logic from DB
-
+    public JavaDStream<Row> transform(Map<Integer, JavaDStream<Row>> prevDStreamMap, Map<Integer, Set<Integer>> prevMap, Integer pid, StructType schema) {
         List<Integer> prevPidList = new ArrayList<>();
         prevPidList.addAll(prevMap.get(pid));
         Integer prevPid = prevPidList.get(0);
@@ -95,41 +48,13 @@ public class Filter implements Transformation {
         System.out.println("colName = " + colName);
 
 
-        JavaDStream<WrapperMessage> prevDStream1 = convertToWrapperDStream(prevDStreamMap, prevMap, pid, schema);
-
-        JavaDStream<WrapperMessage> finalDStream = prevDStream1.transform(new Function<JavaRDD<WrapperMessage>, JavaRDD<WrapperMessage>>() {
+        JavaDStream<Row> finalDStream = prevDStream.transform(new Function<JavaRDD<Row>, JavaRDD<Row>>() {
             @Override
-            public JavaRDD<WrapperMessage> call(JavaRDD<WrapperMessage> rdd) throws Exception {
-                JavaRDD<WrapperMessage> rowRDD = rdd.map(new Function<WrapperMessage, WrapperMessage>() {
-                                                             @Override
-                                                             public WrapperMessage call(WrapperMessage record) throws Exception {
-                                                                 try {
-                                                                     Object[] attributes = new Object[]{};
-                                                                     attributes = Parser.parseMessage(record.getRecord(), pid);
-                                                                     return new WrapperMessage(RowFactory.create(attributes));
-                                                                 } catch (Exception e) {
-                                                                     e.printStackTrace();
-                                                                     throw e;
-                                                                 }
-                                                             }
-                                                         }
-                );
+            public JavaRDD<Row> call(JavaRDD<Row> rowSchemaRDD) throws Exception {
 
-                JavaRDD<Row> rowSchemaRDD = rdd.map(new Function<WrapperMessage, Row>() {
-                                                        @Override
-                                                        public Row call(WrapperMessage rdd) throws Exception {
-                                                            return new Row();
-                                                        }
-                                                    }
-                );
-
-
-                SQLContext sqlContext = SQLContext.getOrCreate(rdd.context());
-
+                SQLContext sqlContext = SQLContext.getOrCreate(rowSchemaRDD.context());
                 DataFrame dataFrame = sqlContext.createDataFrame(rowSchemaRDD, schema);
-
                 DataFrame filteredDF = null;
-
 
                 if (dataFrame != null && !dataFrame.rdd().isEmpty()) {
                     if (check.equals("equals")) {
@@ -147,24 +72,11 @@ public class Filter implements Transformation {
                     }
                 }
 
-                filteredDF.printSchema();
-                JavaRDD<WrapperMessage> finalRDD = filteredDF.javaRDD().map(new Function<Row, WrapperMessage>() {
-                                                                                @Override
-                                                                                public WrapperMessage call(Row row) throws Exception {
-                                                                                    return new WrapperMessage(row);
-                                                                                }
-                                                                            }
-                );
+                //filteredDF.printSchema();
+                return filteredDF.javaRDD();
 
-
-                return finalRDD;
-                // return filteredDF.javaRDD();
             }
         });
-
-        finalDStream.window()
         return finalDStream;
-
-
     }
 }
