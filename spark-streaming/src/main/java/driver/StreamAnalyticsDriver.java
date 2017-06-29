@@ -15,6 +15,7 @@ import messageschema.SchemaReader;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.broadcast.Broadcast;
@@ -132,9 +133,9 @@ public class StreamAnalyticsDriver implements Serializable {
             }
             streamAnalyticsDriver.createDStreams(ssc, listOfSourcePids);
             streamAnalyticsDriver.invokeDStreamOperations(ssc, listOfSourcePids, prevMap, nextPidMap, broadcastVar);
-            //ssc.start();
+            ssc.start();
             System.out.println(" streaming started");
-           // ssc.awaitTermination();
+            ssc.awaitTermination();
         }catch (Exception e){
             LOGGER.info("final exception = " + e);
             InstanceExecAPI instanceExecAPI = new InstanceExecAPI();
@@ -219,13 +220,12 @@ public class StreamAnalyticsDriver implements Serializable {
         JavaDStream<Row> rowJavaDStream = stringJavaDStream.map(new Function<String, Row>() {
             @Override
             public Row call(String record) throws Exception {
-                Object[] attributes = new Object[]{};
-                attributes = Parser.parseMessage(record, pid);
-                return RowFactory.create(attributes);
+                return RowFactory.create(Parser.parseMessage(record, pid));
             }
         });
         return rowJavaDStream;
     }
+
 
     //this method invokes DStream operations based on the prev map & handles logic accordingly for source/transformation/emitter
     public void invokeDStreamOperations(JavaStreamingContext ssc, List<Integer> listOfSourcePids, Map<Integer, Set<Integer>> prevMap, Map<Integer, String> nextPidMap, Broadcast<Map<Integer,String>> broadcastVar) throws Exception {
@@ -242,7 +242,16 @@ public class StreamAnalyticsDriver implements Serializable {
                 System.out.println("transformedDStreamMap = " + transformedDStreamMap);
                 SchemaReader schemaReader = new SchemaReader();
                 StructType schema = schemaReader.generateSchema(pid);
-                transformAndEmit(nextPidMap.get(pid), transformedDStreamMap,schema );
+                System.out.println("schema.toString() = " + schema.toString());
+                rowMsgDataStream.foreachRDD(new Function<JavaRDD<Row>, Void>() {
+                    @Override
+                    public Void call(JavaRDD<Row> rowJavaRDD) throws Exception {
+                        System.out.println("rowJavaRDD = " + rowJavaRDD);
+                        transformAndEmit(nextPidMap.get(pid), transformedDStreamMap,schema );
+                        return null;
+                    }
+                });
+
                 return;
             }
     }
