@@ -47,8 +47,7 @@ public class HDFSPersistentStore implements PersistentStore {
                         System.out.println("df.rdd().count() = " + df.rdd().count());
                         String inputPathName = hdfsPath + date + "_" + pid + "/";
                         String finalOutputPathName = hdfsPath + date + "-" + pid + "/";
-                        //df.rdd().saveAsTextFile(inputPathName);
-                        df.rdd().take(10);
+                        df.rdd().saveAsTextFile(inputPathName);
                         System.out.println("showing dataframe df after writing to hdfs  ");
                         df.show(100);
 
