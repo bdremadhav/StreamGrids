@@ -13,7 +13,6 @@ import org.apache.spark.streaming.api.java.JavaStreamingContext;
 import org.apache.spark.streaming.twitter.TwitterUtils;
 import twitter4j.Status;
 import twitter4j.auth.Authorization;
-import twitter4j.internal.http.HttpRequest;
 
 import java.util.Enumeration;
 import java.util.HashMap;

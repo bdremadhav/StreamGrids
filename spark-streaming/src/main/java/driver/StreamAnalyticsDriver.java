@@ -243,7 +243,13 @@ public class StreamAnalyticsDriver implements Serializable {
                 SchemaReader schemaReader = new SchemaReader();
                 StructType schema = schemaReader.generateSchema(pid);
                 System.out.println("schema.toString() = " + schema.toString());
-                rowMsgDataStream.foreachRDD(new Function<JavaRDD<Row>, Void>() {
+
+                msgDataStream.map(new Function<String, Row>() {
+                    @Override
+                    public Row call(String record) throws Exception {
+                        return RowFactory.create(Parser.parseMessage(record, pid));
+                    }
+                }).foreachRDD(new Function<JavaRDD<Row>, Void>() {
                     @Override
                     public Void call(JavaRDD<Row> rowJavaRDD) throws Exception {
                         System.out.println("rowJavaRDD = " + rowJavaRDD);
