@@ -3,7 +3,6 @@ package messageschema;
 import com.wipro.ats.bdre.md.api.GetProcess;
 import com.wipro.ats.bdre.md.api.GetProperties;
 import com.wipro.ats.bdre.md.api.StreamingMessagesAPI;
-import com.wipro.ats.bdre.md.beans.GetPropertiesInfo;
 import com.wipro.ats.bdre.md.beans.ProcessInfo;
 import com.wipro.ats.bdre.md.dao.MessagesDAO;
 import com.wipro.ats.bdre.md.dao.jpa.Messages;

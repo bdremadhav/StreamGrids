@@ -1,23 +1,16 @@
 package persistentstores;
 
 import com.wipro.ats.bdre.md.api.GetProperties;
-import com.wipro.ats.bdre.md.beans.GetPropertiesInfo;
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.FileUtil;
-import org.apache.hadoop.fs.Path;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.sql.DataFrame;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SQLContext;
-import org.apache.spark.sql.catalyst.plans.logical.Except;
 import org.apache.spark.sql.types.StructType;
 import org.apache.spark.streaming.api.java.JavaDStream;
+import util.WrapperMessage;
 
 import java.util.Date;
-import java.util.Enumeration;
-import java.util.List;
 import java.util.Properties;
 
 /**
@@ -26,7 +19,7 @@ import java.util.Properties;
 public class HDFSPersistentStore implements PersistentStore {
 
     @Override
-    public void persist(JavaDStream<Row> dStream, Integer pid, Integer prevPid, StructType schema) throws Exception {
+    public void persist(JavaRDD emptyRDD, JavaDStream<WrapperMessage> dStream, Integer pid, Integer prevPid, StructType schema) throws Exception {
         try {
             final String hdfsPath = "/user/cloudera/spark-streaming-data/";
             System.out.println("Inside emitter hdfs, persisting pid = " + prevPid);
@@ -36,9 +29,16 @@ public class HDFSPersistentStore implements PersistentStore {
             Properties hdfsProperties = getProperties.getProperties(String.valueOf(pid), "kafka");
 
             Long date = new Date().getTime();
-            JavaDStream<Row> finaldstream =  dStream.transform(new Function<JavaRDD<Row>,JavaRDD<Row>>() {
+            JavaDStream<WrapperMessage> finalDStream =  dStream.transform(new Function<JavaRDD<WrapperMessage>,JavaRDD<WrapperMessage>>() {
                 @Override
-                public JavaRDD<Row> call(JavaRDD<Row> rowJavaRDD) throws Exception {
+                public JavaRDD<WrapperMessage> call(JavaRDD<WrapperMessage> wrapperMessageJavaRDD) throws Exception {
+                    JavaRDD<Row> rowJavaRDD = wrapperMessageJavaRDD.map(new Function<WrapperMessage, Row>() {
+                                                                    @Override
+                                                                    public Row call(WrapperMessage wrapperMessage) throws Exception {
+                                                                        return wrapperMessage.getRow();
+                                                                    }
+                                                                }
+                    );
                     SQLContext sqlContext = SQLContext.getOrCreate(rowJavaRDD.context());
                     DataFrame df = sqlContext.createDataFrame(rowJavaRDD, schema);
                     if (df != null && !df.rdd().isEmpty()) {
@@ -47,27 +47,28 @@ public class HDFSPersistentStore implements PersistentStore {
                         System.out.println("df.rdd().count() = " + df.rdd().count());
                         String inputPathName = hdfsPath + date + "_" + pid + "/";
                         String finalOutputPathName = hdfsPath + date + "-" + pid + "/";
-                        df.rdd().saveAsTextFile(inputPathName);
+                        //df.rdd().saveAsTextFile(inputPathName);
+                        df.rdd().take(10);
                         System.out.println("showing dataframe df after writing to hdfs  ");
                         df.show(100);
 
-                      /*  Path inputPath = new Path(inputPathName);
-                        Path finalOutputPath = new Path(finalOutputPathName);
-                        System.out.println("finalOutputPath = " + finalOutputPath);
-
-                        Configuration configuration = new Configuration();
-                        FileSystem fileSystem = inputPath.getFileSystem(configuration);
-                        boolean result = FileUtil.copyMerge(fileSystem, inputPath, fileSystem, finalOutputPath, true, configuration, null);
-                        System.out.println("merged result = " + result);*/
-
                     }
-
-                    return rowJavaRDD;
+                    JavaRDD<WrapperMessage> finalRDD = emptyRDD;
+                    if (df != null) {
+                        finalRDD = df.javaRDD().map(new Function<Row, WrapperMessage>() {
+                                                        @Override
+                                                        public WrapperMessage call(Row row) throws Exception {
+                                                            return new WrapperMessage(row);
+                                                        }
+                                                    }
+                        );
+                    }
+                    return finalRDD;
                 }
             });
-            finaldstream.foreachRDD(new Function<JavaRDD<Row>, Void>() {
+            finalDStream.foreachRDD(new Function<JavaRDD<WrapperMessage>, Void>() {
                 @Override
-                public Void call(JavaRDD<Row> rowJavaRDD) throws Exception {
+                public Void call(JavaRDD<WrapperMessage> rowJavaRDD) throws Exception {
                     return null;
                 }
             });

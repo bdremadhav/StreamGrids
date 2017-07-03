@@ -1,20 +1,14 @@
 package datasources;
 
 import com.wipro.ats.bdre.md.api.GetConfigurationProperties;
-import com.wipro.ats.bdre.md.api.GetConnectionProperties;
 import com.wipro.ats.bdre.md.api.GetProperties;
-import com.wipro.ats.bdre.md.api.StreamingMessagesAPI;
-import com.wipro.ats.bdre.md.dao.jpa.Connections;
-import com.wipro.ats.bdre.md.dao.jpa.Messages;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.streaming.api.java.JavaDStream;
 import org.apache.spark.streaming.api.java.JavaReceiverInputDStream;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
 import org.apache.spark.streaming.twitter.TwitterUtils;
 import twitter4j.Status;
-import twitter4j.auth.Authorization;
 
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;

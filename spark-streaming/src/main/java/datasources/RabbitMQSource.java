@@ -1,12 +1,11 @@
 package datasources;
 
 import com.rabbitmq.client.QueueingConsumer;
+import org.apache.spark.api.java.function.Function;
 import org.apache.spark.streaming.api.java.JavaDStream;
 import org.apache.spark.streaming.api.java.JavaReceiverInputDStream;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
-import org.apache.spark.streaming.rabbitmq.*;
-import org.apache.spark.api.java.function.Function;
-import scala.Array;
+import org.apache.spark.streaming.rabbitmq.RabbitMQUtils;
 
 import java.util.HashMap;
 import java.util.Map;
