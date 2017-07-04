@@ -23,7 +23,7 @@ public class Filter implements Transformation {
         Integer prevPid = prevPidList.get(0);
         System.out.println("Inside filter prevPid = " + prevPid);
         JavaDStream prevDStream = prevDStreamMap.get(prevPid);
-        JavaDStream filteredDStream = null;
+
         GetProperties getProperties = new GetProperties();
         Properties filterProperties = getProperties.getProperties(String.valueOf(pid), "default");
         final String check = filterProperties.getProperty("operator");
@@ -34,27 +34,13 @@ public class Filter implements Transformation {
         System.out.println("filtervalue = " + filterValue);
         System.out.println("colName = " + colName);
 
-
-
-
         JavaDStream<WrapperMessage> finalDStream = prevDStream.transform(new Function<JavaRDD<WrapperMessage>, JavaRDD<WrapperMessage>>() {
             @Override
             public JavaRDD<WrapperMessage> call(JavaRDD<WrapperMessage> rddWrapperMessage) throws Exception {
-
-                JavaRDD<Row> rddRow = rddWrapperMessage.map(new Function<WrapperMessage, Row>() {
-                                                                @Override
-                                                                public Row call(WrapperMessage wrapperMessage) throws Exception {
-                                                                    return wrapperMessage.getRow();
-                                                                }
-                                                            }
-                );
-
-
+                JavaRDD<Row> rddRow = rddWrapperMessage.map(record -> WrapperMessage.convertToRow(record));
                 SQLContext sqlContext = SQLContext.getOrCreate(rddWrapperMessage.context());
                 DataFrame dataFrame = sqlContext.createDataFrame(rddRow, schema);
                 DataFrame filteredDF = null;
-
-
 
                 if (dataFrame != null && !dataFrame.rdd().isEmpty()) {
                     if (check.equals("equals")) {
@@ -72,19 +58,10 @@ public class Filter implements Transformation {
                     }
                 }
                 JavaRDD<WrapperMessage> finalRDD = emptyRDD;
-                if (filteredDF != null) {
-                    finalRDD = filteredDF.javaRDD().map(new Function<Row, WrapperMessage>() {
-                                                            @Override
-                                                            public WrapperMessage call(Row row) throws Exception {
-                                                                return new WrapperMessage(row);
-                                                            }
-                                                        }
-                    );
-
-                }
-                    return finalRDD;
-                    // return filteredDF.javaRDD();
-                }
+                if (filteredDF != null)
+                    finalRDD = filteredDF.javaRDD().map(s -> WrapperMessage.convertToWrapperMessage(s));
+                return finalRDD;
+            }
         });
         return finalDStream;
     }

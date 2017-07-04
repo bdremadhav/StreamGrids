@@ -22,23 +22,15 @@ public class HDFSPersistentStore implements PersistentStore {
     public void persist(JavaRDD emptyRDD, JavaDStream<WrapperMessage> dStream, Integer pid, Integer prevPid, StructType schema) throws Exception {
         try {
             final String hdfsPath = "/user/cloudera/spark-streaming-data/";
-            System.out.println("Inside emitter hdfs, persisting pid = " + prevPid);
+            System.out.println("Inside emitter hdfs, persisting");
             GetProperties getProperties = new GetProperties();
-
-
             Properties hdfsProperties = getProperties.getProperties(String.valueOf(pid), "kafka");
 
 
             JavaDStream<WrapperMessage> finalDStream =  dStream.transform(new Function<JavaRDD<WrapperMessage>,JavaRDD<WrapperMessage>>() {
                 @Override
                 public JavaRDD<WrapperMessage> call(JavaRDD<WrapperMessage> wrapperMessageJavaRDD) throws Exception {
-                    JavaRDD<Row> rowJavaRDD = wrapperMessageJavaRDD.map(new Function<WrapperMessage, Row>() {
-                                                                    @Override
-                                                                    public Row call(WrapperMessage wrapperMessage) throws Exception {
-                                                                        return wrapperMessage.getRow();
-                                                                    }
-                                                                }
-                    );
+                    JavaRDD<Row> rowJavaRDD = wrapperMessageJavaRDD.map(record->WrapperMessage.convertToRow(record));
                     SQLContext sqlContext = SQLContext.getOrCreate(rowJavaRDD.context());
                     DataFrame df = sqlContext.createDataFrame(rowJavaRDD, schema);
                     if (df != null && !df.rdd().isEmpty()) {
@@ -55,25 +47,18 @@ public class HDFSPersistentStore implements PersistentStore {
                     }
                     JavaRDD<WrapperMessage> finalRDD = emptyRDD;
                     if (df != null) {
-                        finalRDD = df.javaRDD().map(new Function<Row, WrapperMessage>() {
-                                                        @Override
-                                                        public WrapperMessage call(Row row) throws Exception {
-                                                            return new WrapperMessage(row);
-                                                        }
-                                                    }
-                        );
+                        finalRDD = df.javaRDD().map(record->WrapperMessage.convertToWrapperMessage(record));
                     }
                     return finalRDD;
                 }
             });
+            //adding empty output operation to finish flow, else spark would never execute the DAG
             finalDStream.foreachRDD(new Function<JavaRDD<WrapperMessage>, Void>() {
                 @Override
                 public Void call(JavaRDD<WrapperMessage> rowJavaRDD) throws Exception {
                     return null;
                 }
             });
-           // dStream.dstream().saveAsTextFiles(hdfsPath,date.toString());
-
 
         } catch (Exception e) {
             e.printStackTrace();
