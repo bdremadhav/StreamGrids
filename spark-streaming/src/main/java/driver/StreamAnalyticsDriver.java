@@ -214,17 +214,6 @@ public class StreamAnalyticsDriver implements Serializable {
     }
     }
 
-    //convert JavaDStream<String> to JavaDStream<Row>
-    public JavaDStream<Row> convertToDstreamRow(JavaDStream<String> stringJavaDStream, Integer pid){
-
-        JavaDStream<Row> rowJavaDStream = stringJavaDStream.map(new Function<String, Row>() {
-            @Override
-            public Row call(String record) throws Exception {
-                return RowFactory.create(Parser.parseMessage(record, pid));
-            }
-        });
-        return rowJavaDStream;
-    }
 
     public JavaDStream<WrapperMessage> convertToDStreamWrapperMessage(JavaDStream<String> dStream, int pid){
        JavaDStream<WrapperMessage> wrapperDStream= dStream.map(converter);

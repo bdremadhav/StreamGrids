@@ -33,9 +33,7 @@ public class Filter implements Transformation {
         final String colName = filterProperties.getProperty("column");
 
         System.out.println("operator = " + check);
-
         System.out.println("filtervalue = " + filterValue);
-        //colName = filterProperties.getProperty("column");
         System.out.println("colName = " + colName);
 
         JavaDStream<WrapperMessage> finalDStream = prevDStream.transform(new Function<JavaRDD<WrapperMessage>, JavaRDD<WrapperMessage>>() {
