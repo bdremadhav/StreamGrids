@@ -246,15 +246,6 @@ public class StreamAnalyticsDriver implements Serializable {
                 StructType schema = schemaReader.generateSchema(pid);
                 System.out.println("schema.toString() = " + schema.toString());
                 transformAndEmit(emptyRDD,nextPidMap.get(pid), transformedDStreamMap,schema );
-               /* wrapperDStream.foreachRDD(new Function<JavaRDD<WrapperMessage>, Void>() {
-                    @Override
-                    public Void call(JavaRDD<WrapperMessage> wrapperRDD) throws Exception {
-                        System.out.println("wrapperRDD = " + wrapperRDD);
-                        transformAndEmit(nextPidMap.get(pid), transformedDStreamMap,schema );
-                        return null;
-                    }
-                });*/
-
                 return;
             }
     }
@@ -330,10 +321,7 @@ public class StreamAnalyticsDriver implements Serializable {
                                 Class emitterClass = Class.forName(emitterClassName);
                                 Emitter emitterObject = (Emitter) emitterClass.newInstance();
                                 emitterObject.persist(prevDStream, pid, prevPid,schema);
-
-                            //pidDataFrameMap.remove(prevPid);
                         }
-                        //pidDataFrameMap.clear();
                     }
 
                     if (listOfPersistentStores.contains(pid)) {
@@ -353,10 +341,7 @@ public class StreamAnalyticsDriver implements Serializable {
                                 Class persistentStoreClass = Class.forName(persistentStoreClassName);
                                 PersistentStore persistentStoreObject = (PersistentStore) persistentStoreClass.newInstance();
                                 persistentStoreObject.persist(emptyRDD,prevDStream, pid, prevPid, schema);
-
-                            //pidDataFrameMap.remove(prevPid);
                         }
-                        //pidDataFrameMap.clear();
                     }
 
 
