@@ -55,6 +55,7 @@ public class StreamAnalyticsDriver implements Serializable {
     static int countEmitterCovered = 0;
     static Time batchStartTime = new Time(0);
     static Map<Integer,JavaDStream<String>> pidDStreamMap= new HashMap<>();
+    static Map<JavaDStream<String>,Integer> dStreamPidMap= new HashMap<>();
     public Map<Integer, JavaDStream<WrapperMessage>> transformedDStreamMap = new HashMap<>();
     static Integer currentSourcePid = 0;
 
@@ -156,6 +157,7 @@ public class StreamAnalyticsDriver implements Serializable {
                 Source sourceObject = (Source)sourceClass.newInstance();
                 JavaDStream<String> javaDStream = sourceObject.execute(ssc, pid);
                 pidDStreamMap.put(pid,javaDStream);
+                dStreamPidMap.put(javaDStream,pid);
             }
         }catch (Exception e){
             LOGGER.info(e);
@@ -216,18 +218,26 @@ public class StreamAnalyticsDriver implements Serializable {
 
 
     public JavaDStream<WrapperMessage> convertToDStreamWrapperMessage(JavaDStream<String> dStream, int pid){
-       JavaDStream<WrapperMessage> wrapperDStream= dStream.map(converter);
+       JavaDStream<WrapperMessage> wrapperDStream= dStream.map(new Function<String, WrapperMessage>() {
+           @Override
+           public WrapperMessage call(String record) throws Exception {
+               Object[] attributes = new Object[]{};
+               attributes = Parser.parseMessage(record,pid);
+               return new WrapperMessage(RowFactory.create(attributes));
+           }
+       });
        return wrapperDStream;
     }
-
-    static Function<String, WrapperMessage> converter = new Function<String, WrapperMessage>() {
+     /*JavaDStream<WrapperMessage> parameterizedConverter(Integer pid) {
+     Function<String, WrapperMessage> converter = new Function<String, WrapperMessage>() {
         @Override
         public WrapperMessage call(String record) throws Exception {
             Object[] attributes = new Object[]{};
-            attributes = Parser.parseMessage(record,currentSourcePid);
+            attributes = Parser.parseMessage(record,pid);
             return new WrapperMessage(RowFactory.create(attributes));
         }
     };
+    }*/
     //this method invokes DStream operations based on the prev map & handles logic accordingly for source/transformation/emitter
     public void invokeDStreamOperations(JavaRDD emptyRDD,JavaStreamingContext ssc, List<Integer> listOfSourcePids, Map<Integer, Set<Integer>> prevMap, Map<Integer, String> nextPidMap, Broadcast<Map<Integer,String>> broadcastVar) throws Exception {
         System.out.println(" inside invoke dstream");
@@ -235,10 +245,9 @@ public class StreamAnalyticsDriver implements Serializable {
             //iterate through each source and create respective dataFrames for sources
             for (Integer pid : pidDStreamMap.keySet()) {
                 System.out.println("pid = " + pid);
-                currentSourcePid=pid;
                 System.out.println("FetchingDStream for source pid= " + pid);
                 JavaDStream<String> msgDataStream = pidDStreamMap.get(pid);
-                JavaDStream<WrapperMessage> wrapperDStream = convertToDStreamWrapperMessage(msgDataStream,pid);
+                JavaDStream<WrapperMessage> wrapperDStream = convertToDStreamWrapperMessage(msgDataStream,dStreamPidMap.get(msgDataStream));
 
                 transformedDStreamMap.put(pid,wrapperDStream);
                 System.out.println("transformedDStreamMap = " + transformedDStreamMap);
