@@ -218,26 +218,17 @@ public class StreamAnalyticsDriver implements Serializable {
 
 
     public JavaDStream<WrapperMessage> convertToDStreamWrapperMessage(JavaDStream<String> dStream, int pid){
-       JavaDStream<WrapperMessage> wrapperDStream= dStream.map(new Function<String, WrapperMessage>() {
-           @Override
-           public WrapperMessage call(String record) throws Exception {
-               Object[] attributes = new Object[]{};
-               attributes = Parser.parseMessage(record,pid);
-               return new WrapperMessage(RowFactory.create(attributes));
-           }
-       });
+       JavaDStream<WrapperMessage> wrapperDStream= dStream.map(s -> converter(s,pid));
        return wrapperDStream;
     }
-     /*JavaDStream<WrapperMessage> parameterizedConverter(Integer pid) {
-     Function<String, WrapperMessage> converter = new Function<String, WrapperMessage>() {
-        @Override
-        public WrapperMessage call(String record) throws Exception {
-            Object[] attributes = new Object[]{};
-            attributes = Parser.parseMessage(record,pid);
-            return new WrapperMessage(RowFactory.create(attributes));
-        }
-    };
-    }*/
+
+    public static WrapperMessage converter(String record, int pid) throws Exception {
+        Object[] attributes = new Object[]{};
+        attributes = Parser.parseMessage(record,pid);
+        return new WrapperMessage(RowFactory.create(attributes));
+    }
+
+
     //this method invokes DStream operations based on the prev map & handles logic accordingly for source/transformation/emitter
     public void invokeDStreamOperations(JavaRDD emptyRDD,JavaStreamingContext ssc, List<Integer> listOfSourcePids, Map<Integer, Set<Integer>> prevMap, Map<Integer, String> nextPidMap, Broadcast<Map<Integer,String>> broadcastVar) throws Exception {
         System.out.println(" inside invoke dstream");
