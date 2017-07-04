@@ -28,7 +28,7 @@ public class HDFSPersistentStore implements PersistentStore {
 
             Properties hdfsProperties = getProperties.getProperties(String.valueOf(pid), "kafka");
 
-            Long date = new Date().getTime();
+
             JavaDStream<WrapperMessage> finalDStream =  dStream.transform(new Function<JavaRDD<WrapperMessage>,JavaRDD<WrapperMessage>>() {
                 @Override
                 public JavaRDD<WrapperMessage> call(JavaRDD<WrapperMessage> wrapperMessageJavaRDD) throws Exception {
@@ -45,6 +45,7 @@ public class HDFSPersistentStore implements PersistentStore {
                         System.out.println("showing dataframe df before writing to hdfs  ");
                         df.show(100);
                         System.out.println("df.rdd().count() = " + df.rdd().count());
+                        Long date = new Date().getTime();
                         String inputPathName = hdfsPath + date + "_" + pid + "/";
                         String finalOutputPathName = hdfsPath + date + "-" + pid + "/";
                         df.rdd().saveAsTextFile(inputPathName);

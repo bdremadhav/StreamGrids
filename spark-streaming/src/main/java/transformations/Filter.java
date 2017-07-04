@@ -24,19 +24,18 @@ public class Filter implements Transformation {
         System.out.println("Inside filter prevPid = " + prevPid);
         JavaDStream prevDStream = prevDStreamMap.get(prevPid);
         JavaDStream filteredDStream = null;
-
         GetProperties getProperties = new GetProperties();
         Properties filterProperties = getProperties.getProperties(String.valueOf(pid), "default");
         final String check = filterProperties.getProperty("operator");
-        ;
         final String filterValue = filterProperties.getProperty("filtervalue");
         final String colName = filterProperties.getProperty("column");
 
         System.out.println("operator = " + check);
-
         System.out.println("filtervalue = " + filterValue);
-        //colName = filterProperties.getProperty("column");
         System.out.println("colName = " + colName);
+
+
+
 
         JavaDStream<WrapperMessage> finalDStream = prevDStream.transform(new Function<JavaRDD<WrapperMessage>, JavaRDD<WrapperMessage>>() {
             @Override
@@ -52,10 +51,9 @@ public class Filter implements Transformation {
 
 
                 SQLContext sqlContext = SQLContext.getOrCreate(rddWrapperMessage.context());
-
                 DataFrame dataFrame = sqlContext.createDataFrame(rddRow, schema);
-
                 DataFrame filteredDF = null;
+
 
 
                 if (dataFrame != null && !dataFrame.rdd().isEmpty()) {

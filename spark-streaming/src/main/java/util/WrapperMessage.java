@@ -16,4 +16,10 @@ public class WrapperMessage implements Serializable{
         this.row = row;
     }
 
+    @Override
+    public String toString() {
+        return "WrapperMessage{" +
+                "row=" + row +
+                '}';
+    }
 }
