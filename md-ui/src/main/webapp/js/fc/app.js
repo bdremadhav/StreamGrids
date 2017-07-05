@@ -508,7 +508,10 @@ map["filtervalue"]=value3;
 
         });
 }
-
+$scope.insertHiveProp=function(processId){
+var value1 = $('#hiveColumn').val();
+console.log(value1);
+}
 $scope.insertSortProp=function(processId){
 var value1=document.getElementById("sortcolumn").value;
 var value2=document.getElementById("sortorder").value;

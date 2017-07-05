@@ -67,7 +67,6 @@
 
                 <!--Utilities -->
                 <script src="../js/nanobar.min.js" type="text/javascript"></script>
-
                 <style>
 
 
@@ -483,7 +482,7 @@
                                                     </div>
                                                 </div>
                                                 <hr/>
-                                                <form class="form-horizontal" role="form" ng-if="genConfig.type != 'hql'  && genConfig.type != 'hadoopstream' && genConfig.type != 'r'  && genConfig.type != 'spark' && genConfig.type != 'pig' && genConfig.type != 'shell' && genConfig.type != 'source' && genConfig.type != 'filter' && genConfig.type != 'sort' && genConfig.type != 'emitter' && genConfig.type != 'persistentStore' && genConfig.type != 'addFiles'">
+                                                <form class="form-horizontal" role="form" ng-if="genConfig.type != 'hql'  && genConfig.type != 'hadoopstream' && genConfig.type != 'r'  && genConfig.type != 'spark' && genConfig.type != 'pig' && genConfig.type != 'shell' && genConfig.type != 'source' && genConfig.type != 'filter' && genConfig.type != 'sort' && genConfig.type != 'emitter' && genConfig.type != 'persistentStore' && genConfig.type != 'addFiles' && genConfig.type != 'hive'">
                                                     <div class="form-group">
                                                         <label class="control-label col-sm-2" for="{{genConfig.key}}-propkey"><spring:message code="wfdesigner.page.propkey_name"/></label>
                                                         <div class="col-sm-10">
@@ -537,6 +536,43 @@
                                                     <div class="clearfix"></div>
                                                      <button type="submit" ng-click="insertFilterProp(chartViewModel.selectedProcess.processId)" class="btn btn-primary  pull-right">Save</button>
                                                 </form>
+
+
+
+
+
+                                                <form class="form-horizontal" role="form" ng-if="genConfig.type == 'hive'">
+
+                                                   <div class="form-group">
+                                                      <label class="control-label col-sm-2" for="{{genConfig.key}}-propkey">column</label>
+                                                      <select class="form-control" id="hiveColumn"  multiple="" >
+                                                          <option ng-repeat="column in chartViewModel.columnList" value="{{ column.Value }}">{{ column.DisplayText }}</option>
+                                                      </select>
+                                                  </div>
+
+                                                    <div class="clearfix"></div>
+                                                     <button type="submit" ng-click="insertHiveProp(chartViewModel.selectedProcess.processId)" class="btn btn-primary  pull-right">Save</button>
+                                                </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                                          <form class="form-horizontal" role="form" ng-if="genConfig.type == 'sort'">
 
@@ -804,6 +840,7 @@
                         </div>
                         <div id="modalCover"></div>
                         <script type="text/javascript" src="../js/fc/wf-utilities.js"></script>
+
                     </body>
                 </c:when>
                 <c:otherwise>
