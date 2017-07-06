@@ -21,6 +21,10 @@ public class WrapperMessage implements Serializable{
     public static WrapperMessage convertToWrapperMessage(Row record){
         return new WrapperMessage(record);
     }
+
+    public static WrapperMessage convertToPairWrapperMessage(Row record){
+        return new WrapperMessage(record);
+    }
     //this method converts a WrapperMessage to a Spark SQL Row
     public static Row convertToRow(WrapperMessage record){
        return record.getRow();

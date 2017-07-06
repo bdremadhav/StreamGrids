@@ -9,6 +9,8 @@ import org.apache.spark.sql.SQLContext;
 import org.apache.spark.sql.types.StructType;
 import org.apache.spark.streaming.Time;
 import org.apache.spark.streaming.api.java.JavaDStream;
+import org.apache.spark.streaming.api.java.JavaPairDStream;
+import scala.Tuple2;
 import util.WrapperMessage;
 
 import java.util.ArrayList;
@@ -21,16 +23,19 @@ import java.util.Set;
  */
 public class Intersection implements Transformation {
     @Override
-    public JavaDStream<WrapperMessage> transform(JavaRDD emptyRDD, Map<Integer, JavaDStream<WrapperMessage>> prevDStreamMap, Map<Integer, Set<Integer>> prevMap, Integer pid, StructType schema) {
+    public JavaPairDStream<String,WrapperMessage> transform(JavaRDD emptyRDD, Map<Integer, JavaPairDStream<String,WrapperMessage>> prevDStreamMap, Map<Integer, Set<Integer>> prevMap, Integer pid, StructType schema) {
         List<Integer> prevPidList = new ArrayList<>();
         prevPidList.addAll(prevMap.get(pid));
         Integer prevPid1 = prevPidList.get(0);
         System.out.println("before entering for loop first prevPid1 = " + prevPid1);
-        
-        JavaDStream<WrapperMessage> intersectionDStream = prevDStreamMap.get(prevPid1);
+
+        JavaPairDStream<String,WrapperMessage> intersectionPairDStream = prevDStreamMap.get(prevPid1);
+        JavaDStream<WrapperMessage> intersectionDStream = intersectionPairDStream.map(s -> s._2);
         for(int i=1;i< prevPidList.size();i++){
             System.out.println("intersection of dstream of pid = " + prevPidList.get(i));
-            JavaDStream dStream1 = prevDStreamMap.get(prevPidList.get(i));
+
+            JavaPairDStream<String,WrapperMessage> pairDStream1 = prevDStreamMap.get(prevPidList.get(i));
+            JavaDStream<WrapperMessage> dStream1 = pairDStream1.map(s -> s._2);
 
             if(intersectionDStream!=null && dStream1!=null){
 
@@ -93,6 +98,6 @@ public class Intersection implements Transformation {
             }
 
         }
-        return intersectionDStream;
+        return intersectionDStream.mapToPair(s -> new Tuple2<String, WrapperMessage>(null,s));
     }
 }

@@ -66,3 +66,4 @@
 68,'operator_Intersection',41
 70,'operator_Window',41
 71,'operator_Distinct',41
+72,'operator_MapToPair',41
