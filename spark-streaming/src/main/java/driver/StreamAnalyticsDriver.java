@@ -111,8 +111,7 @@ public class StreamAnalyticsDriver implements Serializable {
             String applicationId = sc.sc().applicationId();
             System.out.println("applicationId = " + applicationId);
             InstanceExecAPI instanceExecAPI = new InstanceExecAPI();
-            InstanceExec instanceExec = new InstanceExec();
-            instanceExecAPI.insertInstanceExec(parentProcessId, applicationId);
+            instanceExecAPI.updateInstanceExecToRunning(parentProcessId, applicationId);
 
             long batchDuration = 30000;
 
@@ -246,7 +245,6 @@ public class StreamAnalyticsDriver implements Serializable {
                 StructType schema = schemaReader.generateSchema(pid);
                 System.out.println("schema.toString() = " + schema.toString());
                 transformAndEmit(emptyRDD,nextPidMap.get(pid), transformedDStreamMap,schema );
-                return;
             }
     }
 

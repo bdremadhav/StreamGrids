@@ -1388,6 +1388,7 @@
                                 											modal: true,
                                 											buttons: {
                                 												"OK": function() {
+                                												    $('div#Container').jtable('load');
                                 													$(this).dialog("close");
                                 												}
                                 											}
@@ -1403,6 +1404,7 @@
                                 											modal: true,
                                 											buttons: {
                                 												"OK": function() {
+                                												    $('div#Container').jtable('load');
                                 													$(this).dialog("close");
                                 												}
                                 											}
@@ -1462,6 +1464,7 @@
                                                                                 modal: true,
                                                                                 buttons: {
                                                                                     "OK": function() {
+                                                                                        $('div#Container').jtable('load');
                                                                                         $(this).dialog("close");
                                                                                     }
                                                                                 }

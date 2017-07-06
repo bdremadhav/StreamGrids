@@ -33,11 +33,19 @@ public class InstanceExecAPI extends MetadataAPIBase {
         InstanceExec instanceExec = new InstanceExec();
         Process process = processDAO.get(processId);
         instanceExec.setProcess(process);
-        ExecStatus execStatus = execStatusDAO.get(2);
+        ExecStatus execStatus = execStatusDAO.get(9);
         instanceExec.setExecStatus(execStatus);
         instanceExec.setApplicationId(applicationId);
 
         instanceExecDAO.insert(instanceExec);
+    }
+
+    public void  updateInstanceExecToRunning(Integer processId, String applicationId){
+        InstanceExec instanceExec = instanceExecDAO.getLatestExecofProcess(processId);
+        ExecStatus execStatus = execStatusDAO.get(2);
+        instanceExec.setExecStatus(execStatus);
+        instanceExec.setApplicationId(applicationId);
+        instanceExecDAO.update(instanceExec);
     }
 
     public void updateInstanceExec(Integer processId){

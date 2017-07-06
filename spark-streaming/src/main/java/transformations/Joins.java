@@ -17,7 +17,7 @@ import java.util.*;
 /**
  * Created by cloudera on 7/4/17.
  */
-public class Join implements Transformation {
+public class Joins implements Transformation {
     @Override
     public JavaDStream<WrapperMessage> transform(JavaRDD emptyRDD, Map<Integer, JavaDStream<WrapperMessage>> prevDStreamMap, Map<Integer, Set<Integer>> prevMap, Integer pid, StructType schema) {
         List<Integer> prevPidList = new ArrayList<>();

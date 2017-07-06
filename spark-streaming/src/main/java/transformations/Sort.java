@@ -28,8 +28,10 @@ public class Sort implements Transformation {
         GetProperties getProperties = new GetProperties();
         Properties sortProperties=  getProperties.getProperties(String.valueOf(pid),"default");
 
-        final String colName=sortProperties.getProperty("column");
-        final String order = sortProperties.getProperty("order");
+        String colName=sortProperties.getProperty("column");
+        String order = sortProperties.getProperty("order");
+
+
         System.out.println("colName = " + colName);
 
         JavaDStream<WrapperMessage> finalDStream = prevDStream.transform(new Function<JavaRDD<WrapperMessage>, JavaRDD<WrapperMessage>>() {
@@ -81,42 +83,5 @@ public class Sort implements Transformation {
         });
         return finalDStream;
     }
-   /* //@Override
-    public DataFrame transform(Map<Integer, DataFrame> prevDataFrameMap, Map<Integer, Set<Integer>> prevMap, Integer pid) {
 
-        DataFrame prevDataFrame = prevDataFrameMap.get(prevPid);
-        DataFrame sortedDF =null;
-        GetProperties getProperties=new GetProperties();
-
-        Properties sortProperties=  getProperties.getProperties(String.valueOf(pid),"default");
-        //String check="";
-
-        String colName=new String();
-        String order = new String();
-
-        order = sortProperties.getProperty("order");
-        colName = sortProperties.getProperty("column");
-        System.out.println("colName = " + colName);
-
-        if(prevDataFrame!=null && !prevDataFrame.rdd().isEmpty()){
-
-                System.out.println("showing dataframe before sort ");
-                prevDataFrame.show(100);
-            if(order.equalsIgnoreCase("descending")) {
-                sortedDF = prevDataFrame.sort(prevDataFrame.col(colName).desc());
-            }else{
-                sortedDF = prevDataFrame.sort(prevDataFrame.col(colName).asc());
-            }
-                sortedDF.show(100);
-                System.out.println("showing dataframe after sort ");
-
-        }
-
-        return sortedDF;
-    }
-
-    @Override
-    public JavaDStream<Row> transform(Map<Integer, JavaDStream<Row>> prevDStreamMap, Map<Integer, Set<Integer>> prevMap, Integer pid, StructType schema) {
-        return null;
-    }*/
 }

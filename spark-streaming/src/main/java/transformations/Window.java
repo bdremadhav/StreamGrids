@@ -40,13 +40,6 @@ public class Window implements Transformation{
             windowDStream = prevDStream.window(windowDuration);
             System.out.println(" Inside FixedWindow" );
             windowDStream.print();
-            windowDStream.foreachRDD(new Function() {
-                @Override
-                public Object call(Object o) throws Exception {
-                    System.out.println(" for each rdd in window " );
-                    return null;
-                }
-            });
         }
         else {
             Duration slideDuration = new Duration(Long.parseLong(slideDurationString));

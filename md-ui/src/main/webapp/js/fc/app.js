@@ -499,7 +499,7 @@ map["filtervalue"]=value3;
                 if(data.Result == "OK") {
                    var modal = document.getElementById('myModal');
                     modal.style.display = "none";
-                    alertBox("info","filter properties added");
+                    alertBox("info","Filter properties added");
                 }
                 else
                 alertBox("warning","Error occured");
@@ -525,7 +525,107 @@ map["order"]=value2;
                 if(data.Result == "OK") {
                   var modal = document.getElementById('myModal');
                   modal.style.display = "none";
-                    alertBox("info","sort properties added");
+                    alertBox("info","Sort properties added");
+                }
+                else
+                alertBox("warning","Error occured");
+
+            }
+
+        });
+}
+
+$scope.insertTakeProp=function(processId){
+var value1=document.getElementById("number").value;
+console.log("values are "+value1);
+console.log("processId is "+processId);
+var map=new Object();
+map["number-elements"]=value1;
+    $.ajax({
+            type: "POST",
+            url: "/mdrest/properties/"+processId,
+            data: jQuery.param(map),
+            success: function(data) {
+                if(data.Result == "OK") {
+                  var modal = document.getElementById('myModal');
+                  modal.style.display = "none";
+                    alertBox("info","Take properties added");
+                }
+                else
+                alertBox("warning","Error occured");
+
+            }
+
+        });
+}
+
+$scope.insertPersistProp=function(processId){
+var value1=document.getElementById("storageLevel").value;
+console.log("values are "+value1);
+console.log("processId is "+processId);
+var map=new Object();
+map["storage-level"]=value1;
+    $.ajax({
+            type: "POST",
+            url: "/mdrest/properties/"+processId,
+            data: jQuery.param(map),
+            success: function(data) {
+                if(data.Result == "OK") {
+                  var modal = document.getElementById('myModal');
+                  modal.style.display = "none";
+                    alertBox("info","Persist properties added");
+                }
+                else
+                alertBox("warning","Error occured");
+
+            }
+
+        });
+}
+
+$scope.insertRepartitionProp=function(processId){
+var value1=document.getElementById("numPartitions").value;
+console.log("values are "+value1);
+console.log("processId is "+processId);
+var map=new Object();
+map["num-partitions"]=value1;
+    $.ajax({
+            type: "POST",
+            url: "/mdrest/properties/"+processId,
+            data: jQuery.param(map),
+            success: function(data) {
+                if(data.Result == "OK") {
+                  var modal = document.getElementById('myModal');
+                  modal.style.display = "none";
+                    alertBox("info","Repartition properties added");
+                }
+                else
+                alertBox("warning","Error occured");
+
+            }
+
+        });
+}
+
+$scope.insertWindowProp=function(processId){
+var value1=document.getElementById("windowType").value;
+var value2=document.getElementById("windowDuration").value;
+var value3=document.getElementById("slideDuration").value;
+console.log("values are "+value1+" "+value2+" "+value3);
+console.log("processId is "+processId);
+var map=new Object();
+map["window-type"]=value1;
+map["window-duration"]=value2;
+map["slide-duration"]=value3;
+    $.ajax({
+            type: "POST",
+            url: "/mdrest/properties/"+processId,
+            data: jQuery.param(map),
+            success: function(data) {
+                if(data.Result == "OK") {
+                   var modal = document.getElementById('myModal');
+                    modal.style.display = "none";
+                    alertBox("info","Window properties added");
                 }
                 else
                 alertBox("warning","Error occured");

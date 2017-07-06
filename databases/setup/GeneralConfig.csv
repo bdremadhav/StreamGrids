@@ -75,7 +75,11 @@
 
 '41','param','Parameters','Additional parameters', 1,'true','text', 1
 '43','default','Filter','Filter', 1,'true','filter', 1
-'66','Sort','Sort','Sort', 1,'true','sort', 1
+'60','default','Take','Take', 1,'true','take', 1
+'61','default','Persist','Persist', 1,'true','persist', 1
+'62','default','Repartition','Repartition', 1,'true','repartition', 1
+'62','default','Window','Window', 1,'true','window', 1
+'66','default','Sort','Sort', 1,'true','sort', 1
 
 '42','record','Kafka Properties','Kafka', 1,'true','source', 1
 '46','record','Twitter Properties','Twitter', 1,'true','source', 1
