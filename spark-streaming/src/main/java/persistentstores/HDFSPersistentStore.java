@@ -27,6 +27,8 @@ public class HDFSPersistentStore implements PersistentStore {
             System.out.println("Inside emitter hdfs, persisting");
             GetProperties getProperties = new GetProperties();
             Properties hdfsProperties = getProperties.getProperties(String.valueOf(pid), "kafka");
+            System.out.println(" Printing Pair dstream" );
+            inputDStream.print();
             JavaDStream<WrapperMessage> dStream = inputDStream.map(s -> s._2);
 
             JavaDStream<WrapperMessage> finalDStream =  dStream.transform(new Function<JavaRDD<WrapperMessage>,JavaRDD<WrapperMessage>>() {

@@ -65,5 +65,12 @@
 67,'operator_Aggregation',41
 68,'operator_Intersection',41
 70,'operator_Window',41
-71,'operator_Distinct',41
-72,'operator_MapToPair',41
+71,'operator_Count',41
+72,'operator_Distinct',41
+73,'operator_MapToPair',41
+74,'operator_Map',41
+75,'operator_FlatMap',41
+76,'operator_Reduce',41
+77,'operator_ReduceByKey',41
+78,'operator_GroupByKey',41
+79,'operator_SortByKey',41

@@ -10,6 +10,7 @@ import org.apache.spark.streaming.api.java.JavaPairDStream;
 import util.WrapperMessage;
 
 import java.util.*;
+import java.util.Map;
 
 /**
  * Created by cloudera on 7/3/17.
