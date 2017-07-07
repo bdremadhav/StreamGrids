@@ -6,6 +6,7 @@ import com.wipro.ats.bdre.md.dao.ProcessDAO;
 import com.wipro.ats.bdre.md.dao.PropertiesDAO;
 import com.wipro.ats.bdre.md.dao.jpa.Messages;
 import com.wipro.ats.bdre.md.dao.jpa.Process;
+import com.wipro.ats.bdre.md.dao.jpa.ProcessType;
 import com.wipro.ats.bdre.md.dao.jpa.Properties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
@@ -38,7 +39,7 @@ public class GetMessageColumns extends MetadataAPIBase {
     public static List<Integer> listOfPidWithNonEmptySchema = new ArrayList<Integer>();
 
     public static void main(String[] args) {
-        Set<String> columnNames = new GetMessageColumns().getMessageNames(6);
+        Set<String> columnNames = new GetMessageColumns().getMessageColumnNames(3);
         System.out.println("final result = " + columnNames);
     }
 
@@ -105,13 +106,98 @@ public class GetMessageColumns extends MetadataAPIBase {
     }
 
 
-
-
-    public Set<String> getMessageNames(Integer pid) {
+    public Set<Integer> getMessageList(Integer pid) {
         Process selectedProcess = processDAO.get(pid);
         Process parentProcess = selectedProcess.getProcess();
         Integer parentProcessId = parentProcess.getProcessId();
         String nextProcessOfParent = processDAO.get(parentProcessId).getNextProcessId();
+        listOfSourcesForGivenPid.clear();
+        prevMap.clear();
+        listOfSourcePids.clear();
+        for (String nextProcessId : nextProcessOfParent.split(",")) {
+            listOfSourcePids.add(Integer.valueOf(nextProcessId));
+        }
+
+
+
+        Map<Integer, String> nextPidMap = new HashMap<Integer, String>();
+        nextPidMap.put(parentProcessId, nextProcessOfParent);
+        List<com.wipro.ats.bdre.md.dao.jpa.Process> jpaProcessList = processDAO.subProcesslist(parentProcessId);
+        for (Process subProcess : jpaProcessList) {
+            nextPidMap.put(subProcess.getProcessId(), subProcess.getNextProcessId());
+        }
+
+        List<Integer> currentUpstreamList = new ArrayList();
+        currentUpstreamList.addAll(listOfSourcePids);
+        //populate prevMap with source pids,
+        for (Integer sourcePid : listOfSourcePids) {
+            prevMap.put(sourcePid, null);
+        }
+
+        while (!currentUpstreamList.isEmpty()) {
+            System.out.println("currentUpstreamList = " + currentUpstreamList);
+            GetMessageColumns getMessageColumns = new GetMessageColumns();
+            System.out.println(" calling identifyflows");
+            getMessageColumns.identifyFlows(currentUpstreamList, nextPidMap,parentProcessId);
+        }
+        System.out.println("prevMap = " + prevMap);
+        return prevMap.get(pid);
+    }
+
+
+
+    public Set<String> getMessageColumnNames(Integer pid) {
+        Set<String> columnDetails = new HashSet<>();
+        Process selectedProcess = processDAO.get(pid);
+        Process parentProcess = selectedProcess.getProcess();
+        Integer parentProcessId = parentProcess.getProcessId();
+        String nextProcessOfParent = processDAO.get(parentProcessId).getNextProcessId();
+        System.out.println(nextProcessOfParent +" "+pid);
+
+        List<Properties> messageProperties1 =  propertiesDAO.getPropertiesForConfig(pid, "message");
+        System.out.println("messageProperties1 " +messageProperties1);
+
+
+        if(messageProperties1.size()!=0){
+            Properties messageProperty = messageProperties1.get(0);
+            if(nextProcessOfParent.contains(pid.toString())){
+                String messageName = messageProperty.getPropValue();
+                Messages message = messagesDAO.get(messageName);
+                String schema = message.getMessageSchema();
+                String[] columnAndDataTypes = schema.split(",");
+                columnDetails.addAll(Arrays.asList(columnAndDataTypes));
+            }
+            else
+            {
+                String schema = messageProperty.getPropValue();
+                String[] columnAndDataTypes = schema.split(",");
+                columnDetails.addAll(Arrays.asList(columnAndDataTypes));
+            }
+
+        }
+
+
+        if (columnDetails.size()!=0)
+            return columnDetails;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         listOfSourcesForGivenPid.clear();
         prevMap.clear();
         listOfSourcePids.clear();
@@ -147,7 +233,7 @@ public class GetMessageColumns extends MetadataAPIBase {
         System.out.println("pidListWithNonEmptySchema = " + pidListWithNonEmptySchema);
 
 
-        Set<String> columnDetails = new HashSet<>();
+
         for(Integer sourcePid : pidListWithNonEmptySchema){
             List<Properties> messageProperties =  propertiesDAO.getPropertiesForConfig(sourcePid, "message");
             System.out.println("messageProperties " +messageProperties);

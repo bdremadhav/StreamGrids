@@ -76,6 +76,7 @@
 '41','param','Parameters','Additional parameters', 1,'true','text', 1
 '43','default','Filter','Filter', 1,'true','filter', 1
 '58','hive','Hive','Hive', 1,'true','hive', 1
+'65','join','Join','Join', 1,'true','join', 1
 '66','Sort','Sort','Sort', 1,'true','sort', 1
 
 '42','message','Kafka Properties','Kafka', 1,'true','source', 1

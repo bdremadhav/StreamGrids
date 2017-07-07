@@ -31,7 +31,7 @@ public class SparkStreamingAPI extends MetadataAPIBase {
         RestWrapperOptions restWrapperOptions = null;
         try{
             GetMessageColumns getMessageColumns = new GetMessageColumns();
-            Set<String> columnNames = getMessageColumns.getColumnNames(processId);
+            Set<String> columnNames = getMessageColumns.getMessageColumnNames(processId);
             List<RestWrapperOptions.Option> options = new ArrayList<RestWrapperOptions.Option>();
             for (String column : columnNames) {
                 RestWrapperOptions.Option option = new RestWrapperOptions.Option(column,column);
@@ -45,6 +45,34 @@ public class SparkStreamingAPI extends MetadataAPIBase {
     return restWrapperOptions;
 
     }
+
+
+
+
+
+    @RequestMapping(value = "/getMessageList/{id}", method = RequestMethod.POST)
+    @ResponseBody
+    public RestWrapperOptions listMessageOptions(@PathVariable("id") Integer processId, Principal principal) {
+
+        RestWrapperOptions restWrapperOptions = null;
+        try{
+            GetMessageColumns getMessageColumns = new GetMessageColumns();
+            Set<Integer> columnNames = getMessageColumns.getMessageList(processId);
+            List<RestWrapperOptions.Option> options = new ArrayList<RestWrapperOptions.Option>();
+            for (Integer column : columnNames) {
+                RestWrapperOptions.Option option = new RestWrapperOptions.Option(column.toString(),column);
+                options.add(option);
+            }
+            restWrapperOptions = new RestWrapperOptions(options, RestWrapperOptions.OK);
+        } catch (MetadataException e) {
+            LOGGER.error(e);
+            restWrapperOptions = new RestWrapperOptions(e.getMessage(), RestWrapper.ERROR);
+        }
+        return restWrapperOptions;
+
+    }
+
+
 
 
     @Override

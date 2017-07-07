@@ -384,6 +384,8 @@ var flowchart = {
     flowchart.ChartViewModel = function (chartDataModel) {
         this.selectedProcess = {};
         this.columnList={};
+        this.messageList={};
+        this.messageColumnList={};
         this.selectedProcessProps = {};
         this.selectedProcessGenConfigProp = {};
 
@@ -566,6 +568,8 @@ var flowchart = {
         this.deselectAll = function () {
             this.selectedProcess = {};
             this.columnList={};
+            this.messageList={};
+            this.messageColumnList={};
             this.selectedProcessProps = {};
             this.selectedProcessGenConfigProp = {};
             this.selectedProcessConfigKeyValue = {};
@@ -609,6 +613,8 @@ var flowchart = {
                 node.select();
                 var tempProcessData;
                 var tempColumnList;
+                var tempMessageList;
+                var tempMessageColumnList;
                 var tempPropertiesData;
                 var pid = node.data.pid;
                 if (pid < 0) pid = -node.data.pid;
@@ -628,6 +634,25 @@ var flowchart = {
                     }
                     this.columnList=tempColumnList;
 
+
+
+
+                   var dataRecord = messagesAC('/mdrest/sparkstreaming/getMessageList/'+this.selectedProcess.processId, 'POST', [this.selectedProcess.processId]);
+                  if (dataRecord) {
+                      tempMessageList = dataRecord;
+                  } else {
+                      alertBox('danger', 'Error has occured');
+                  }
+                  this.messageList=tempMessageList;
+                  var tableNameId=document.getElementById("joinTable");
+                   console.log("tableNameId is "+tableNameId);
+                   var dataRecord = messagesAC('/mdrest/sparkstreaming/getmessagecolumns/'+this.selectedProcess.processId, 'POST', [tableNameId]);
+                    if (dataRecord) {
+                        tempMessageColumnList = dataRecord;
+                    } else {
+                        alertBox('danger', 'Error has occured');
+                    }
+                    this.messageColumnList=tempMessageColumnList;
 
 
                 var dataRecord = propertiesAC('/mdrest/properties/', 'GET', node.data.pid);
