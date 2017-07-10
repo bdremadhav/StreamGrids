@@ -555,19 +555,20 @@ padding: 15px;
                         </form>
 
 
-                        <form class="form-horizontal" role="form" ng-if="genConfig.type == 'join'">
-
+                        <form class="form-horizontal" id="joinabc" role="form" ng-if="genConfig.type == 'join'" >
                        <div class="form-group">
                           <label class="control-label col-sm-2" for="{{genConfig.key}}-propkey">Joining Table</label>
                           <div class="col-sm-10">
-                          <select class="form-control" id="joinTable" >
+                          <select class="form-control" id="joinTable" ng-change="changeme()" ng-model="joinme" >
                               <option ng-repeat="column in chartViewModel.messageList" value="{{ column.Value }}">{{ column.DisplayText }}</option>
                           </select>
                           </div>
+                          </div>
+                          <div class="form-group">
                           <label class="control-label col-sm-2" for="{{genConfig.key}}-propkey">Joining column</label>
                           <div class="col-sm-10">
                            <select class="form-control" id="joinColumn" >
-                              <option ng-repeat="column in chartViewModel.messageColumnList" value="{{ column.Value }}">{{ column.DisplayText }}</option>
+                              <option ng-repeat="column in messageColumnListChart" value="{{ column.Value }}">{{ column.DisplayText }}</option>
                            </select>
                            </div>
                       </div>

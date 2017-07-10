@@ -749,6 +749,18 @@ $scope.deleteFile = function(parentProcessId,cfgDetails,cfgKVP) {
         alertBox('warning', 'File delete failed');
     }
 }
+$scope.changeme=function(){
+
+var messageTypeOptionslist = messagesAC('/mdrest/sparkstreaming/getmessagecolumns/'+$('#joinTable').val(), 'POST', []);
+    if (messageTypeOptionslist) {
+        $scope.messageColumnListChart = messageTypeOptionslist;
+        console.log('info -- messageColumnListChart options listed');
+    }
+    else {
+        console.log('messageColumnListChart not loaded');
+    }
+}
+
 
 $scope.deleteJar = function(parentProcessId,subDir,fileName) {
 
@@ -890,6 +902,7 @@ $scope.newPageProcessType = {};
 $scope.newPagePermissionType={};
 $scope.newPageUserRoles={};
 $scope.newPageWorkflowType = {};
+$scope.messageColumnListChart={};
 $scope.operators = ["equals","not equals", "contains","doesnot contains","begins with","ends with","greater than","lesser than"];
 $scope.intialiseNewProcessPage =function() {
 
@@ -935,6 +948,10 @@ $scope.intialiseNewProcessPage =function() {
         console.log('workflowtypeOptionlist not loaded');
     }
 }
+
+
+
+
 
 //
 // Create first process function
