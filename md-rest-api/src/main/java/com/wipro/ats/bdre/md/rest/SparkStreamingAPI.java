@@ -32,6 +32,7 @@ public class SparkStreamingAPI extends MetadataAPIBase {
         try{
             GetMessageColumns getMessageColumns = new GetMessageColumns();
             Set<String> columnNames = getMessageColumns.getMessageColumnNames(processId);
+            LOGGER.info(columnNames);
             List<RestWrapperOptions.Option> options = new ArrayList<RestWrapperOptions.Option>();
             for (String column : columnNames) {
                 RestWrapperOptions.Option option = new RestWrapperOptions.Option(column,column);

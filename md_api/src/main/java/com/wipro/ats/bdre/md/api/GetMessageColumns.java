@@ -39,7 +39,7 @@ public class GetMessageColumns extends MetadataAPIBase {
     public static List<Integer> listOfPidWithNonEmptySchema = new ArrayList<Integer>();
 
     public static void main(String[] args) {
-        Set<String> columnNames = new GetMessageColumns().getMessageColumnNames(3);
+        Set<String> columnNames = new GetMessageColumns().getMessageColumnNames(2);
         System.out.println("final result = " + columnNames);
     }
 

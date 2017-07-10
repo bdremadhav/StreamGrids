@@ -512,6 +512,14 @@ $scope.insertHiveProp=function(processId){
 var value1 = $('#hiveColumn').val();
 console.log(value1);
 }
+
+$scope.insertJoinProperties=function(processId){
+var tableName=$('#joinTable').val();
+var columnName=$('#joinColumn').val();
+console.log(tableName+" "+columnName);
+}
+
+
 $scope.insertSortProp=function(processId){
 var value1=document.getElementById("sortcolumn").value;
 var value2=document.getElementById("sortorder").value;

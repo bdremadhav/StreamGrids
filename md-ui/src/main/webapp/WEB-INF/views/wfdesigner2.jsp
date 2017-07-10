@@ -574,7 +574,7 @@ padding: 15px;
                       </div>
 
                         <div class="clearfix"></div>
-                         <button type="submit" ng-click="insertHiveProp(chartViewModel.selectedProcess.processId)" class="btn btn-primary  pull-right">Save</button>
+                         <button type="submit" ng-click="insertJoinProperties(chartViewModel.selectedProcess.processId)" class="btn btn-primary  pull-right">Save</button>
                     </form>
 
 
