@@ -39,8 +39,8 @@ public class GetMessageColumns extends MetadataAPIBase {
     public static List<Integer> listOfPidWithNonEmptySchema = new ArrayList<Integer>();
 
     public static void main(String[] args) {
-        Set<String> columnNames = new GetMessageColumns().getMessageColumnNames(2);
-        System.out.println("final result = " + columnNames);
+       // Set<String> columnNames = new GetMessageColumns().getMessageColumnNames(2);
+        System.out.println("final result = " + new GetMessageColumns().getMessageList(15));
     }
 
     public Set<String> getColumnNames(Integer pid) {
@@ -106,7 +106,7 @@ public class GetMessageColumns extends MetadataAPIBase {
     }
 
 
-    public Set<Integer> getMessageList(Integer pid) {
+    public HashMap<String,Integer> getMessageList(Integer pid) {
         Process selectedProcess = processDAO.get(pid);
         Process parentProcess = selectedProcess.getProcess();
         Integer parentProcessId = parentProcess.getProcessId();
@@ -114,6 +114,7 @@ public class GetMessageColumns extends MetadataAPIBase {
         listOfSourcesForGivenPid.clear();
         prevMap.clear();
         listOfSourcePids.clear();
+        listOfPidWithNonEmptySchema.clear();
         for (String nextProcessId : nextProcessOfParent.split(",")) {
             listOfSourcePids.add(Integer.valueOf(nextProcessId));
         }
@@ -140,8 +141,27 @@ public class GetMessageColumns extends MetadataAPIBase {
             System.out.println(" calling identifyflows");
             getMessageColumns.identifyFlows(currentUpstreamList, nextPidMap,parentProcessId);
         }
-        System.out.println("prevMap = " + prevMap);
-        return prevMap.get(pid);
+        System.out.println("prevMap = in message list " + prevMap);
+        HashMap<String,Integer> hashMap=new HashMap<>();
+        System.out.println("prevMap.get(pid) "+prevMap.get(pid));
+        for(Integer prevId:prevMap.get(pid))
+        {
+                List<Properties> messageProperties1 =  propertiesDAO.getPropertiesForConfig(prevId, "message");
+                if (messageProperties1.size()!=0)
+                {
+                    Properties messageProperty = messageProperties1.get(0);
+                    String messageName = messageProperty.getPropValue();
+                    hashMap.put(messageName,prevId);
+                }
+                else
+                {
+                    Process process=processDAO.get(prevId);
+                    hashMap.put(process.getProcessName(),prevId);
+                }
+
+
+        }
+        return hashMap;
     }
 
 
@@ -197,10 +217,11 @@ public class GetMessageColumns extends MetadataAPIBase {
 
 
 
-
+        listOfPidWithNonEmptySchema.clear();
         listOfSourcesForGivenPid.clear();
         prevMap.clear();
         listOfSourcePids.clear();
+
         for (String nextProcessId : nextProcessOfParent.split(",")) {
             listOfSourcePids.add(Integer.valueOf(nextProcessId));
         }

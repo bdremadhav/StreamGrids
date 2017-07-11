@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by cloudera on 5/22/17.
@@ -58,12 +56,17 @@ public class SparkStreamingAPI extends MetadataAPIBase {
         RestWrapperOptions restWrapperOptions = null;
         try{
             GetMessageColumns getMessageColumns = new GetMessageColumns();
-            Set<Integer> columnNames = getMessageColumns.getMessageList(processId);
+            HashMap<String,Integer> tablePair = getMessageColumns.getMessageList(processId);
             List<RestWrapperOptions.Option> options = new ArrayList<RestWrapperOptions.Option>();
-            for (Integer column : columnNames) {
-                RestWrapperOptions.Option option = new RestWrapperOptions.Option(column.toString(),column);
+            Iterator it = tablePair.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry)it.next();
+                System.out.println(pair.getKey() + " = " + pair.getValue());
+                RestWrapperOptions.Option option = new RestWrapperOptions.Option((String) pair.getKey(),pair.getValue());
                 options.add(option);
+                it.remove();
             }
+
             restWrapperOptions = new RestWrapperOptions(options, RestWrapperOptions.OK);
         } catch (MetadataException e) {
             LOGGER.error(e);
