@@ -565,13 +565,23 @@ padding: 15px;
                           </div>
                           </div>
                           <div class="form-group">
-                          <label class="control-label col-sm-2" for="{{genConfig.key}}-propkey">Joining column</label>
+                          <label class="control-label col-sm-2" for="{{genConfig.key}}-propkey">Joining Column</label>
                           <div class="col-sm-10">
                            <select class="form-control" id="joinColumn" >
                               <option ng-repeat="column in messageColumnListChart" value="{{ column.Value }}">{{ column.DisplayText }}</option>
                            </select>
                            </div>
                       </div>
+
+
+                      <div class="form-group">
+                        <label class="control-label col-sm-2" for="{{genConfig.key}}-propkey">Output Columns</label>
+                        <div class="col-sm-10">
+                         <select class="form-control" id="joinColumns" multiple>
+                            <option ng-repeat="column in messageColumnListChart" value="{{ column.Value }}">{{ column.DisplayText }}</option>
+                         </select>
+                         </div>
+                    </div>
 
                         <div class="clearfix"></div>
                          <button type="submit" ng-click="insertJoinProperties(chartViewModel.selectedProcess.processId)" class="btn btn-primary  pull-right">Save</button>
