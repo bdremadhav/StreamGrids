@@ -10,22 +10,16 @@ import com.wipro.ats.bdre.md.dao.jpa.InstanceExec;
 import com.wipro.ats.bdre.md.dao.jpa.Messages;
 import datasources.Source;
 import emitters.Emitter;
-import messageformat.MessageParser;
 import messageformat.Parser;
 import messageschema.SchemaReader;
-import org.apache.commons.collections.map.HashedMap;
-import org.apache.hadoop.yarn.webapp.hamlet.HamletSpec;
 import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
-import org.apache.spark.api.java.function.Function2;
 import org.apache.spark.broadcast.Broadcast;
-import org.apache.spark.sql.DataFrame;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.RowFactory;
-import org.apache.spark.sql.SQLContext;
 import org.apache.spark.sql.types.StructType;
 import org.apache.spark.streaming.Duration;
 import org.apache.spark.streaming.Time;
@@ -33,6 +27,7 @@ import org.apache.spark.streaming.api.java.JavaDStream;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
 import persistentstores.PersistentStore;
 import transformations.Transformation;
+import util.WrapperMessage;
 
 import java.io.Serializable;
 import java.util.*;
@@ -55,13 +50,14 @@ public class StreamAnalyticsDriver implements Serializable {
     public static List<Integer> listOfEmitters = new ArrayList<>();
     public static List<Integer> listOfPersistentStores = new ArrayList<>();
     public static Map<Integer, String> nextPidMap = new HashMap<Integer, String>();
-    public static Map<Integer,String> pidMessageTypeMap = new HashedMap();
+    public static Map<Integer,String> pidMessageTypeMap = new HashMap<>();
     public static Integer parentProcessId;
     static int countEmitterCovered = 0;
     static Time batchStartTime = new Time(0);
     static Map<Integer,JavaDStream<String>> pidDStreamMap= new HashMap<>();
-    public Map<Integer, DataFrame> pidDataFrameMap = new HashedMap();
-    Integer sourcePid = 0;
+    static Map<JavaDStream<String>,Integer> dStreamPidMap= new HashMap<>();
+    public Map<Integer, JavaDStream<WrapperMessage>> transformedDStreamMap = new HashMap<>();
+    static Integer currentSourcePid = 0;
 
     public static void main(String[] args) {
 
@@ -110,12 +106,12 @@ public class StreamAnalyticsDriver implements Serializable {
             //TODO get appname properties from parent process
             SparkConf conf = new SparkConf().setAppName("Log Analyzer");
             JavaSparkContext sc = new JavaSparkContext(conf);
+            JavaRDD emptyRDD = sc.emptyRDD();
             Broadcast<Map<Integer, String>> broadcastVar = sc.broadcast(pidMessageTypeMap);
             String applicationId = sc.sc().applicationId();
             System.out.println("applicationId = " + applicationId);
             InstanceExecAPI instanceExecAPI = new InstanceExecAPI();
-            InstanceExec instanceExec = new InstanceExec();
-            instanceExecAPI.insertInstanceExec(parentProcessId, applicationId);
+            instanceExecAPI.updateInstanceExecToRunning(parentProcessId, applicationId);
 
             long batchDuration = 30000;
 
@@ -137,7 +133,7 @@ public class StreamAnalyticsDriver implements Serializable {
                 streamAnalyticsDriver.identifyFlows(currentUpstreamList, nextPidMap, parentProcessId);
             }
             streamAnalyticsDriver.createDStreams(ssc, listOfSourcePids);
-            streamAnalyticsDriver.createDataFrames(ssc, listOfSourcePids, prevMap, nextPidMap, broadcastVar);
+            streamAnalyticsDriver.invokeDStreamOperations(emptyRDD,ssc, listOfSourcePids, prevMap, nextPidMap, broadcastVar);
             ssc.start();
             ssc.awaitTermination();
         }catch (Exception e){
@@ -149,6 +145,7 @@ public class StreamAnalyticsDriver implements Serializable {
     }
     public void createDStreams(JavaStreamingContext ssc,List<Integer> listOfSourcePids) throws Exception{
         try {
+            System.out.println(" Inside create dstreams");
         for (Integer pid : listOfSourcePids) {
             GetParentProcessType getParentProcessType=new GetParentProcessType();
             String processTypeName=getParentProcessType.processTypeName(pid);
@@ -157,8 +154,9 @@ public class StreamAnalyticsDriver implements Serializable {
 
                 Class sourceClass = Class.forName(sourceClassName);
                 Source sourceObject = (Source)sourceClass.newInstance();
-                JavaDStream javaDStream = sourceObject.execute(ssc, pid);
+                JavaDStream<String> javaDStream = sourceObject.execute(ssc, pid);
                 pidDStreamMap.put(pid,javaDStream);
+                dStreamPidMap.put(javaDStream,pid);
             }
         }catch (Exception e){
             LOGGER.info(e);
@@ -217,70 +215,46 @@ public class StreamAnalyticsDriver implements Serializable {
     }
     }
 
-    //this method creates dataframes based on the prev map & handles logic accordingly for source/transformation/emitter
-    public void createDataFrames(JavaStreamingContext ssc, List<Integer> listOfSourcePids, Map<Integer, Set<Integer>> prevMap, Map<Integer, String> nextPidMap, Broadcast<Map<Integer,String>> broadcastVar) throws Exception {
-        try {
+
+    public JavaDStream<WrapperMessage> convertToDStreamWrapperMessage(JavaDStream<String> dStream, int pid){
+       JavaDStream<WrapperMessage> wrapperDStream= dStream.map(s -> converter(s,pid));
+       return wrapperDStream;
+    }
+
+    public static WrapperMessage converter(String record, int pid) throws Exception {
+        Object[] attributes = new Object[]{};
+        attributes = Parser.parseMessage(record,pid);
+        return new WrapperMessage(RowFactory.create(attributes));
+    }
+
+
+    //this method invokes DStream operations based on the prev map & handles logic accordingly for source/transformation/emitter
+    public void invokeDStreamOperations(JavaRDD emptyRDD,JavaStreamingContext ssc, List<Integer> listOfSourcePids, Map<Integer, Set<Integer>> prevMap, Map<Integer, String> nextPidMap, Broadcast<Map<Integer,String>> broadcastVar) throws Exception {
+        System.out.println(" inside invoke dstream");
             System.out.println("prevMap = " + prevMap);
             //iterate through each source and create respective dataFrames for sources
             for (Integer pid : pidDStreamMap.keySet()) {
                 System.out.println("pid = " + pid);
                 System.out.println("FetchingDStream for source pid= " + pid);
                 JavaDStream<String> msgDataStream = pidDStreamMap.get(pid);
-                msgDataStream.foreachRDD(
-                        new Function2<JavaRDD<String>, Time, Void>() {
-                            @Override
-                            public Void call(JavaRDD<String> rdd, Time time) throws Exception{
-                                System.out.println("rdd.count() for pid " + pid + "= " + rdd.count());
-                                sourcePid = pid;
-                                System.out.println("time at the start = " + time + " sourcePid= " + sourcePid);
-                                if (batchStartTime.$less(time)) {
-                                    pidDataFrameMap = new HashMap<Integer, DataFrame>();
-                                    batchStartTime = time;
-                                }
-                                // Get the singleton instance of SparkSession
-                                SQLContext sqlContext = SQLContext.getOrCreate(rdd.context());
-                                // Convert RDD[String] to RDD[Row] to DataFrame
-                                JavaRDD<Row> rowRDD = rdd.map(new Function<String, Row>() {
-                                                                  @Override
-                                                                  public Row call(String record) throws Exception{
-                                                                      try {
-                                                                          System.out.println("Inside message handler,sourcePid = " + pid);
-                                                                          Object[] attributes = new Object[]{};
-                                                                          attributes = Parser.parseMessage(record, pid);
-                                                                          return RowFactory.create(attributes);
-                                                                      }catch (Exception e){
-                                                                          e.printStackTrace();
-                                                                          throw e;
-                                                                      }
-                                                                  }
-                                                              }
-                                );
-                                SchemaReader schemaReader = new SchemaReader();
-                                StructType schema = schemaReader.generateSchema(pid);
-                                DataFrame dataFrame = sqlContext.createDataFrame(rowRDD, schema);
-                                //dataFrame.show();
-                                pidDataFrameMap.put(pid, dataFrame);
-                                System.out.println("pidDataFrameMap = " + pidDataFrameMap);
-                                transformAndEmit(nextPidMap.get(pid), pidDataFrameMap);
-                                return null;
-                            }
-                        });
+                JavaDStream<WrapperMessage> wrapperDStream = convertToDStreamWrapperMessage(msgDataStream,dStreamPidMap.get(msgDataStream));
 
-                //}
-                //TODO: Add logic to handle other Source Types
+                transformedDStreamMap.put(pid,wrapperDStream);
+                System.out.println("transformedDStreamMap = " + transformedDStreamMap);
+                SchemaReader schemaReader = new SchemaReader();
+                StructType schema = schemaReader.generateSchema(pid);
+                System.out.println("schema.toString() = " + schema.toString());
+                transformAndEmit(emptyRDD,nextPidMap.get(pid), transformedDStreamMap,schema );
             }
-        }catch (Exception e){
-            LOGGER.info(e);
-            e.printStackTrace();
-            throw  e;
-        }
     }
 
-    public void transformAndEmit(String nextPidString, Map<Integer, DataFrame> pidDataFrameMap) throws Exception{
+
+
+    public void transformAndEmit(JavaRDD emptyRDD, String nextPidString, Map<Integer, JavaDStream<WrapperMessage>> transformedDStreamMap,StructType schema) throws Exception{
         try {
 
             System.out.println("nextPidString = " + nextPidString);
-            System.out.println("pidDataFrameMap = " + pidDataFrameMap);
+            System.out.println("transformedDStreamMap = " + transformedDStreamMap);
             if (!nextPidString.equals(nextPidMap.get(parentProcessId))) { //condition occurs when all emitters are finished and next is set to parentprocessid
                 String[] nextPidStringArray = nextPidString.split(",");
                 Integer[] nextPidInts = new Integer[nextPidStringArray.length];
@@ -292,9 +266,9 @@ public class StreamAnalyticsDriver implements Serializable {
                         countEmitterCovered++;
                         System.out.println("No.of Emitters covered =" + countEmitterCovered);
                         if (countEmitterCovered >= listOfEmitters.size()) {
-                            System.out.println("clearing contents of pidDataFrameMap before clearing= " + pidDataFrameMap);
-                            pidDataFrameMap.clear();
-                            System.out.println("clearing contents of pidDataFrameMap before clearing= " + pidDataFrameMap);
+                            System.out.println("clearing contents of transformedDStreamMap before clearing= " + transformedDStreamMap);
+                            transformedDStreamMap.clear();
+                            System.out.println("clearing contents of transformedDStreamMap before clearing= " + transformedDStreamMap);
                             System.out.println("resetting countEmitterCovered");
                             countEmitterCovered = 0;
                             return;
@@ -303,15 +277,14 @@ public class StreamAnalyticsDriver implements Serializable {
                 }
                 for (int i = 0; i < nextPidInts.length; i++) {
                     for (Integer prevPid : prevMap.get(nextPidInts[i])) {
-                        if (pidDataFrameMap.get(prevPid) == null) {
+                        if (transformedDStreamMap.get(prevPid) == null) {
                             return;
                         }
                     }
                 }
                 for (Integer pid : nextPidInts) {
                     System.out.println("pid for transformation or emitter= " + pid);
-                    if (pidDataFrameMap.get(pid) != null)
-                        pidDataFrameMap.get(pid).show(100);
+
                     System.out.println("listOfTransformations = " + listOfTransformations);
                     if (listOfTransformations.contains(pid)) {
                         System.out.println(" inside transformation ");
@@ -325,8 +298,8 @@ public class StreamAnalyticsDriver implements Serializable {
 
                             Class transformationClass = Class.forName(transformationClassName);
                             Transformation transformationObject = (Transformation) transformationClass.newInstance();
-                            DataFrame dataFramePostTransformation = transformationObject.transform(pidDataFrameMap, prevMap, pid);
-                            pidDataFrameMap.put(pid, dataFramePostTransformation);
+                            JavaDStream<WrapperMessage> dStreamPostTransformation = transformationObject.transform(emptyRDD,transformedDStreamMap, prevMap, pid,schema);
+                            transformedDStreamMap.put(pid, dStreamPostTransformation);
 
                     }
                     if (listOfEmitters.contains(pid)) {
@@ -336,8 +309,8 @@ public class StreamAnalyticsDriver implements Serializable {
                         for (Integer prevPid : prevPids) {
                             count++;
                             System.out.println("count = " + count);
-                            System.out.println("currently trying to emit dataframe of prevPid = " + prevPid);
-                            DataFrame prevDataFrame = pidDataFrameMap.get(prevPid);
+                            System.out.println("currently trying to emit dstream of prevPid = " + prevPid);
+                            JavaDStream<WrapperMessage> prevDStream = transformedDStreamMap.get(prevPid);
 
                             GetParentProcessType getParentProcessType = new GetParentProcessType();
                             String emitterType = getParentProcessType.processTypeName(pid).replace("emitter_", "");
@@ -345,11 +318,8 @@ public class StreamAnalyticsDriver implements Serializable {
 
                                 Class emitterClass = Class.forName(emitterClassName);
                                 Emitter emitterObject = (Emitter) emitterClass.newInstance();
-                                emitterObject.persist(prevDataFrame, pid, prevPid);
-
-                            //pidDataFrameMap.remove(prevPid);
+                                emitterObject.persist(prevDStream, pid, prevPid,schema);
                         }
-                        //pidDataFrameMap.clear();
                     }
 
                     if (listOfPersistentStores.contains(pid)) {
@@ -359,8 +329,8 @@ public class StreamAnalyticsDriver implements Serializable {
                         for (Integer prevPid : prevPids) {
                             count++;
                             System.out.println("count = " + count);
-                            System.out.println("currently trying to emit dataframe of prevPid = " + prevPid);
-                            DataFrame prevDataFrame = pidDataFrameMap.get(prevPid);
+                            System.out.println("currently trying to persist dstream of prevPid = " + prevPid);
+                            JavaDStream<WrapperMessage> prevDStream = transformedDStreamMap.get(prevPid);
 
                             GetParentProcessType getParentProcessType = new GetParentProcessType();
                             String persistentStoreType = getParentProcessType.processTypeName(pid).replace("persistentStore_", "");
@@ -368,15 +338,12 @@ public class StreamAnalyticsDriver implements Serializable {
 
                                 Class persistentStoreClass = Class.forName(persistentStoreClassName);
                                 PersistentStore persistentStoreObject = (PersistentStore) persistentStoreClass.newInstance();
-                                persistentStoreObject.persist(prevDataFrame, pid, prevPid);
-
-                            //pidDataFrameMap.remove(prevPid);
+                                persistentStoreObject.persist(emptyRDD,prevDStream, pid, prevPid, schema);
                         }
-                        //pidDataFrameMap.clear();
                     }
 
 
-                    transformAndEmit(nextPidMap.get(pid), pidDataFrameMap);
+                    transformAndEmit(emptyRDD,nextPidMap.get(pid), transformedDStreamMap,schema);
                 }
             }
 

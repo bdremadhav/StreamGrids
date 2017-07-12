@@ -25,10 +25,10 @@ var saxAtmosphereWS = function(c) {
 		_this.onClose(response);
 	};
 	
-	/** invoked when a message gets delivered **/
+	/** invoked when a record gets delivered **/
 	request.onMessage = function (response) {
-		var message = response.responseBody;
-		_this.onMessage(message);
+		var record = response.responseBody;
+		_this.onMessage(record);
 	};
 	
 	/** invoked when an unexpected error occurs **/

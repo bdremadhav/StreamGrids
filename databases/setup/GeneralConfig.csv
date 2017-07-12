@@ -87,6 +87,20 @@
 '50','message','Socket Properties','Socket', 1,'true','source', 1
 '51','message','S3 Properties','S3', 1,'true','source', 1
 
+'60','default','Take','Take', 1,'true','take', 1
+'61','default','Persist','Persist', 1,'true','persist', 1
+'62','default','Repartition','Repartition', 1,'true','repartition', 1
+'70','default','Window','Window', 1,'true','window', 1
+'66','default','Sort','Sort', 1,'true','sort', 1
+
+'42','record','Kafka Properties','Kafka', 1,'true','source', 1
+'46','record','Twitter Properties','Twitter', 1,'true','source', 1
+'47','record','Kinesis Properties','Kinesis', 1,'true','source', 1
+'48','record','MQTT Properties','MQTT', 1,'true','source', 1
+'49','record','RabbitMQ Properties','RabbitMQ', 1,'true','source', 1
+'50','record','Socket Properties','Socket', 1,'true','source', 1
+'51','record','S3 Properties','S3', 1,'true','source', 1
+
 '52','connection','Kafka Properties','Kafka', 1,'true','emitter', 1
 '53','connection','Kinesis Properties','Kinesis', 1,'true','emitter', 1
 '54','connection','MQTT Properties','MQTT', 1,'true','emitter', 1

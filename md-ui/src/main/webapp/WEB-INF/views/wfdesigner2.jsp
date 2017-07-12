@@ -576,7 +576,20 @@ padding: 15px;
                         <label class="control-label col-sm-2" for="{{genConfig.key}}-propkey">Output Columns</label>
                         <div class="col-sm-10">
                          <select class="form-control js-example-basic-multiple" id="joinColumns" multiple="multiple">
-                            <option ng-repeat="column in messageColumnListChart" value="{{ column.Value }}">{{ column.DisplayText }}</option>
+                            <option ng-repeat="column in messageColumnListChart" value="{{ column.Value }}" selected>{{ column.DisplayText }}</option>
+                         </select>
+                         </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" >Join Type</label>
+                        <div class="col-sm-10">
+                         <select class="form-control " id="join-type">
+                            <option value="Inner Join">Inner Join</option>
+                            <option value="Left Outer Join">Left Outer Join</option>
+                            <option value="Right Outer Join">Right Outer Join</option>
+                            <option value="Full Outer Join">Full Outer Join</option>
+                            <option value="Cross Join">Cross Join</option>
                          </select>
                          </div>
                     </div>
@@ -587,24 +600,78 @@ padding: 15px;
 
 
 
+                                           <form class="form-horizontal" role="form" ng-if="genConfig.type == 'take'">
+                                             <div class="form-group">
+                                                 <label class="control-label col-sm-2" for="number">Number of Elements</label>
+                                                 <input type="text" class="form-control col-sm-10" id="number" required>
+                                             </div>
+
+                                              <div class="clearfix"></div>
+                                                <button type="submit" ng-click="insertTakeProp(chartViewModel.selectedProcess.processId)" class="btn btn-primary  pull-right">Save</button>
+                                           </form>
 
 
+                                            <form class="form-horizontal" role="form" ng-if="genConfig.type == 'persist'">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2" for="storageLevel">Storage Level</label>
+                                                    <select class="form-control" id="storageLevel">
+                                                        <option value="NONE">NONE</option>
+                                                        <option value="DISK_ONLY">DISK_ONLY</option>
+                                                        <option value="DISK_ONLY_2">DISK_ONLY_2</option>
+                                                        <option value="MEMORY_ONLY">MEMORY_ONLY</option>
+                                                        <option value="MEMORY_ONLY_2">MEMORY_ONLY_2</option>
+                                                        <option value="MEMORY_ONLY_SER">MEMORY_ONLY_SER</option>
+                                                        <option value="MEMORY_ONLY_SER_2">MEMORY_ONLY_SER_2</option>
+                                                        <option value="MEMORY_AND_DISK">MEMORY_AND_DISK</option>
+                                                        <option value="MEMORY_AND_DISK_2">MEMORY_AND_DISK_2</option>
+                                                        <option value="MEMORY_AND_DISK_SER">MEMORY_AND_DISK_SER</option>
+                                                        <option value="MEMORY_AND_DISK_SER_2">MEMORY_AND_DISK_SER_2</option>
+                                                        <option value="OFF_HEAP">OFF_HEAP</option>
+                                                     </select>
+                                                </div>
+
+                                                 <div class="clearfix"></div>
+                                                   <button type="submit" ng-click="insertPersistProp(chartViewModel.selectedProcess.processId)" class="btn btn-primary  pull-right">Save</button>
+                                              </form>
 
 
+                                              <form class="form-horizontal" role="form" ng-if="genConfig.type == 'repartition'">
+                                                   <div class="form-group">
+                                                       <label class="control-label col-sm-2" for="numPartitions">Number of Partitions</label>
+                                                       <input type="text" class="form-control col-sm-10" id="numPartitions" required>
+                                                   </div>
+
+                                                   <div class="clearfix"></div>
+                                                     <button type="submit" ng-click="insertRepartitionProp(chartViewModel.selectedProcess.processId)" class="btn btn-primary  pull-right">Save</button>
+                                                </form>
+
+                                               <form class="form-horizontal" role="form" ng-if="genConfig.type == 'window'">
+                                                  <div class="form-group">
+                                                      <label class="control-label col-sm-2" for="windowType">Window Type</label>
+                                                      <select class="form-control" id="windowType">
+                                                          <option value="FixedWindow">Fixed Window</option>
+                                                          <option value="SlidingWindow">Sliding Window</option>
+                                                       </select>
+                                                  </div>
+
+                                                  <div class="form-group">
+                                                         <label class="control-label col-sm-2" for="windowDuration">Window Duration</label>
+                                                         <input type="text" class="form-control col-sm-10" id="windowDuration" required>
+                                                     </div>
+                                                  <div class="form-group">
+                                                     <label class="control-label col-sm-2" for="slideDuration">Slide Duration</label>
+                                                     <input type="text" class="form-control col-sm-10" id="slideDuration" required>
+                                                 </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+                                                  <div class="clearfix"></div>
+                                                    <button type="submit" ng-click="insertWindowProp(chartViewModel.selectedProcess.processId)" class="btn btn-primary  pull-right">Save</button>
+                                               </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                  <form class="form-horizontal" role="form" ng-if="genConfig.type == 'sort'">
 
                            <div class="form-group">

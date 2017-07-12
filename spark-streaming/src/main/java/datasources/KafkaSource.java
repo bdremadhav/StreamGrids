@@ -4,7 +4,6 @@ import com.wipro.ats.bdre.md.api.GetConfigurationProperties;
 import com.wipro.ats.bdre.md.api.GetConnectionProperties;
 import com.wipro.ats.bdre.md.api.GetProperties;
 import com.wipro.ats.bdre.md.api.StreamingMessagesAPI;
-import com.wipro.ats.bdre.md.beans.GetPropertiesInfo;
 import com.wipro.ats.bdre.md.dao.jpa.Connections;
 import com.wipro.ats.bdre.md.dao.jpa.Messages;
 import kafka.serializer.StringDecoder;
@@ -67,7 +66,7 @@ public class KafkaSource implements Source{
     }
 
     @Override
-    public JavaDStream execute(JavaStreamingContext ssc,Integer pid) throws Exception {
+    public JavaDStream<String> execute(JavaStreamingContext ssc,Integer pid) throws Exception {
         try {
             System.out.println("pid = " + pid);
             Map<String, String> kafkaParams = getKafkaParams(pid);

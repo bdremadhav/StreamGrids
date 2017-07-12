@@ -56,13 +56,13 @@ public class SparkStreamingAPI extends MetadataAPIBase {
         RestWrapperOptions restWrapperOptions = null;
         try{
             GetMessageColumns getMessageColumns = new GetMessageColumns();
-            HashMap<String,Integer> tablePair = getMessageColumns.getMessageList(processId);
+            HashMap<Integer,String> tablePair = getMessageColumns.getMessageList(processId);
             List<RestWrapperOptions.Option> options = new ArrayList<RestWrapperOptions.Option>();
             Iterator it = tablePair.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry pair = (Map.Entry)it.next();
                 System.out.println(pair.getKey() + " = " + pair.getValue());
-                RestWrapperOptions.Option option = new RestWrapperOptions.Option((String) pair.getKey(),pair.getValue());
+                RestWrapperOptions.Option option = new RestWrapperOptions.Option((String) pair.getValue(), pair.getKey());
                 options.add(option);
                 it.remove();
             }

@@ -40,7 +40,7 @@ public class GetMessageColumns extends MetadataAPIBase {
 
     public static void main(String[] args) {
        // Set<String> columnNames = new GetMessageColumns().getMessageColumnNames(2);
-        System.out.println("final result = " + new GetMessageColumns().getMessageList(15));
+        System.out.println("final result = " + new GetMessageColumns().getMessageList(36));
     }
 
     public Set<String> getColumnNames(Integer pid) {
@@ -106,7 +106,7 @@ public class GetMessageColumns extends MetadataAPIBase {
     }
 
 
-    public HashMap<String,Integer> getMessageList(Integer pid) {
+    public HashMap<Integer,String> getMessageList(Integer pid) {
         Process selectedProcess = processDAO.get(pid);
         Process parentProcess = selectedProcess.getProcess();
         Integer parentProcessId = parentProcess.getProcessId();
@@ -142,7 +142,7 @@ public class GetMessageColumns extends MetadataAPIBase {
             getMessageColumns.identifyFlows(currentUpstreamList, nextPidMap,parentProcessId);
         }
         System.out.println("prevMap = in message list " + prevMap);
-        HashMap<String,Integer> hashMap=new HashMap<>();
+        HashMap<Integer,String> hashMap=new HashMap<>();
         System.out.println("prevMap.get(pid) "+prevMap.get(pid));
         for(Integer prevId:prevMap.get(pid))
         {
@@ -151,12 +151,12 @@ public class GetMessageColumns extends MetadataAPIBase {
                 {
                     Properties messageProperty = messageProperties1.get(0);
                     String messageName = messageProperty.getPropValue();
-                    hashMap.put(messageName,prevId);
+                    hashMap.put(prevId,messageName);
                 }
                 else
                 {
                     Process process=processDAO.get(prevId);
-                    hashMap.put(process.getProcessName(),prevId);
+                    hashMap.put(prevId,process.getProcessName());
                 }
 
 

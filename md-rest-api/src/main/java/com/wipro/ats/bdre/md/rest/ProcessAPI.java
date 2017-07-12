@@ -16,8 +16,7 @@ package com.wipro.ats.bdre.md.rest;
 
 import com.wipro.ats.bdre.MDConfig;
 import com.wipro.ats.bdre.exception.MetadataException;
-import com.wipro.ats.bdre.md.api.Export;
-import com.wipro.ats.bdre.md.api.Import;
+import com.wipro.ats.bdre.md.api.*;
 import com.wipro.ats.bdre.md.api.base.MetadataAPIBase;
 import com.wipro.ats.bdre.md.beans.ExecutionBean;
 import com.wipro.ats.bdre.md.beans.ExecutionInfo;
@@ -1017,6 +1016,9 @@ public class ProcessAPI extends MetadataAPIBase {
                 }
                 executionInfo.setOSProcessId(fPid.getInt(osProcess));
                 LOGGER.debug(" OS process Id : " + executionInfo.getOSProcessId() + "executed by " + principal.getName());
+                com.wipro.ats.bdre.md.api.InstanceExecAPI instanceExecAPI = new com.wipro.ats.bdre.md.api.InstanceExecAPI();
+                instanceExecAPI.insertInstanceExec(executionBean.getProcessId(), null);
+
             } catch (Exception e) {
                 executionInfo.setOSProcessId(-1);
                 LOGGER.error(e + " Setting OS Process ID failed " + executionInfo.getOSProcessId());

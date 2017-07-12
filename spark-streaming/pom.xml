@@ -29,7 +29,7 @@
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_2.10</artifactId>
-            <version>1.5.0</version>
+            <version>1.6.0</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.spark/spark-hive_2.10 -->
         <dependency>
@@ -61,19 +61,19 @@
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-streaming_2.10</artifactId>
-            <version>1.5.0</version>
+            <version>1.6.0</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-streaming-kafka_2.10</artifactId>
-            <version>1.5.0</version>
+            <version>1.6.0</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-streaming-twitter_2.10</artifactId>
-            <version>1.5.0</version>
+            <version>1.6.0</version>
         </dependency>
 
 

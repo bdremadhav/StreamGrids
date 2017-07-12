@@ -1,9 +1,9 @@
 04-26 16:31:11 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLException: Schema "BDRE" not found; SQL statement:
 SET SCHEMA BDRE [90079-172]
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
-	at org.h2.message.DbException.get(DbException.java:169)
-	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.record.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.record.DbException.get(DbException.java:169)
+	at org.h2.record.DbException.get(DbException.java:146)
 	at org.h2.engine.Database.getSchema(Database.java:1555)
 	at org.h2.command.dml.Set.update(Set.java:340)
 	at org.h2.command.CommandContainer.update(CommandContainer.java:79)
@@ -147,7 +147,7 @@ CREATE TABLE  process_log  (
    process_id  int NOT NULL,
    log_category  varchar(10) NOT NULL,
    message_id  varchar(128) NOT NULL,
-   message  varchar(1024) NOT NULL,
+   record  varchar(1024) NOT NULL,
    instance_ref  bigint,
   PRIMARY KEY ( log_id ),
   CONSTRAINT  process_id  FOREIGN KEY ( process_id ) REFERENCES  process  ( process_id ) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -187,10 +187,10 @@ create table app_deployment_queue (
 ) [42102-172]
 04-26 17:46:58 jdbc[2]: exception
 org.h2.jdbc.JdbcSQLException: The object is already closed [90007-172]
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
-	at org.h2.message.DbException.get(DbException.java:169)
-	at org.h2.message.DbException.get(DbException.java:146)
-	at org.h2.message.DbException.get(DbException.java:135)
+	at org.h2.record.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.record.DbException.get(DbException.java:169)
+	at org.h2.record.DbException.get(DbException.java:146)
+	at org.h2.record.DbException.get(DbException.java:135)
 	at org.h2.jdbc.JdbcConnection.checkClosed(JdbcConnection.java:1410)
 	at org.h2.jdbc.JdbcConnection.checkClosed(JdbcConnection.java:1388)
 	at org.h2.jdbc.JdbcConnection.getAutoCommit(JdbcConnection.java:428)
@@ -202,10 +202,10 @@ org.h2.jdbc.JdbcSQLException: The object is already closed [90007-172]
 	at java.lang.Thread.run(Unknown Source)
 04-26 17:46:58 jdbc[2]: exception
 org.h2.jdbc.JdbcSQLException: The object is already closed [90007-172]
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
-	at org.h2.message.DbException.get(DbException.java:169)
-	at org.h2.message.DbException.get(DbException.java:146)
-	at org.h2.message.DbException.get(DbException.java:135)
+	at org.h2.record.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.record.DbException.get(DbException.java:169)
+	at org.h2.record.DbException.get(DbException.java:146)
+	at org.h2.record.DbException.get(DbException.java:135)
 	at org.h2.jdbc.JdbcConnection.checkClosed(JdbcConnection.java:1410)
 	at org.h2.jdbc.JdbcConnection.checkClosed(JdbcConnection.java:1388)
 	at org.h2.jdbc.JdbcConnection.getAutoCommit(JdbcConnection.java:428)
@@ -253,9 +253,9 @@ CREATE TABLE analytics_apps (
 05-11 17:32:12 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLException: Schema "BDRE" already exists; SQL statement:
 CREATE SCHEMA BDRE [90078-172]
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
-	at org.h2.message.DbException.get(DbException.java:169)
-	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.record.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.record.DbException.get(DbException.java:169)
+	at org.h2.record.DbException.get(DbException.java:146)
 	at org.h2.command.ddl.CreateSchema.update(CreateSchema.java:46)
 	at org.h2.command.CommandContainer.update(CommandContainer.java:79)
 	at org.h2.command.Command.executeUpdate(Command.java:235)
@@ -522,10 +522,10 @@ create table app_deployment_queue_status (
 ) [42101-172]
 05-11 17:36:09 jdbc[2]: exception
 org.h2.jdbc.JdbcSQLException: The object is already closed [90007-172]
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
-	at org.h2.message.DbException.get(DbException.java:169)
-	at org.h2.message.DbException.get(DbException.java:146)
-	at org.h2.message.DbException.get(DbException.java:135)
+	at org.h2.record.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.record.DbException.get(DbException.java:169)
+	at org.h2.record.DbException.get(DbException.java:146)
+	at org.h2.record.DbException.get(DbException.java:135)
 	at org.h2.jdbc.JdbcConnection.checkClosed(JdbcConnection.java:1410)
 	at org.h2.jdbc.JdbcConnection.checkClosed(JdbcConnection.java:1388)
 	at org.h2.jdbc.JdbcConnection.getAutoCommit(JdbcConnection.java:428)
@@ -537,10 +537,10 @@ org.h2.jdbc.JdbcSQLException: The object is already closed [90007-172]
 	at java.lang.Thread.run(Unknown Source)
 05-11 17:36:09 jdbc[2]: exception
 org.h2.jdbc.JdbcSQLException: The object is already closed [90007-172]
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
-	at org.h2.message.DbException.get(DbException.java:169)
-	at org.h2.message.DbException.get(DbException.java:146)
-	at org.h2.message.DbException.get(DbException.java:135)
+	at org.h2.record.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.record.DbException.get(DbException.java:169)
+	at org.h2.record.DbException.get(DbException.java:146)
+	at org.h2.record.DbException.get(DbException.java:135)
 	at org.h2.jdbc.JdbcConnection.checkClosed(JdbcConnection.java:1410)
 	at org.h2.jdbc.JdbcConnection.checkClosed(JdbcConnection.java:1388)
 	at org.h2.jdbc.JdbcConnection.getAutoCommit(JdbcConnection.java:428)
@@ -552,10 +552,10 @@ org.h2.jdbc.JdbcSQLException: The object is already closed [90007-172]
 	at java.lang.Thread.run(Unknown Source)
 05-11 17:36:09 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLException: The object is already closed [90007-172]
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
-	at org.h2.message.DbException.get(DbException.java:169)
-	at org.h2.message.DbException.get(DbException.java:146)
-	at org.h2.message.DbException.get(DbException.java:135)
+	at org.h2.record.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.record.DbException.get(DbException.java:169)
+	at org.h2.record.DbException.get(DbException.java:146)
+	at org.h2.record.DbException.get(DbException.java:135)
 	at org.h2.jdbc.JdbcConnection.checkClosed(JdbcConnection.java:1410)
 	at org.h2.jdbc.JdbcConnection.checkClosed(JdbcConnection.java:1388)
 	at org.h2.jdbc.JdbcConnection.getAutoCommit(JdbcConnection.java:428)
@@ -567,10 +567,10 @@ org.h2.jdbc.JdbcSQLException: The object is already closed [90007-172]
 	at java.lang.Thread.run(Unknown Source)
 05-11 17:36:09 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLException: The object is already closed [90007-172]
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
-	at org.h2.message.DbException.get(DbException.java:169)
-	at org.h2.message.DbException.get(DbException.java:146)
-	at org.h2.message.DbException.get(DbException.java:135)
+	at org.h2.record.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.record.DbException.get(DbException.java:169)
+	at org.h2.record.DbException.get(DbException.java:146)
+	at org.h2.record.DbException.get(DbException.java:135)
 	at org.h2.jdbc.JdbcConnection.checkClosed(JdbcConnection.java:1410)
 	at org.h2.jdbc.JdbcConnection.checkClosed(JdbcConnection.java:1388)
 	at org.h2.jdbc.JdbcConnection.getAutoCommit(JdbcConnection.java:428)

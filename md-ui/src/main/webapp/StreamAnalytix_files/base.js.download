@@ -72,7 +72,7 @@ $(function(){
 	
 	if ( $.sessionTimeout ) {
 		$.sessionTimeout({
-			message: i18N['sax.notification.stayConnected'],			
+			record: i18N['sax.notification.stayConnected'],
 			keepAlive: false,
 			logoutButton: i18N['sax.logout'],
             keepAliveButton: i18N['sax.notification.stayConnected.button'],
@@ -337,26 +337,26 @@ function initLicenseViolation() {
 					var msg = '';
 					switch(d.FailType) {
 						case 'MAX_VIOLATION':
-							msg = d.message +' '+ d.SupportEmail;
+							msg = d.record +' '+ d.SupportEmail;
 							toastr['error'](msg, d.label)
 							break;
 						case 'GRACE_TO_EXP':
-							msg = d.message +' '+ d.SupportEmail;
+							msg = d.record +' '+ d.SupportEmail;
 							toastr['error'](msg, d.label)
 							break;
 						case 'GRACE':
-							msg = d.message +' '+ d.SupportEmail;
+							msg = d.record +' '+ d.SupportEmail;
 							toastr['error'](msg, d.label)
 							break;
 						case 'EXPIRED':
-							msg = d.message +' '+ d.SupportEmail;
+							msg = d.record +' '+ d.SupportEmail;
 							toastr['error'](msg, d.label)
 							break;
 						case 'VIOLATED':
 							if ( typeof d.MaxCores !== 'undefined' ) {
-								msg = d.message +' '+ d.SupportEmail;
+								msg = d.record +' '+ d.SupportEmail;
 							} else {
-								msg = d.message +' '+ d.SupportEmail;
+								msg = d.record +' '+ d.SupportEmail;
 							}								
 							
 							toastr['error'](msg, d.label)							
@@ -603,7 +603,7 @@ $( document ).ready(function() {
 			var result = postAjaxData(editLangUrl, JSON.stringify(params));
 			result = JSON.parse(result);
 			if (result.status != 'SUCCESS' ) {
-				$('#languageStatusWrap').html('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'+result.message+'</div>').show();
+				$('#languageStatusWrap').html('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'+result.record+'</div>').show();
 			} else {
 				location.reload();
 			}
@@ -640,7 +640,7 @@ $( document ).ready(function() {
 			var result = postAjaxData(url, JSON.stringify(params), '');
 			result = JSON.parse(result);
 			if (result.status != 'SUCCESS' ) {
-				$('#languageStatusWrap1').html('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'+result.message+'</div>').show();
+				$('#languageStatusWrap1').html('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'+result.record+'</div>').show();
 			} else {
 				if ( intellicusToken != 'null' && intellicusToken != null ) {
 					var valArr = $("#isDashboardEnableFld[name='isDashboardEnable']").val().split("|");	
@@ -721,14 +721,14 @@ function initsaxAlertWS() {
 		//console.log('onClose: ', response);
 	};
 
-	/** invoked when a message gets delivered **/
+	/** invoked when a record gets delivered **/
 	saxAlertWS.onMessage = function(response) {
 		if ( typeof response !== 'undefined' || response != '' ) {
 			try {
 				response = $.parseJSON(response);
 				if ( typeof response.pipelineName === 'undefined' ) {
 					var alertTitle = response.alertName;
-					var alertMsg = response.message;
+					var alertMsg = response.record;
 					if ( response.severity == "general" ) {
 						action = "warning";
 					} else if ( response.severity == "subsystemCrashed" ) {
@@ -778,7 +778,7 @@ var alertsNotification = new function() {
 				
 				bootbox.alert({
 					size: 'large',
-					message: alertObj[0].message
+					record: alertObj[0].record
 				});
 			});
 		}, 200);
@@ -813,7 +813,7 @@ var alertsNotification = new function() {
 			id: notificatinId,
 			action: action,
 			title: title,
-			message: msg
+			record: msg
 		});
 		
 		if ( notification.alerts.length > 20 ) {
@@ -838,7 +838,7 @@ var alertsNotification = new function() {
 			$('#noAlertsMessage').remove();
 			
 			for ( var i=0; i<notification.alerts.length; i++ ) {
-				var description = $('<div>').html(notification.alerts[i].message);
+				var description = $('<div>').html(notification.alerts[i].record);
 				description = $(description).text();
 				description = '<p>'+ description +'</p>';
 				if ( description.length > 50 ) {

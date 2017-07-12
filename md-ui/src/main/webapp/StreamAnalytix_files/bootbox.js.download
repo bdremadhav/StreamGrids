@@ -108,8 +108,8 @@ window.bootbox = window.bootbox || (function init($, undefined) {
       throw new Error("Please supply an object of options");
     }
 
-    if (!options.message) {
-      throw new Error("Please specify a message");
+    if (!options.record) {
+      throw new Error("Please specify a record");
     }
 
     // make sure any supplied options take precedence over defaults
@@ -167,8 +167,8 @@ window.bootbox = window.bootbox || (function init($, undefined) {
    * use the properties argument to map the unnamed args to
    * object properties
    * so in the latter case:
-   * mapArguments(["foo", $.noop], ["message", "callback"])
-   * -> { message: "foo", callback: $.noop }
+   * mapArguments(["foo", $.noop], ["record", "callback"])
+   * -> { record: "foo", callback: $.noop }
    */
   function mapArguments(args, properties) {
     var argn = args.length;
@@ -272,7 +272,7 @@ window.bootbox = window.bootbox || (function init($, undefined) {
   exports.alert = function() {
     var options;
 
-    options = mergeDialogOptions("alert", ["ok"], ["message", "callback"], arguments);
+    options = mergeDialogOptions("alert", ["ok"], ["record", "callback"], arguments);
 
     if (options.callback && !$.isFunction(options.callback)) {
       throw new Error("alert requires callback property to be a function when provided");
@@ -294,7 +294,7 @@ window.bootbox = window.bootbox || (function init($, undefined) {
   exports.confirm = function() {
     var options;
 
-    options = mergeDialogOptions("confirm", ["cancel", "confirm"], ["message", "callback"], arguments);
+    options = mergeDialogOptions("confirm", ["cancel", "confirm"], ["record", "callback"], arguments);
 
     /**
      * overrides; undo anything the user tried to set they shouldn't have
@@ -326,7 +326,7 @@ window.bootbox = window.bootbox || (function init($, undefined) {
 
     // we have to create our form first otherwise
     // its value is undefined when gearing up our options
-    // @TODO this could be solved by allowing message to
+    // @TODO this could be solved by allowing record to
     // be a function instead...
     form = $(templates.form);
 
@@ -355,7 +355,7 @@ window.bootbox = window.bootbox || (function init($, undefined) {
     /**
      * overrides; undo anything the user tried to set they shouldn't have
      */
-    options.message = form;
+    options.record = form;
 
     options.buttons.cancel.callback = options.onEscape = function() {
       return options.callback(null);
@@ -537,7 +537,7 @@ window.bootbox = window.bootbox || (function init($, undefined) {
       callbacks[key] = button.callback;
     });
 
-    body.find(".bootbox-body").html(options.message);
+    body.find(".bootbox-body").html(options.record);
 
     if (options.animate === true) {
       dialog.addClass("fade");

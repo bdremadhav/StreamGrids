@@ -12,11 +12,15 @@ import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.spark.SparkConf;
 import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.JavaPairRDD;
+import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.DataFrame;
 import org.apache.spark.sql.SQLContext;
+import org.apache.spark.sql.types.StructType;
+import org.apache.spark.streaming.api.java.JavaDStream;
 import scala.Tuple2;
 import org.apache.hadoop.hbase.client.HBaseAdmin;
+import util.WrapperMessage;
 
 import java.util.function.BiFunction;
 /*
@@ -24,13 +28,12 @@ import java.util.function.BiFunction;
  */
 
 public class HBasePersistentStore implements PersistentStore{
-
     @Override
-    public void persist(DataFrame df, Integer pid, Integer prevPid) throws Exception {
+    public void persist(JavaRDD emptyRDD, JavaDStream<WrapperMessage> wrapperMessageJavaDStream, Integer pid, Integer prevPid, StructType schema) throws Exception {
 
     }
 
-    public static void main(String[] args) throws Exception {
+   /* public static void main(String[] args) throws Exception {
         HBaseConfiguration hconfig = new HBaseConfiguration(new Configuration());
         HTableDescriptor htable = new HTableDescriptor(TableName.valueOf("User"));
         htable.addFamily( new HColumnDescriptor("Id"));
@@ -40,7 +43,7 @@ public class HBasePersistentStore implements PersistentStore{
         System.out.println( "Creating Table..." );
        // hbase_admin.createTable( htable ); System.out.println("Done!");
 
-    }
+    }*/
 
 
 }
