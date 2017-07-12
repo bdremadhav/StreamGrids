@@ -144,6 +144,7 @@ public class GetMessageColumns extends MetadataAPIBase {
         System.out.println("prevMap = in message list " + prevMap);
         HashMap<Integer,String> hashMap=new HashMap<>();
         System.out.println("prevMap.get(pid) "+prevMap.get(pid));
+        if (prevMap.get(pid)!=null){
         for(Integer prevId:prevMap.get(pid))
         {
                 List<Properties> messageProperties1 =  propertiesDAO.getPropertiesForConfig(prevId, "message");
@@ -160,6 +161,7 @@ public class GetMessageColumns extends MetadataAPIBase {
                 }
 
 
+        }
         }
         return hashMap;
     }
