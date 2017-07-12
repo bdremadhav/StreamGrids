@@ -2112,7 +2112,7 @@
                                                                       <div class="form-group" >
                                                                          <label class="control-label col-sm-2" for="executorCores">Executor Cores</label>
                                                                          <div class="col-sm-10">
-                                                                          <input type="text" class="form-control"  id="executorCores" name="executorCores" value="3" required>
+                                                                          <input type="text" class="form-control"  id="executorCores" name="executorCores" value="2" required>
                                                                          </div>
                                                                        </div>
 

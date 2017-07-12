@@ -2,8 +2,10 @@ package transformations;
 
 import com.wipro.ats.bdre.md.api.GetProperties;
 import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.Function2;
 import org.apache.spark.sql.types.StructType;
+import org.apache.spark.streaming.Duration;
 import org.apache.spark.streaming.api.java.JavaDStream;
 import org.apache.spark.streaming.api.java.JavaPairDStream;
 import scala.Tuple2;
@@ -29,20 +31,34 @@ public class Reduce implements Transformation {
         Properties filterProperties = getProperties.getProperties(String.valueOf(pid), "default");
         //operator can be Reduce or ReduceByWindow
         String operator = filterProperties.getProperty("operator");
+        operator = "Reduce";
         String executorPlugin = filterProperties.getProperty("executor-plugin");
-        JavaDStream<WrapperMessage> outputDStream = dStream;
+        executorPlugin = "driver.ReduceFunction";
+        JavaDStream<Tuple2<String,WrapperMessage>> outputDStream = null;
+
+        Function2 function2 = null;
+        try {
+            Class userClass = Class.forName(executorPlugin);
+            function2 = (Function2) userClass.newInstance();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         if(operator.equalsIgnoreCase("Reduce")){
-            //outputDStream = dStream.reduce();
+            outputDStream = prevDStream.reduce(function2);
         }
         else{
             String windowType = filterProperties.getProperty("window-type");
             String windowDurationString = filterProperties.getProperty("window-duration");
             String slideDurationString = filterProperties.getProperty("slide-duration");
 
-            //outputDStream = dStream.reduceByWindow();
+            Duration windowDuration = new Duration(Long.parseLong(windowDurationString));
+            Duration slideDuration = new Duration(Long.parseLong(slideDurationString));
+
+            outputDStream = prevDStream.reduceByWindow(function2 ,windowDuration,slideDuration);
+
         }
 
-        return outputDStream.mapToPair(s -> new Tuple2<String, WrapperMessage>(null,s));
+        return outputDStream.mapToPair(s -> new Tuple2<String,WrapperMessage>(s._1,s._2));
 
     }
 }
