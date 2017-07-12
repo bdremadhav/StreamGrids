@@ -14,13 +14,18 @@ import messageformat.Parser;
 import messageschema.SchemaReader;
 import org.apache.commons.math3.util.Pair;
 import org.apache.log4j.Logger;
+import org.apache.spark.Accumulator;
 import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
+import org.apache.spark.api.java.function.PairFunction;
 import org.apache.spark.broadcast.Broadcast;
+import org.apache.spark.rdd.RDD;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.RowFactory;
+import org.apache.spark.sql.SQLContext;
 import org.apache.spark.sql.types.StructType;
 import org.apache.spark.streaming.Duration;
 import org.apache.spark.streaming.Time;
@@ -240,8 +245,31 @@ public class StreamAnalyticsDriver implements Serializable {
                 System.out.println("pid = " + pid);
                 System.out.println("FetchingDStream for source pid= " + pid);
                 JavaPairDStream<String,String> msgDataStream = pidDStreamMap.get(pid);
-                JavaPairDStream<String,WrapperMessage> wrapperDStream = convertToDStreamWrapperMessage(msgDataStream,dStreamPidMap.get(msgDataStream));
+                JavaPairDStream<String, WrapperMessage> wrapperDStream = null;
 
+                if("json1".equalsIgnoreCase("json")) {
+                    SQLContext sqlContext = new SQLContext(ssc.sparkContext());
+                    wrapperDStream = msgDataStream.transformToPair(new Function<JavaPairRDD<String, String>, JavaPairRDD<String, WrapperMessage>>() {
+                        @Override
+                        public JavaPairRDD<String, WrapperMessage> call(JavaPairRDD<String, String> inputPairRDD) throws Exception {
+                            JavaPairRDD<String, WrapperMessage> outputPairRdd = null;
+                            JavaRDD javaRDD = inputPairRDD.map(s -> s._2);
+                            Row row = sqlContext.read().json(javaRDD).head();
+
+                            outputPairRdd = inputPairRDD.mapToPair(new PairFunction<Tuple2<String, String>, String, WrapperMessage>() {
+                                @Override
+                                public Tuple2<String, WrapperMessage> call(Tuple2<String, String> inputTuple2) throws Exception {
+                                    return new Tuple2<String, WrapperMessage>(inputTuple2._1,new WrapperMessage(row));
+                                }
+                            });
+                            return outputPairRdd ;
+                        }
+                    });
+                }
+
+                else{
+                    wrapperDStream = convertToDStreamWrapperMessage(msgDataStream, dStreamPidMap.get(msgDataStream));
+                }
                 transformedDStreamMap.put(pid,wrapperDStream);
                 System.out.println("transformedDStreamMap = " + transformedDStreamMap);
                 SchemaReader schemaReader = new SchemaReader();

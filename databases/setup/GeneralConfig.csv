@@ -78,7 +78,7 @@
 '60','default','Take','Take', 1,'true','take', 1
 '61','default','Persist','Persist', 1,'true','persist', 1
 '62','default','Repartition','Repartition', 1,'true','repartition', 1
-'62','default','Window','Window', 1,'true','window', 1
+'70','default','Window','Window', 1,'true','window', 1
 '66','default','Sort','Sort', 1,'true','sort', 1
 
 '42','record','Kafka Properties','Kafka', 1,'true','source', 1
