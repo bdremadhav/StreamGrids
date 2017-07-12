@@ -59,7 +59,7 @@ ga('send', 'pageview');
 <script src="../js/fc/dragging_service.js" type="text/javascript"></script>
 <script src="../js/fc/flowchart_viewmodel.js" type="text/javascript"></script>
 <script src="../js/fc/flowchart_directive.js" type="text/javascript"></script>
-
+<script src="../StreamAnalytix_files/select2.4.0.min.js" type="text/javascript"></script>
 
 <!--Ajax calls Code. -->
 <script type="text/javascript" src="../js/fc/wfd-ac.js"></script>
@@ -311,8 +311,6 @@ padding: 15px;
 <div class="row">
     <div class="col-md-3">&nbsp;</div>
 </div>
-
-
 
 
 
@@ -577,7 +575,7 @@ padding: 15px;
                       <div class="form-group">
                         <label class="control-label col-sm-2" for="{{genConfig.key}}-propkey">Output Columns</label>
                         <div class="col-sm-10">
-                         <select class="form-control" id="joinColumns" multiple>
+                         <select class="form-control js-example-basic-multiple" id="joinColumns" multiple="multiple">
                             <option ng-repeat="column in messageColumnListChart" value="{{ column.Value }}">{{ column.DisplayText }}</option>
                          </select>
                          </div>
