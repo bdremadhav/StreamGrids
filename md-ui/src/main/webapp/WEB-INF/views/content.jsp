@@ -291,7 +291,7 @@
                                  </li>
 
                                   <li>
-                                     <a  href="sessions.page"><i class="mdi mdi-24px mdi-forum"></i><span>Sessions</span></a>
+                                     <a  href="sessions.page"><i class="mdi mdi-24px mdi-watch"></i><span>Sessions</span></a>
                                   </li>
 
                                  <li style="display:none;">

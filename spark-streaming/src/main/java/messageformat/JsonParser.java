@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.avro.data.Json;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.spark.sql.SQLContext;
-import org.jsonschema2pojo.SchemaGenerator;
+//import org.jsonschema2pojo.SchemaGenerator;
 
 import java.io.File;
 import java.util.*;

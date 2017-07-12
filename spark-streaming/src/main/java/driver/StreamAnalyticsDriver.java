@@ -59,7 +59,7 @@ public class StreamAnalyticsDriver implements Serializable {
     public static List<Integer> listOfEmitters = new ArrayList<>();
     public static List<Integer> listOfPersistentStores = new ArrayList<>();
     public static Map<Integer, String> nextPidMap = new HashMap<Integer, String>();
-    public static Map<Integer,String> pidMessageTypeMap = new HashMap<>();
+    public static Map<Integer,String> pidMessageTypeMap = new HashMap<Integer, String>();
     public static Integer parentProcessId;
     static int countEmitterCovered = 0;
     static Time batchStartTime = new Time(0);
@@ -116,7 +116,7 @@ public class StreamAnalyticsDriver implements Serializable {
             SparkConf conf = new SparkConf().setAppName("Log Analyzer");
             JavaSparkContext sc = new JavaSparkContext(conf);
             JavaRDD emptyRDD = sc.emptyRDD();
-            Broadcast<Map<Integer, String>> broadcastVar = sc.broadcast(pidMessageTypeMap);
+            //Broadcast<Map<Integer, String>> broadcastVar = sc.broadcast(pidMessageTypeMap);
             String applicationId = sc.sc().applicationId();
             System.out.println("applicationId = " + applicationId);
             InstanceExecAPI instanceExecAPI = new InstanceExecAPI();
@@ -142,7 +142,7 @@ public class StreamAnalyticsDriver implements Serializable {
                 streamAnalyticsDriver.identifyFlows(currentUpstreamList, nextPidMap, parentProcessId);
             }
             streamAnalyticsDriver.createDStreams(ssc, listOfSourcePids);
-            streamAnalyticsDriver.invokeDStreamOperations(emptyRDD,ssc, listOfSourcePids, prevMap, nextPidMap, broadcastVar);
+            streamAnalyticsDriver.invokeDStreamOperations(emptyRDD,ssc, listOfSourcePids, prevMap, nextPidMap);
             ssc.start();
             ssc.awaitTermination();
         }catch (Exception e){
@@ -238,7 +238,7 @@ public class StreamAnalyticsDriver implements Serializable {
 
 
     //this method invokes DStream operations based on the prev map & handles logic accordingly for source/transformation/emitter
-    public void invokeDStreamOperations(JavaRDD emptyRDD,JavaStreamingContext ssc, List<Integer> listOfSourcePids, Map<Integer, Set<Integer>> prevMap, Map<Integer, String> nextPidMap, Broadcast<Map<Integer,String>> broadcastVar) throws Exception {
+    public void invokeDStreamOperations(JavaRDD emptyRDD,JavaStreamingContext ssc, List<Integer> listOfSourcePids, Map<Integer, Set<Integer>> prevMap, Map<Integer, String> nextPidMap) throws Exception {
         System.out.println(" inside invoke dstream");
             System.out.println("prevMap = " + prevMap);
             //iterate through each source and create respective dataFrames for sources
