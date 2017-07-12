@@ -2,7 +2,9 @@ package transformations;
 
 import com.wipro.ats.bdre.md.api.GetProperties;
 import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.function.Function2;
 import org.apache.spark.sql.types.StructType;
+import org.apache.spark.streaming.Duration;
 import org.apache.spark.streaming.api.java.JavaPairDStream;
 import util.WrapperMessage;
 
@@ -28,15 +30,24 @@ public class ReduceByKey implements Transformation {
         String executorPlugin = filterProperties.getProperty("executor-plugin");
 
         JavaPairDStream<String,WrapperMessage> outputDStream = prevDStream;
-        if(operator.equalsIgnoreCase("Reduce")){
-            //outputDStream = prevDStream.reduceByKey();
+        Function2 function2 = null;
+        try {
+            Class userClass = Class.forName(executorPlugin);
+            function2 = (Function2) userClass.newInstance();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        if(operator.equalsIgnoreCase("ReduceByKey")){
+            outputDStream = prevDStream.reduceByKey(function2);
         }
         else{
-            String windowType = filterProperties.getProperty("window-type");
             String windowDurationString = filterProperties.getProperty("window-duration");
             String slideDurationString = filterProperties.getProperty("slide-duration");
+            Duration windowDuration = new Duration(Long.parseLong(windowDurationString));
+            Duration slideDuration = new Duration(Long.parseLong(slideDurationString));
 
-           // outputDStream = prevDStream.reduceByKeyAndWindow();
+            outputDStream = prevDStream.reduceByKeyAndWindow(function2 ,windowDuration,slideDuration);
         }
         return outputDStream;
     }

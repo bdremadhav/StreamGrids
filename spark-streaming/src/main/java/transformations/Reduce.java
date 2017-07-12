@@ -31,9 +31,7 @@ public class Reduce implements Transformation {
         Properties filterProperties = getProperties.getProperties(String.valueOf(pid), "default");
         //operator can be Reduce or ReduceByWindow
         String operator = filterProperties.getProperty("operator");
-        operator = "Reduce";
         String executorPlugin = filterProperties.getProperty("executor-plugin");
-        executorPlugin = "driver.ReduceFunction";
         JavaDStream<Tuple2<String,WrapperMessage>> outputDStream = null;
 
         Function2 function2 = null;
@@ -47,7 +45,6 @@ public class Reduce implements Transformation {
             outputDStream = prevDStream.reduce(function2);
         }
         else{
-            String windowType = filterProperties.getProperty("window-type");
             String windowDurationString = filterProperties.getProperty("window-duration");
             String slideDurationString = filterProperties.getProperty("slide-duration");
 

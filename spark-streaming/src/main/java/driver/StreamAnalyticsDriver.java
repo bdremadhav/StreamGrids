@@ -19,6 +19,7 @@ import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.PairFunction;
 import org.apache.spark.broadcast.Broadcast;
@@ -253,13 +254,12 @@ public class StreamAnalyticsDriver implements Serializable {
                         @Override
                         public JavaPairRDD<String, WrapperMessage> call(JavaPairRDD<String, String> inputPairRDD) throws Exception {
                             JavaPairRDD<String, WrapperMessage> outputPairRdd = null;
-                            JavaRDD javaRDD = inputPairRDD.map(s -> s._2);
-                            Row row = sqlContext.read().json(javaRDD).head();
-
-                            outputPairRdd = inputPairRDD.mapToPair(new PairFunction<Tuple2<String, String>, String, WrapperMessage>() {
+                            JavaRDD<String> javaRDD = inputPairRDD.map(s -> s._2).flatMap(s -> Arrays.asList(s.split(",")));
+                            JavaRDD<Row> rowJavaRDD = sqlContext.read().json(javaRDD).javaRDD();
+                            outputPairRdd = rowJavaRDD.mapToPair(new PairFunction<Row, String, WrapperMessage>() {
                                 @Override
-                                public Tuple2<String, WrapperMessage> call(Tuple2<String, String> inputTuple2) throws Exception {
-                                    return new Tuple2<String, WrapperMessage>(inputTuple2._1,new WrapperMessage(row));
+                                public Tuple2<String, WrapperMessage> call(Row row) throws Exception {
+                                    return new Tuple2<String, WrapperMessage>(null,new WrapperMessage(row));
                                 }
                             });
                             return outputPairRdd ;

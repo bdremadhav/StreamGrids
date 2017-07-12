@@ -29,7 +29,6 @@ public class Map implements Transformation {
         GetProperties getProperties = new GetProperties();
         Properties filterProperties = getProperties.getProperties(String.valueOf(pid), "default");
         String mapper = filterProperties.getProperty("mapper");
-        mapper = "Custom";
         JavaPairDStream<String,WrapperMessage> finalDStream = null ;
         JavaDStream<WrapperMessage> outputRdd = null;
 
@@ -38,7 +37,6 @@ public class Map implements Transformation {
         }
         else {
             String executorPlugin = filterProperties.getProperty("executor-plugin");
-            executorPlugin = "driver.MapFunction";
             try {
                 Class userClass =  Class.forName(executorPlugin);
                 Function function = (Function) userClass.newInstance();
@@ -46,7 +44,6 @@ public class Map implements Transformation {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            //TODO: Execute user given executor plugin
             finalDStream = outputRdd.mapToPair(s -> new Tuple2<String, WrapperMessage>(null,s));
         }
         return finalDStream;

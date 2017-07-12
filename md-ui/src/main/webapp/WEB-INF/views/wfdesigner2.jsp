@@ -44,6 +44,9 @@
                 <script src="../js/bootstrap.js" type="text/javascript"></script>
                 <script src="../js/jquery-ui-1.10.3.custom.js" type="text/javascript"></script>
 
+                <link href="../css/select2.min.css" rel="stylesheet" />
+                <script src="../js/select2.min.js"></script>
+
                 <link rel="stylesheet" type="text/css" href="../js/fc/wf.css">
 
                 <!-- Library code. -->
@@ -483,7 +486,7 @@
                                                     </div>
                                                 </div>
                                                 <hr/>
-                                                <form class="form-horizontal" role="form" ng-if="genConfig.type != 'hql'  && genConfig.type != 'hadoopstream' && genConfig.type != 'r'  && genConfig.type != 'spark' && genConfig.type != 'pig' && genConfig.type != 'shell' && genConfig.type != 'source' && genConfig.type != 'filter' && genConfig.type != 'sort' && genConfig.type != 'take' && genConfig.type != 'persist' && genConfig.type != 'repartition' && genConfig.type != 'window' && genConfig.type != 'emitter' && genConfig.type != 'persistentStore' && genConfig.type != 'addFiles'">
+                                                <form class="form-horizontal" role="form" ng-if="genConfig.type != 'hql'  && genConfig.type != 'hadoopstream' && genConfig.type != 'r'  && genConfig.type != 'spark' && genConfig.type != 'pig' && genConfig.type != 'shell' && genConfig.type != 'source' && genConfig.type != 'filter' && genConfig.type != 'sort' && genConfig.type != 'take' && genConfig.type != 'persist' && genConfig.type != 'repartition' && genConfig.type != 'MapToPair' && genConfig.type != 'Map' && genConfig.type != 'FlatMap' && genConfig.type != 'Reduce' && genConfig.type != 'ReduceByKey' && genConfig.type != 'window' && genConfig.type != 'GroupByKey' && genConfig.type != 'emitter' && genConfig.type != 'persistentStore' && genConfig.type != 'addFiles'">
                                                     <div class="form-group">
                                                         <label class="control-label col-sm-2" for="{{genConfig.key}}-propkey"><spring:message code="wfdesigner.page.propkey_name"/></label>
                                                         <div class="col-sm-10">
@@ -630,6 +633,159 @@
                                                </form>
 
 
+
+                                               <form class="form-horizontal" role="form" ng-if="genConfig.type == 'MapToPair'">
+                                                  <div class="form-group">
+                                                      <label class="control-label col-sm-2" for="keyType">Key Type</label>
+                                                      <select class="form-control" id="keyType">
+                                                          <option value="Fields">Fields</option>
+                                                          <option value="Custom">Custom</option>
+                                                       </select>
+                                                  </div>
+
+                                                  <div class="form-group">
+                                                         <label class="control-label col-sm-2" for="keyFields">Key Fields</label>
+                                                         <input type="text" class="form-control col-sm-10" id="keyFields" required>
+                                                  </div>
+
+                                                  <div class="clearfix"></div>
+                                                    <button type="submit" ng-click="insertMapToPairProp(chartViewModel.selectedProcess.processId)" class="btn btn-primary  pull-right">Save</button>
+                                               </form>
+
+
+                                              <form class="form-horizontal" role="form" ng-if="genConfig.type == 'Map'">
+                                                 <div class="form-group">
+                                                     <label class="control-label col-sm-2" for="mapper">Mapper</label>
+                                                     <select class="form-control" id="mapper">
+                                                         <option value="Identity Mapper">Identity Mapper</option>
+                                                         <option value="Custom">Custom</option>
+                                                      </select>
+                                                 </div>
+
+                                                 <div class="form-group">
+                                                        <label class="control-label col-sm-2" for="executorPlugin">Executor Plugin</label>
+                                                        <input type="text" class="form-control col-sm-10" id="executorPlugin" required>
+                                                 </div>
+
+                                                 <div class="clearfix"></div>
+                                                   <button type="submit" ng-click="insertMapProp(chartViewModel.selectedProcess.processId)" class="btn btn-primary  pull-right">Save</button>
+                                              </form>
+
+
+                                              <form class="form-horizontal" role="form" ng-if="genConfig.type == 'FlatMap'">
+
+                                                    <div class="form-group">
+                                                       <label class="control-label col-sm-2" for="operator">Operator</label>
+                                                       <select class="form-control" id="operator">
+                                                           <option value="FlatMap">FlatMap</option>
+                                                           <option value="FlatMapToPair">FlatMapToPair</option>
+                                                        </select>
+                                                   </div>
+
+                                                 <div class="form-group">
+                                                     <label class="control-label col-sm-2" for="mapper">Mapper</label>
+                                                     <select class="form-control" id="mapper">
+                                                         <option value="Identity Mapper">Identity Mapper</option>
+                                                         <option value="Custom">Custom</option>
+                                                      </select>
+                                                 </div>
+
+                                                 <div class="form-group">
+                                                        <label class="control-label col-sm-2" for="executorPlugin">Executor Plugin</label>
+                                                        <input type="text" class="form-control col-sm-10" id="executorPlugin" required>
+                                                 </div>
+
+                                                 <div class="clearfix"></div>
+                                                   <button type="submit" ng-click="insertFlatMapProp(chartViewModel.selectedProcess.processId)" class="btn btn-primary  pull-right">Save</button>
+                                              </form>
+
+
+                                                <form class="form-horizontal" role="form" ng-if="genConfig.type == 'Reduce'">
+                                                 <div class="form-group">
+                                                     <label class="control-label col-sm-2" for="operator">Operator</label>
+                                                     <select class="form-control" id="operator">
+                                                         <option value="Reduce">Reduce</option>
+                                                         <option value="ReduceByWindow">ReduceByWindow</option>
+                                                      </select>
+                                                 </div>
+
+                                                 <div class="form-group">
+                                                        <label class="control-label col-sm-2" for="executorPlugin">Executor Plugin</label>
+                                                        <input type="text" class="form-control col-sm-10" id="executorPlugin" required>
+                                                 </div>
+
+                                                 <div class="form-group">
+                                                          <label class="control-label col-sm-2" for="windowDuration">Window Duration</label>
+                                                          <input type="text" class="form-control col-sm-10" id="windowDuration" required>
+                                                  </div>
+
+                                                   <div class="form-group">
+                                                      <label class="control-label col-sm-2" for="slideDuration">Slide Duration</label>
+                                                      <input type="text" class="form-control col-sm-10" id="slideDuration" required>
+                                                  </div>
+
+
+                                                 <div class="clearfix"></div>
+                                                   <button type="submit" ng-click="insertReduceProp(chartViewModel.selectedProcess.processId)" class="btn btn-primary  pull-right">Save</button>
+
+
+                                              </form>
+                                                  <form class="form-horizontal" role="form" ng-if="genConfig.type == 'ReduceByKey'">
+                                                   <div class="form-group">
+                                                       <label class="control-label col-sm-2" for="operator">Operator</label>
+                                                       <select class="form-control" id="operator">
+                                                           <option value="ReduceByKey">ReduceByKey</option>
+                                                           <option value="ReduceByKeyAndWindow">ReduceByKeyAndWindow</option>
+                                                        </select>
+                                                   </div>
+
+                                                   <div class="form-group">
+                                                          <label class="control-label col-sm-2" for="executorPlugin">Executor Plugin</label>
+                                                          <input type="text" class="form-control col-sm-10" id="executorPlugin" required>
+                                                   </div>
+
+                                                   <div class="form-group">
+                                                            <label class="control-label col-sm-2" for="windowDuration">Window Duration</label>
+                                                            <input type="text" class="form-control col-sm-10" id="windowDuration" required>
+                                                    </div>
+
+                                                     <div class="form-group">
+                                                        <label class="control-label col-sm-2" for="slideDuration">Slide Duration</label>
+                                                        <input type="text" class="form-control col-sm-10" id="slideDuration" required>
+                                                    </div>
+
+
+                                                   <div class="clearfix"></div>
+                                                     <button type="submit" ng-click="insertReduceByKeyProp(chartViewModel.selectedProcess.processId)" class="btn btn-primary  pull-right">Save</button>
+                                                </form>
+
+
+
+                                                </form>
+                                                  <form class="form-horizontal" role="form" ng-if="genConfig.type == 'GroupByKey'">
+                                                   <div class="form-group">
+                                                       <label class="control-label col-sm-2" for="operator">Operator</label>
+                                                       <select class="form-control" id="operator">
+                                                           <option value="GroupByKey">GroupByKey</option>
+                                                           <option value="GroupByKeyAndWindow">GroupByKeyAndWindow</option>
+                                                        </select>
+                                                   </div>
+
+
+                                                   <div class="form-group">
+                                                            <label class="control-label col-sm-2" for="windowDuration">Window Duration</label>
+                                                            <input type="text" class="form-control col-sm-10" id="windowDuration" required>
+                                                    </div>
+
+                                                     <div class="form-group">
+                                                        <label class="control-label col-sm-2" for="slideDuration">Slide Duration</label>
+                                                        <input type="text" class="form-control col-sm-10" id="slideDuration" required>
+                                                    </div>
+
+
+                                                   <div class="clearfix"></div>
+                                                     <button type="submit" ng-click="insertGroupByKeyProp(chartViewModel.selectedProcess.processId)" class="btn btn-primary  pull-right">Save</button>
+                                                </form>
 
                                             <form class="form-horizontal" role="form" ng-if="genConfig.type == 'emitter'">
 

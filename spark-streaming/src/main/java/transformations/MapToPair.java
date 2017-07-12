@@ -29,44 +29,58 @@ public class MapToPair implements Transformation{
         prevPidList.addAll(prevMap.get(pid));
         Integer prevPid1 = prevPidList.get(0);
         System.out.println("Inside MapToPair prevPid1 = " + prevPid1);
-        JavaPairDStream<String,WrapperMessage> inputDStream = prevDStreamMap.get(prevPid1);
+        JavaPairDStream<String, WrapperMessage> inputDStream = prevDStreamMap.get(prevPid1);
         GetProperties getProperties = new GetProperties();
-        //Properties filterProperties = getProperties.getProperties(String.valueOf(pid), "default");
-        //String keyString = filterProperties.getProperty("key-fields");
-        String keyString = "clientIdentd,userID";
-        String[] keyFields = keyString.split(",");
+        Properties filterProperties = getProperties.getProperties(String.valueOf(pid), "default");
+        String keyType = filterProperties.getProperty("keyType");
+        String keyString = filterProperties.getProperty("keyFields");
 
-        JavaDStream<WrapperMessage> dStream = inputDStream.map(s -> s._2);
-        System.out.println(" Printing input dstream" );
-        //dStream.print();
         JavaPairDStream<String, WrapperMessage> finalDStream = null;
-        if(dStream != null) {
-            System.out.println(" dstream is not null" );
-             finalDStream = dStream.transformToPair(new Function<JavaRDD<WrapperMessage>, JavaPairRDD<String, WrapperMessage>>() {
+        JavaDStream<WrapperMessage> dStream = inputDStream.map(s -> s._2);
+        if (keyType.equalsIgnoreCase("Custom")) {
+            finalDStream = dStream.mapToPair(new PairFunction<WrapperMessage, String, WrapperMessage>() {
                 @Override
-                public JavaPairRDD<String, WrapperMessage> call(JavaRDD<WrapperMessage> wrapperMessageJavaRDD) throws Exception {
-                    JavaRDD<Row> rddRow = wrapperMessageJavaRDD.map(record -> WrapperMessage.convertToRow(record));
-
-                    JavaPairRDD<String, WrapperMessage> pairRDD = rddRow.mapToPair(new PairFunction<Row, String, WrapperMessage>() {
-                        @Override
-                        public Tuple2<String, WrapperMessage> call(Row row) throws Exception {
-                            String key = null;
-                            if (row != null) {
-                                for (String keyField : keyFields) {
-                                    System.out.println(keyField + " index is " + schema.fieldIndex(keyField));
-                                    key += row.getString(schema.fieldIndex(keyField)) + "#";
-                                }
-                            }
-                            return new Tuple2<String, WrapperMessage>(key, WrapperMessage.convertToWrapperMessage(row));
-
-                        }
-                    });
-
-                    return pairRDD;
+                public Tuple2<String, WrapperMessage> call(WrapperMessage wrapperMessage) throws Exception {
+                    return new Tuple2<String, WrapperMessage>(keyString,wrapperMessage);
                 }
             });
-        }
 
+        }
+        else {
+
+            String[] keyFields = keyString.split(",");
+            System.out.println(" Printing input dstream");
+            //dStream.print();
+
+            if (dStream != null) {
+                System.out.println(" dstream is not null");
+                finalDStream = dStream.transformToPair(new Function<JavaRDD<WrapperMessage>, JavaPairRDD<String, WrapperMessage>>() {
+                    @Override
+                    public JavaPairRDD<String, WrapperMessage> call(JavaRDD<WrapperMessage> wrapperMessageJavaRDD) throws Exception {
+                        JavaRDD<Row> rddRow = wrapperMessageJavaRDD.map(record -> WrapperMessage.convertToRow(record));
+
+                        JavaPairRDD<String, WrapperMessage> pairRDD = rddRow.mapToPair(new PairFunction<Row, String, WrapperMessage>() {
+                            @Override
+                            public Tuple2<String, WrapperMessage> call(Row row) throws Exception {
+                                String key = null;
+                                if (row != null) {
+                                    for (String keyField : keyFields) {
+                                        System.out.println(keyField + " index is " + schema.fieldIndex(keyField));
+                                        key += row.getString(schema.fieldIndex(keyField)) + "#";
+                                    }
+                                }
+                                return new Tuple2<String, WrapperMessage>(key, WrapperMessage.convertToWrapperMessage(row));
+
+                            }
+                        });
+
+                        return pairRDD;
+                    }
+                });
+            }
+
+
+        }
         return finalDStream;
     }
 }

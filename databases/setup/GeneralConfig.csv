@@ -80,6 +80,13 @@
 '62','default','Repartition','Repartition', 1,'true','repartition', 1
 '70','default','Window','Window', 1,'true','window', 1
 '66','default','Sort','Sort', 1,'true','sort', 1
+'73','default','MapToPair','MapToPair', 1,'true','MapToPair', 1
+'74','default','Map','Map', 1,'true','Map', 1
+'75','default','FlatMap','FlatMap', 1,'true','FlatMap', 1
+'76','default','Reduce','Reduce', 1,'true','Reduce', 1
+'77','default','ReduceByKey','ReduceByKey', 1,'true','ReduceByKey', 1
+'78','default','GroupByKey','GroupByKey', 1,'true','GroupByKey', 1
+
 
 '42','record','Kafka Properties','Kafka', 1,'true','source', 1
 '46','record','Twitter Properties','Twitter', 1,'true','source', 1
