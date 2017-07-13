@@ -667,6 +667,189 @@ map["slide-duration"]=value3;
         });
 }
 
+$scope.insertMapToPairProp=function(processId){
+var value1=document.getElementById("keyType").value;
+var value2=document.getElementById("keyFields").value;
+console.log("values are "+value1+" "+value2);
+console.log("processId is "+processId);
+var map=new Object();
+map["keyType"]=value1;
+map["keyFields"]=value2;
+    $.ajax({
+            type: "POST",
+            url: "/mdrest/properties/"+processId,
+            data: jQuery.param(map),
+            success: function(data) {
+                if(data.Result == "OK") {
+                   var modal = document.getElementById('myModal');
+                    modal.style.display = "none";
+                    alertBox("info","MapToPair properties added");
+                }
+                else
+                alertBox("warning","Error occured");
+
+            }
+
+        });
+}
+
+
+$scope.insertMapProp=function(processId){
+var value1=document.getElementById("mapper").value;
+var value2=document.getElementById("executorPlugin").value;
+console.log("values are "+value1+" "+value2);
+console.log("processId is "+processId);
+var map=new Object();
+map["mapper"]=value1;
+map["executor-plugin"]=value2;
+$scope.uploadJar(processId,'lib','mapJar');
+
+    $.ajax({
+            type: "POST",
+            url: "/mdrest/properties/"+processId,
+            data: jQuery.param(map),
+            success: function(data) {
+                if(data.Result == "OK") {
+                   var modal = document.getElementById('myModal');
+                    modal.style.display = "none";
+                    alertBox("info","Map properties added and map jar uploaded");
+                }
+                else
+                alertBox("warning","Error occured");
+
+            }
+
+        });
+
+
+
+}
+
+$scope.insertFlatMapProp=function(processId){
+var value1=document.getElementById("mapper").value;
+var value2=document.getElementById("executorPlugin").value;
+var value3=document.getElementById("operator").value;
+
+console.log("values are "+value1+" "+value2);
+console.log("processId is "+processId);
+var map=new Object();
+map["mapper"]=value1;
+map["executor-plugin"]=value2;
+map["operator"]=value3;
+    $.ajax({
+            type: "POST",
+            url: "/mdrest/properties/"+processId,
+            data: jQuery.param(map),
+            success: function(data) {
+                if(data.Result == "OK") {
+                   var modal = document.getElementById('myModal');
+                    modal.style.display = "none";
+                    alertBox("info","FlatMap properties added");
+                }
+                else
+                alertBox("warning","Error occured");
+
+            }
+
+        });
+}
+
+$scope.insertReduceProp=function(processId){
+var value1=document.getElementById("operator").value;
+var value2=document.getElementById("executorPlugin").value;
+var value3=document.getElementById("windowDuration").value;
+var value4=document.getElementById("slideDuration").value;
+
+console.log("values are "+value1+" "+value2);
+console.log("processId is "+processId);
+var map=new Object();
+map["operator"]=value1;
+map["executor-plugin"]=value2;
+map["window-duration"]=value3;
+map["slide-duration"]=value4;
+
+    $.ajax({
+            type: "POST",
+            url: "/mdrest/properties/"+processId,
+            data: jQuery.param(map),
+            success: function(data) {
+                if(data.Result == "OK") {
+                   var modal = document.getElementById('myModal');
+                    modal.style.display = "none";
+                    alertBox("info","Reduce properties added");
+                }
+                else
+                alertBox("warning","Error occured");
+
+            }
+
+        });
+}
+
+$scope.insertReduceByKeyProp=function(processId){
+var value1=document.getElementById("operator").value;
+var value2=document.getElementById("executorPlugin").value;
+var value3=document.getElementById("windowDuration").value;
+var value4=document.getElementById("slideDuration").value;
+
+console.log("values are "+value1+" "+value2);
+console.log("processId is "+processId);
+var map=new Object();
+map["operator"]=value1;
+map["executor-plugin"]=value2;
+map["window-duration"]=value3;
+map["slide-duration"]=value4;
+
+    $.ajax({
+            type: "POST",
+            url: "/mdrest/properties/"+processId,
+            data: jQuery.param(map),
+            success: function(data) {
+                if(data.Result == "OK") {
+                   var modal = document.getElementById('myModal');
+                    modal.style.display = "none";
+                    alertBox("info","ReduceByKey properties added");
+                }
+                else
+                alertBox("warning","Error occured");
+
+            }
+
+        });
+}
+
+$scope.insertReduceByKeyProp=function(processId){
+var value1=document.getElementById("operator").value;
+var value3=document.getElementById("windowDuration").value;
+var value4=document.getElementById("slideDuration").value;
+
+console.log("values are "+value1+" "+value2);
+console.log("processId is "+processId);
+var map=new Object();
+map["operator"]=value1;
+map["window-duration"]=value3;
+map["slide-duration"]=value4;
+
+    $.ajax({
+            type: "POST",
+            url: "/mdrest/properties/"+processId,
+            data: jQuery.param(map),
+            success: function(data) {
+                if(data.Result == "OK") {
+                   var modal = document.getElementById('myModal');
+                    modal.style.display = "none";
+                    alertBox("info","GroupByKey properties added");
+                }
+                else
+                alertBox("warning","Error occured");
+
+            }
+
+        });
+}
+
+
+
 
 $scope.insertEmitterProp=function(processId){
 var value1=document.getElementById("emitterConnectionName").value;
@@ -832,6 +1015,7 @@ $scope.uploadFile = function(processId,parentProcessId,subDir,cg) {
 $scope.uploadJar = function(parentProcessId,subDir,fileId) {
 
     var args = [parentProcessId,subDir,fileId];
+    console.log(args);
     var dataRecord = fileHandlerAC('/mdrest/filehandler/upload/', 'POST', args);
 
     if (dataRecord ) {

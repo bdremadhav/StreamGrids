@@ -8,6 +8,7 @@ import org.apache.spark.sql.DataFrame;
 import org.apache.spark.sql.hive.HiveContext;
 import org.apache.spark.sql.types.StructType;
 import org.apache.spark.streaming.api.java.JavaDStream;
+import org.apache.spark.streaming.api.java.JavaPairDStream;
 import util.WrapperMessage;
 
 import java.util.Properties;
@@ -39,7 +40,7 @@ public class HivePersistentStore implements PersistentStore {
     }
 
     @Override
-    public void persist(JavaRDD emptyRDD, JavaDStream<WrapperMessage> wrapperMessageJavaDStream, Integer pid, Integer prevPid, StructType schema) throws Exception {
+    public void persist(JavaRDD emptyRDD, JavaPairDStream<String, WrapperMessage> wrapperMessageJavaDStream, Integer pid, Integer prevPid, StructType schema) throws Exception {
 
     }
 }

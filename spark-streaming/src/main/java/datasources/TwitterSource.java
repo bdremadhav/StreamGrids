@@ -4,10 +4,13 @@ import com.wipro.ats.bdre.md.api.GetConfigurationProperties;
 import com.wipro.ats.bdre.md.api.GetProperties;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.streaming.api.java.JavaDStream;
+import org.apache.spark.streaming.api.java.JavaPairDStream;
 import org.apache.spark.streaming.api.java.JavaReceiverInputDStream;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
 import org.apache.spark.streaming.twitter.TwitterUtils;
+import scala.Tuple2;
 import twitter4j.Status;
+import util.WrapperMessage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +21,7 @@ import java.util.Properties;
  */
 public class TwitterSource implements Source{
     @Override
-    public JavaDStream execute(JavaStreamingContext ssc, Integer pid) throws Exception {
+    public JavaPairDStream<String, String> execute(JavaStreamingContext ssc, Integer pid) throws Exception {
         GetProperties getProperties=new GetProperties();
         Map<String,String> twitterParams = new  HashMap<String,String>();
         Properties properties=  getProperties.getProperties(pid.toString() ,"message");
@@ -45,7 +48,7 @@ public class TwitterSource implements Source{
                     public String call(twitter4j.Status status) { return status.getText(); }
                 }
         );
-        return tweets;
+        return tweets.mapToPair(s -> new Tuple2<String, String>(null,s));
 
     }
 }

@@ -10,16 +10,19 @@ import org.apache.spark.sql.SQLContext;
 import org.apache.spark.sql.types.StructType;
 import org.apache.spark.streaming.Time;
 import org.apache.spark.streaming.api.java.JavaDStream;
+import org.apache.spark.streaming.api.java.JavaPairDStream;
+import scala.Tuple2;
 import util.WrapperMessage;
 
 import java.util.*;
+import java.util.Map;
 
 /**
  * Created by cloudera on 7/4/17.
  */
 public class Joins implements Transformation {
     @Override
-    public JavaDStream<WrapperMessage> transform(JavaRDD emptyRDD, Map<Integer, JavaDStream<WrapperMessage>> prevDStreamMap, Map<Integer, Set<Integer>> prevMap, Integer pid, StructType schema) {
+    public JavaPairDStream<String,WrapperMessage> transform(JavaRDD emptyRDD, Map<Integer, JavaPairDStream<String,WrapperMessage>> prevDStreamMap, Map<Integer, Set<Integer>> prevMap, Integer pid, StructType schema) {
         List<Integer> prevPidList = new ArrayList<>();
         prevPidList.addAll(prevMap.get(pid));
         Integer prevPid1 = prevPidList.get(0);
@@ -31,15 +34,16 @@ public class Joins implements Transformation {
         //joinType - One of: inner, outer, left_outer, right_outer, leftsemi.
         final String joinType = filterProperties.getProperty("join-type");
 
-        JavaDStream<WrapperMessage> joinDStream = prevDStreamMap.get(prevPid1);
+        JavaPairDStream<String,WrapperMessage> joinPairDStream = prevDStreamMap.get(prevPid1);
+        JavaDStream<WrapperMessage> joinDStream = joinPairDStream.map(s -> s._2);
         for(int i=1;i< prevPidList.size();i++){
             Integer currentPid = prevPidList.get(i);
             System.out.println("join of dstream of pid = " + currentPid);
             filterProperties = getProperties.getProperties(String.valueOf(currentPid), "default");
             final String joinMessage2 = filterProperties.getProperty("join-message");
             final String joinColumn2 = filterProperties.getProperty("join-column");
-            JavaDStream dStream1 = prevDStreamMap.get(prevPidList.get(i));
-
+            JavaPairDStream<String,WrapperMessage> pairDStream1 = prevDStreamMap.get(prevPidList.get(i));
+            JavaDStream<WrapperMessage> dStream1 = pairDStream1.map(s -> s._2);
             if(joinDStream!=null && dStream1!=null){
 
 
@@ -101,6 +105,6 @@ public class Joins implements Transformation {
             }
 
         }
-        return joinDStream;
+        return joinDStream.mapToPair(s -> new Tuple2<String, WrapperMessage>(null,s));
     }
 }

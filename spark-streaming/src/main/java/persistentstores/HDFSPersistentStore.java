@@ -8,6 +8,8 @@ import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SQLContext;
 import org.apache.spark.sql.types.StructType;
 import org.apache.spark.streaming.api.java.JavaDStream;
+import org.apache.spark.streaming.api.java.JavaPairDStream;
+import scala.Tuple2;
 import util.WrapperMessage;
 
 import java.util.Date;
@@ -19,13 +21,15 @@ import java.util.Properties;
 public class HDFSPersistentStore implements PersistentStore {
 
     @Override
-    public void persist(JavaRDD emptyRDD, JavaDStream<WrapperMessage> dStream, Integer pid, Integer prevPid, StructType schema) throws Exception {
+    public void persist(JavaRDD emptyRDD, JavaPairDStream<String,WrapperMessage> inputDStream, Integer pid, Integer prevPid, StructType schema) throws Exception {
         try {
             final String hdfsPath = "/user/cloudera/spark-streaming-data/";
             System.out.println("Inside emitter hdfs, persisting");
             GetProperties getProperties = new GetProperties();
             Properties hdfsProperties = getProperties.getProperties(String.valueOf(pid), "kafka");
-
+            System.out.println(" Printing Pair dstream" );
+            inputDStream.print();
+            JavaDStream<WrapperMessage> dStream = inputDStream.map(s -> s._2);
 
             JavaDStream<WrapperMessage> finalDStream =  dStream.transform(new Function<JavaRDD<WrapperMessage>,JavaRDD<WrapperMessage>>() {
                 @Override
