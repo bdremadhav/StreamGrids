@@ -3,6 +3,8 @@ package transformations;
 import com.wipro.ats.bdre.md.api.GetProperties;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.FlatMapFunction;
+import org.apache.spark.api.java.function.Function;
+import org.apache.spark.api.java.function.PairFlatMapFunction;
 import org.apache.spark.sql.types.StructType;
 import org.apache.spark.streaming.api.java.JavaPairDStream;
 import scala.Tuple2;
@@ -27,15 +29,34 @@ public class FlatMap implements Transformation {
         Properties filterProperties = getProperties.getProperties(String.valueOf(pid), "default");
         String operator = filterProperties.getProperty("operator");
         String mapper = filterProperties.getProperty("flat-mapper");
+        String executorPlugin = filterProperties.getProperty("executor-plugin");
 
         JavaPairDStream<String,WrapperMessage> finalDStream = null ;
         if(mapper.equalsIgnoreCase("IdentityMapper")){
             finalDStream = prevDStream;
         }
         else {
-            String executorPlugin = filterProperties.getProperty("executor-plugin");
-            //TODO: Execute user given executor plugin
-            finalDStream = prevDStream;
+
+            if(operator.equalsIgnoreCase("FlatMap")){
+                try {
+                    Class userClass =  Class.forName(executorPlugin);
+                    FlatMapFunction function = (FlatMapFunction) userClass.newInstance();
+                    finalDStream = prevDStream.flatMap(function).mapToPair(s -> new Tuple2<String, WrapperMessage>(null,(WrapperMessage)s));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            else{
+                try {
+                    Class userClass =  Class.forName(executorPlugin);
+                    PairFlatMapFunction function = (PairFlatMapFunction) userClass.newInstance();
+                    finalDStream = prevDStream.flatMapToPair(function);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+
         }
         return finalDStream;
 

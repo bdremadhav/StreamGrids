@@ -236,7 +236,6 @@ public class StreamAnalyticsDriver implements Serializable {
         return new WrapperMessage(RowFactory.create(attributes));
     }
 
-
     //this method invokes DStream operations based on the prev map & handles logic accordingly for source/transformation/emitter
     public void invokeDStreamOperations(JavaRDD emptyRDD,JavaStreamingContext ssc, List<Integer> listOfSourcePids, Map<Integer, Set<Integer>> prevMap, Map<Integer, String> nextPidMap) throws Exception {
         System.out.println(" inside invoke dstream");
@@ -254,14 +253,11 @@ public class StreamAnalyticsDriver implements Serializable {
                         @Override
                         public JavaPairRDD<String, WrapperMessage> call(JavaPairRDD<String, String> inputPairRDD) throws Exception {
                             JavaPairRDD<String, WrapperMessage> outputPairRdd = null;
-                            JavaRDD<String> javaRDD = inputPairRDD.map(s -> s._2).flatMap(s -> Arrays.asList(s.split(",")));
+                            JavaRDD<String> javaRDD = inputPairRDD.map(s -> s._2).flatMap(s -> Arrays.asList(s.split("\n")));
+                            javaRDD.take(15);
                             JavaRDD<Row> rowJavaRDD = sqlContext.read().json(javaRDD).javaRDD();
-                            outputPairRdd = rowJavaRDD.mapToPair(new PairFunction<Row, String, WrapperMessage>() {
-                                @Override
-                                public Tuple2<String, WrapperMessage> call(Row row) throws Exception {
-                                    return new Tuple2<String, WrapperMessage>(null,new WrapperMessage(row));
-                                }
-                            });
+                            rowJavaRDD.take(15);
+                            outputPairRdd = rowJavaRDD.mapToPair(row -> new Tuple2<String, WrapperMessage>(null,new WrapperMessage(row)));
                             return outputPairRdd ;
                         }
                     });

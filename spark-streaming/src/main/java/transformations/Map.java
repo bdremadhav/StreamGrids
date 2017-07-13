@@ -3,6 +3,7 @@ package transformations;
 import com.wipro.ats.bdre.md.api.GetProperties;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.Function;
+import org.apache.spark.sql.Row;
 import org.apache.spark.sql.types.StructType;
 import org.apache.spark.streaming.api.java.JavaDStream;
 import org.apache.spark.streaming.api.java.JavaPairDStream;
@@ -25,12 +26,12 @@ public class Map implements Transformation {
         Integer prevPid = prevPidList.get(0);
         System.out.println("Inside Take prevPid = " + prevPid);
         JavaPairDStream<String,WrapperMessage> prevDStream = prevDStreamMap.get(prevPid);
+        JavaPairDStream<String,Row> prevRowDstream = prevDStream.mapValues(s -> s.getRow());
 
         GetProperties getProperties = new GetProperties();
         Properties filterProperties = getProperties.getProperties(String.valueOf(pid), "default");
         String mapper = filterProperties.getProperty("mapper");
         JavaPairDStream<String,WrapperMessage> finalDStream = null ;
-        JavaDStream<WrapperMessage> outputRdd = null;
 
         if(mapper.equalsIgnoreCase("IdentityMapper")){
             finalDStream = prevDStream;
@@ -40,11 +41,12 @@ public class Map implements Transformation {
             try {
                 Class userClass =  Class.forName(executorPlugin);
                 Function function = (Function) userClass.newInstance();
-                outputRdd = prevDStream.map(function);
+                JavaDStream<Row> rowRdd = prevRowDstream.map(function);
+                finalDStream = rowRdd.mapToPair(s -> new Tuple2<String, WrapperMessage>(null,new WrapperMessage(s)));
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            finalDStream = outputRdd.mapToPair(s -> new Tuple2<String, WrapperMessage>(null,s));
+
         }
         return finalDStream;
     }

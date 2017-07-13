@@ -37,6 +37,13 @@
             <artifactId>hadoop-client</artifactId>
             <version>2.6.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.jsonschema2pojo</groupId>
+            <artifactId>jsonschema2pojo-maven-plugin</artifactId>
+            <version>0.4.0</version>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-streaming_2.10</artifactId>

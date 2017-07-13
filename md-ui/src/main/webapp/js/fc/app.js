@@ -637,6 +637,7 @@ map["slide-duration"]=value3;
 
 $scope.insertMapToPairProp=function(processId){
 var value1=document.getElementById("keyType").value;
+console.log(document.getElementById("keyFields"));
 var value2=document.getElementById("keyFields").value;
 console.log("values are "+value1+" "+value2);
 console.log("processId is "+processId);
@@ -662,9 +663,10 @@ map["keyFields"]=value2;
 }
 
 
-$scope.insertMapProp=function(processId){
+$scope.insertMapProp=function(parentProcessId,processId){
 var value1=document.getElementById("mapper").value;
 var value2=document.getElementById("executorPlugin").value;
+$scope.uploadJar(parentProcessId,processId,'mapJar');
 console.log("values are "+value1+" "+value2);
 console.log("processId is "+processId);
 var map=new Object();
@@ -678,7 +680,7 @@ map["executor-plugin"]=value2;
                 if(data.Result == "OK") {
                    var modal = document.getElementById('myModal');
                     modal.style.display = "none";
-                    alertBox("info","Map properties added");
+                    alertBox("info","MapToPair properties added");
                 }
                 else
                 alertBox("warning","Error occured");
@@ -688,17 +690,16 @@ map["executor-plugin"]=value2;
         });
 }
 
-$scope.insertFlatMapProp=function(processId){
+$scope.insertFlatMapProp=function(parentProcessId,processId){
 var value1=document.getElementById("mapper").value;
 var value2=document.getElementById("executorPlugin").value;
-var value3=document.getElementById("operator").value;
+$scope.uploadJar(parentProcessId,processId,'flatmapJar');
 
 console.log("values are "+value1+" "+value2);
 console.log("processId is "+processId);
 var map=new Object();
 map["mapper"]=value1;
 map["executor-plugin"]=value2;
-map["operator"]=value3;
     $.ajax({
             type: "POST",
             url: "/mdrest/properties/"+processId,
@@ -717,11 +718,13 @@ map["operator"]=value3;
         });
 }
 
-$scope.insertReduceProp=function(processId){
+$scope.insertReduceProp=function(parentProcessId,processId){
 var value1=document.getElementById("operator").value;
 var value2=document.getElementById("executorPlugin").value;
 var value3=document.getElementById("windowDuration").value;
 var value4=document.getElementById("slideDuration").value;
+$scope.uploadJar(parentProcessId,processId,'reduceJar');
+
 
 console.log("values are "+value1+" "+value2);
 console.log("processId is "+processId);
@@ -749,11 +752,13 @@ map["slide-duration"]=value4;
         });
 }
 
-$scope.insertReduceByKeyProp=function(processId){
+$scope.insertReduceByKeyProp=function(parentProcessId,processId){
 var value1=document.getElementById("operator").value;
 var value2=document.getElementById("executorPlugin").value;
 var value3=document.getElementById("windowDuration").value;
 var value4=document.getElementById("slideDuration").value;
+$scope.uploadJar(parentProcessId,processId,'reducebykeyJar');
+
 
 console.log("values are "+value1+" "+value2);
 console.log("processId is "+processId);
@@ -781,7 +786,7 @@ map["slide-duration"]=value4;
         });
 }
 
-$scope.insertReduceByKeyProp=function(processId){
+$scope.insertGroupByKeyProp=function(processId){
 var value1=document.getElementById("operator").value;
 var value3=document.getElementById("windowDuration").value;
 var value4=document.getElementById("slideDuration").value;
@@ -810,7 +815,6 @@ map["slide-duration"]=value4;
 
         });
 }
-
 
 
 

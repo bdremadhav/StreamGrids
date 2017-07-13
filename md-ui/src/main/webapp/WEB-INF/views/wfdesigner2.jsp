@@ -47,6 +47,11 @@
                 <link href="../css/select2.min.css" rel="stylesheet" />
                 <script src="../js/select2.min.js"></script>
 
+                <script type="text/javascript">
+                    $(".js-example-placeholder-multiple").select2();
+                </script>
+
+
                 <link rel="stylesheet" type="text/css" href="../js/fc/wf.css">
 
                 <!-- Library code. -->
@@ -620,11 +625,11 @@
 
                                                   <div class="form-group">
                                                          <label class="control-label col-sm-2" for="windowDuration">Window Duration</label>
-                                                         <input type="text" class="form-control col-sm-10" id="windowDuration" required>
+                                                         <input type="text" class="form-control col-sm-10" id="windowDuration">
                                                      </div>
                                                   <div class="form-group">
                                                      <label class="control-label col-sm-2" for="slideDuration">Slide Duration</label>
-                                                     <input type="text" class="form-control col-sm-10" id="slideDuration" required>
+                                                     <input type="text" class="form-control col-sm-10" id="slideDuration">
                                                  </div>
 
 
@@ -645,7 +650,9 @@
 
                                                   <div class="form-group">
                                                          <label class="control-label col-sm-2" for="keyFields">Key Fields</label>
-                                                         <input type="text" class="form-control col-sm-10" id="keyFields" required>
+                                                      <select id="keyFields" class="js-example-placeholder-multiple form-control" multiple="multiple">
+                                                          <option ng-repeat="column in chartViewModel.columnList" id="{{$index}}" value="{{ column.Value }}">{{ column.DisplayText }}</option>
+                                                      </select>
                                                   </div>
 
                                                   <div class="clearfix"></div>
@@ -664,11 +671,17 @@
 
                                                  <div class="form-group">
                                                         <label class="control-label col-sm-2" for="executorPlugin">Executor Plugin</label>
-                                                        <input type="text" class="form-control col-sm-10" id="executorPlugin" required>
+                                                        <input type="text" class="form-control col-sm-10" id="executorPlugin">
                                                  </div>
 
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2" for="uploadJar">Upload Jar</label>
+                                                    <input type="file" class="form-control col-sm-10" style="opacity: 100; position: inherit;" id="mapJar"></input>
+                                                </div>
+
                                                  <div class="clearfix"></div>
-                                                   <button type="submit" ng-click="insertMapProp(chartViewModel.selectedProcess.processId)" class="btn btn-primary  pull-right">Save</button>
+                                                   <button type="submit" ng-click="insertMapProp(chartViewModel.selectedProcess.parentProcessId,chartViewModel.selectedProcess.processId)" class="btn btn-primary  pull-right">Save</button>
                                               </form>
 
 
@@ -692,11 +705,17 @@
 
                                                  <div class="form-group">
                                                         <label class="control-label col-sm-2" for="executorPlugin">Executor Plugin</label>
-                                                        <input type="text" class="form-control col-sm-10" id="executorPlugin" required>
+                                                        <input type="text" class="form-control col-sm-10" id="executorPlugin">
                                                  </div>
 
+                                                  <div class="form-group">
+                                                     <label class="control-label col-sm-2" for="uploadJar">Upload Jar</label>
+                                                     <input type="file" class="form-control col-sm-10" style="opacity: 100; position: inherit;" id="flatmapJar"></input>
+                                                 </div>
+
+
                                                  <div class="clearfix"></div>
-                                                   <button type="submit" ng-click="insertFlatMapProp(chartViewModel.selectedProcess.processId)" class="btn btn-primary  pull-right">Save</button>
+                                                   <button type="submit" ng-click="insertFlatMapProp(chartViewModel.selectedProcess.parentProcessId,chartViewModel.selectedProcess.processId)" class="btn btn-primary  pull-right">Save</button>
                                               </form>
 
 
@@ -711,22 +730,28 @@
 
                                                  <div class="form-group">
                                                         <label class="control-label col-sm-2" for="executorPlugin">Executor Plugin</label>
-                                                        <input type="text" class="form-control col-sm-10" id="executorPlugin" required>
+                                                        <input type="text" class="form-control col-sm-10" id="executorPlugin">
                                                  </div>
+
+                                                  <div class="form-group">
+                                                     <label class="control-label col-sm-2" for="uploadJar">Upload Jar</label>
+                                                     <input type="file" class="form-control col-sm-10" style="opacity: 100; position: inherit;" id="reduceJar" ></input>
+                                                 </div>
+
 
                                                  <div class="form-group">
                                                           <label class="control-label col-sm-2" for="windowDuration">Window Duration</label>
-                                                          <input type="text" class="form-control col-sm-10" id="windowDuration" required>
+                                                          <input type="text" class="form-control col-sm-10" id="windowDuration">
                                                   </div>
 
                                                    <div class="form-group">
                                                       <label class="control-label col-sm-2" for="slideDuration">Slide Duration</label>
-                                                      <input type="text" class="form-control col-sm-10" id="slideDuration" required>
+                                                      <input type="text" class="form-control col-sm-10" id="slideDuration">
                                                   </div>
 
 
                                                  <div class="clearfix"></div>
-                                                   <button type="submit" ng-click="insertReduceProp(chartViewModel.selectedProcess.processId)" class="btn btn-primary  pull-right">Save</button>
+                                                   <button type="submit" ng-click="insertReduceProp(chartViewModel.selectedProcess.parentProcessId,chartViewModel.selectedProcess.processId)" class="btn btn-primary  pull-right">Save</button>
 
 
                                               </form>
@@ -741,22 +766,28 @@
 
                                                    <div class="form-group">
                                                           <label class="control-label col-sm-2" for="executorPlugin">Executor Plugin</label>
-                                                          <input type="text" class="form-control col-sm-10" id="executorPlugin" required>
+                                                          <input type="text" class="form-control col-sm-10" id="executorPlugin">
                                                    </div>
+
+                                                    <div class="form-group">
+                                                       <label class="control-label col-sm-2" for="uploadJar">Upload Jar</label>
+                                                       <input type="file" class="form-control col-sm-10" style="opacity: 100; position: inherit;" id="reducebykeyJar"></input>
+                                                   </div>
+
 
                                                    <div class="form-group">
                                                             <label class="control-label col-sm-2" for="windowDuration">Window Duration</label>
-                                                            <input type="text" class="form-control col-sm-10" id="windowDuration" required>
+                                                            <input type="text" class="form-control col-sm-10" id="windowDuration">
                                                     </div>
 
                                                      <div class="form-group">
                                                         <label class="control-label col-sm-2" for="slideDuration">Slide Duration</label>
-                                                        <input type="text" class="form-control col-sm-10" id="slideDuration" required>
+                                                        <input type="text" class="form-control col-sm-10" id="slideDuration">
                                                     </div>
 
 
                                                    <div class="clearfix"></div>
-                                                     <button type="submit" ng-click="insertReduceByKeyProp(chartViewModel.selectedProcess.processId)" class="btn btn-primary  pull-right">Save</button>
+                                                     <button type="submit" ng-click="insertReduceByKeyProp(chartViewModel.selectedProcess.parentProcessId,chartViewModel.selectedProcess.processId)" class="btn btn-primary  pull-right">Save</button>
                                                 </form>
 
 
@@ -774,12 +805,12 @@
 
                                                    <div class="form-group">
                                                             <label class="control-label col-sm-2" for="windowDuration">Window Duration</label>
-                                                            <input type="text" class="form-control col-sm-10" id="windowDuration" required>
+                                                            <input type="text" class="form-control col-sm-10" id="windowDuration">
                                                     </div>
 
                                                      <div class="form-group">
                                                         <label class="control-label col-sm-2" for="slideDuration">Slide Duration</label>
-                                                        <input type="text" class="form-control col-sm-10" id="slideDuration" required>
+                                                        <input type="text" class="form-control col-sm-10" id="slideDuration">
                                                     </div>
 
 
