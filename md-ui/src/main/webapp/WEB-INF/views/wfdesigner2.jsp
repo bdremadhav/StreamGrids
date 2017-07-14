@@ -650,7 +650,7 @@
 
                                                   <div class="form-group">
                                                          <label class="control-label col-sm-2" for="keyFields">Key Fields</label>
-                                                      <select id="keyFields" class="js-example-placeholder-multiple form-control" multiple="multiple">
+                                                      <select id="keyFields" class="js-example-placeholder-multiple form-control">
                                                           <option ng-repeat="column in chartViewModel.columnList" id="{{$index}}" value="{{ column.Value }}">{{ column.DisplayText }}</option>
                                                       </select>
                                                   </div>

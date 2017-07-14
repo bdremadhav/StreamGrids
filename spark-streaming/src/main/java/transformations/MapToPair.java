@@ -50,7 +50,7 @@ public class MapToPair implements Transformation{
 
             String[] keyFields = keyString.split(",");
             System.out.println(" Printing input dstream");
-            //dStream.print();
+            dStream.print();
 
             if (dStream != null) {
                 System.out.println(" dstream is not null");
@@ -62,7 +62,7 @@ public class MapToPair implements Transformation{
                         JavaPairRDD<String, WrapperMessage> pairRDD = rddRow.mapToPair(new PairFunction<Row, String, WrapperMessage>() {
                             @Override
                             public Tuple2<String, WrapperMessage> call(Row row) throws Exception {
-                                String key = null;
+                                String key = "";
                                 if (row != null) {
                                     for (String keyField : keyFields) {
                                         System.out.println(keyField + " index is " + schema.fieldIndex(keyField));
@@ -81,6 +81,8 @@ public class MapToPair implements Transformation{
 
 
         }
+        System.out.println("printing output dstream " );
+        finalDStream.print();
         return finalDStream;
     }
 }

@@ -19,7 +19,7 @@ rm -f -r $BDRE_HOME
 mkdir -p $BDRE_HOME/bdre-scripts
 mkdir -p $BDRE_HOME/lib
 mkdir -p $BDRE_APPS_HOME
-mkdir -p $BDRE_HOME-wfd
+mkdir -p ~/streamgrids
 
 BDRE_CODE=`pwd`
 

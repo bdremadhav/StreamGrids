@@ -48,6 +48,7 @@ public class Map implements Transformation {
             }
 
         }
+        finalDStream.print();
         return finalDStream;
     }
 }
