@@ -711,16 +711,17 @@ padding: 15px;
 
 
 
-                                           <form class="form-horizontal" role="form" ng-if="genConfig.type == 'aggregation'">
+                                           <form class="form-horizontal" role="form" id="processFieldsForm1" ng-if="genConfig.type == 'aggregation'">
                                            <h3>Choose column level aggregations</h3>
+
                                             <div class="" id="formGroup1" >
                                             <div class="col-md-5">
-                                              <select class="form-control" id="column" >
+                                              <select class="form-control" id="column" name="column.1">
                                                 <option ng-repeat="column in chartViewModel.columnList" id="{{$index}}" value="{{ column.Value }}">{{ column.DisplayText }}</option>
                                             </select>
                                             </div>
                                             <div class="col-md-5">
-                                             <select class="form-control" id="aggregation">
+                                             <select class="form-control" id="aggregation" name="aggregation.1">
                                                 <option ng-repeat="aggregation in aggregations" id="{{$index}}" value="{{ aggregation }}">{{ aggregation }}</option>
                                             </select>
                                             </div>
@@ -730,82 +731,96 @@ padding: 15px;
 
                                         </div>
 
-                                <div class="col-md-2" id="deletediv">
+                                        <div class="" id="deletediv">
+
+                                                <div class="col-md-5">
                                                <button id="b1" class="btn add-more" onclick="addMore()">
                                                    <span class="glyphicon glyphicon-plus" style="font-size:large"></span>
                                                </button>
+                                               </div>
+                                               <div class="col-md-6">
+                                               <button type="submit" style="margin-right: 0px;" ng-click="insertAggProp(chartViewModel.selectedProcess.processId)" class="btn btn-primary  pull-right">Save</button>
+                                               </div>
+
                            </div>
-                                 <script type="text/javascript">
-                                  function columnTypes(){
-                                      var opt='';
 
-                                   <!--do the ajax call here to fetch columnList -->
-                                      return opt;
-                                  }
-
-
-
-                                   function aggregationTypes(){
-                                        var opt='';
-
-                                     <!--do the ajax call here to fetch aggregationTypes -->
-
-                                        return opt;
-                                    }
-
-
-
-                                  var next = 1;
-                                   function addMore()
-                                   {
-                                   console.log("in add more function");
-                                    var addto = "#deletediv";
-                                           var addRemove = "#formGroup" + (next);
-                                           next = next + 1;
-                                           var removeBtn = '<button id="remove' + (next) + '" class="btn btn-danger remove-me" ><span class="glyphicon glyphicon-trash" ></span></button></div><div id="field">';
-                                           var newIn = '';
-                                           newIn = newIn +  '<div class="" id="formGroup' + next + '">' ;
-                                           newIn = newIn +  '<div class="col-md-5">' ;
-                                           newIn = newIn +  '<select class="form-control input-sm" id="column.' + next + '" name="column.' + next + '">' ;
-                                            newIn = newIn +  columnTypes() ;
-                                           newIn = newIn +  '</select>' ;
-                                           newIn = newIn +  '</div>' ;
-                                           newIn = newIn +  '<div class="col-md-5">' ;
-                                           newIn = newIn +  '<select class="form-control input-sm" id="aggregation.' + next + '" name="aggregation.' + next + '">' ;
-                                            newIn = newIn +  aggregationTypes() ;
-                                           newIn = newIn +  '</select>' ;
-                                           newIn = newIn +  '</div>' ;
-
-                                           newIn = newIn + removeBtn;
-                                           newIn = newIn +  '</div>' ;
-
-                                           var newInput = $(newIn);
-                                           var removeButton = $(removeBtn);
-                                           $(addto).before(newInput);
-
-                                           $("#formGroup" + next).attr('data-source',$(addto).attr('data-source'));
-                                           $("#count").val(next);
-
-                                               $('.remove-me').click(function(e){
-                                                   e.preventDefault();
-                                                   var fieldNum = this.id.charAt(this.id.length-1);
-                                                   var fieldID = "#formGroup" + fieldNum;
-                                                   console.log($(this));
-                                                   //$(this).remove();
-                                                   $(fieldID).remove();
-                                               });
-                                }
-
-
-
-
-
-                            </script>
 
 													</form>
 
 
+                                <script type="text/javascript">
+                                      function columnTypes(){
+                                        var columnListArray=angular.element("#aggregation").scope().chartViewModel.columnList;
+                                        console.log(columnListArray);
+                                        var opt='';
+                                        for(var i=0;i<columnListArray.length;i++){
+                                        console.log(columnListArray[i].DisplayText);
+                                        opt+='<option value="'+columnListArray[i].Value+'">'+columnListArray[i].DisplayText+'</option>';
+                                        }
+                                          return opt;
+                                      }
 
+
+
+                                       function aggregationTypes(){
+                                         var aggregationListArray=angular.element("#aggregation").scope().aggregations;
+                                         console.log(aggregationListArray);
+                                         var opt='';
+                                         for(var i=0;i<aggregationListArray.length;i++){
+                                         console.log(aggregationListArray[i]);
+                                         opt+='<option value="'+aggregationListArray[i]+'">'+aggregationListArray[i]+'</option>';
+                                         }
+                                         return opt;
+                                        }
+
+
+
+                                      var next = 1;
+                                       function addMore()
+                                       {
+                                       console.log("in add more function");
+                                        var addto = "#deletediv";
+                                               var addRemove = "#formGroup" + (next);
+                                               next = next + 1;
+                                               var removeBtn = '<button id="remove' + (next) + '" class="btn btn-danger remove-me" ><span class="glyphicon glyphicon-trash" ></span></button></div><div id="field">';
+                                               var newIn = '';
+                                               newIn = newIn +  '<div class="" id="formGroup' + next + '">' ;
+                                               newIn = newIn +  '<div class="col-md-5">' ;
+                                               newIn = newIn +  '<select class="form-control input-sm" id="column.' + next + '" name="column.' + next + '">' ;
+                                                newIn = newIn +  columnTypes() ;
+                                               newIn = newIn +  '</select>' ;
+                                               newIn = newIn +  '</div>' ;
+                                               newIn = newIn +  '<div class="col-md-5">' ;
+                                               newIn = newIn +  '<select class="form-control input-sm" id="aggregation.' + next + '" name="aggregation.' + next + '">' ;
+                                                newIn = newIn +  aggregationTypes() ;
+                                               newIn = newIn +  '</select>' ;
+                                               newIn = newIn +  '</div>' ;
+
+                                               newIn = newIn + removeBtn;
+                                               newIn = newIn +  '</div>' ;
+
+                                               var newInput = $(newIn);
+                                               var removeButton = $(removeBtn);
+                                               $(addto).before(newInput);
+
+                                               $("#formGroup" + next).attr('data-source',$(addto).attr('data-source'));
+                                               $("#count").val(next);
+
+                                                   $('.remove-me').click(function(e){
+                                                       e.preventDefault();
+                                                       var fieldNum = this.id.charAt(this.id.length-1);
+                                                       var fieldID = "#formGroup" + fieldNum;
+                                                       console.log($(this));
+                                                       //$(this).remove();
+                                                       $(fieldID).remove();
+                                                   });
+                                    }
+
+
+
+
+
+                                </script>
 
 
 

@@ -512,6 +512,53 @@ $scope.insertHiveProp=function(processId){
 var value1 = $('#hiveColumn').val();
 console.log(value1);
 }
+var aggregationFinal ="";
+function formIntoText(typeOf) {
+    var map = new Object();
+    var x = '';
+    x = document.getElementById(typeOf);
+    console.log(x);
+    var text = "";
+    var i;
+    for(i = 0; i < x.length-2; i=i+3) {
+          var column=x.elements[i].value;
+          var aggregation=x.elements[i+1].value;
+          text= text+column+":::"+aggregation+",";
+    }
+
+    console.log(text);
+    aggregationFinal=text;
+}
+$scope.insertAggProp=function(processId){
+var map=new Object();
+formIntoText('processFieldsForm1');
+console.log(aggregationFinal);
+map["column:aggType"]=aggregationFinal.substr(1, aggregationFinal.length-1);;
+    $.ajax({
+            type: "POST",
+            url: "/mdrest/properties/"+processId,
+            data: jQuery.param(map),
+            success: function(data) {
+                if(data.Result == "OK") {
+                     var modal = document.getElementById('myModal');
+                     modal.style.display = "none";
+                    alertBox("info","Aggregation properties added");
+                }
+                else
+                alertBox("warning","Error occured");
+
+            }
+
+        });
+}
+
+
+
+
+
+
+
+
 
 $scope.insertJoinProperties=function(processId){
 var joinPrevProcessId=$('#joinTable').val();
@@ -1217,6 +1264,7 @@ $scope.newPageUserRoles={};
 $scope.newPageWorkflowType = {};
 $scope.messageColumnListChart={};
 $scope.operators = ["equals","not equals", "contains","doesnot contains","begins with","ends with","greater than","lesser than"];
+$scope.aggregations = ["sum","max","min","count","mean"];
 $scope.intialiseNewProcessPage =function() {
 
     var busdomainOptions = busdomainOptionsAC('/mdrest/busdomain/options/', 'POST', '');
