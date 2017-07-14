@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by cloudera on 5/22/17.
@@ -31,7 +29,8 @@ public class SparkStreamingAPI extends MetadataAPIBase {
         RestWrapperOptions restWrapperOptions = null;
         try{
             GetMessageColumns getMessageColumns = new GetMessageColumns();
-            Set<String> columnNames = getMessageColumns.getColumnNames(processId);
+            Set<String> columnNames = getMessageColumns.getMessageColumnNames(processId);
+            LOGGER.info(columnNames);
             List<RestWrapperOptions.Option> options = new ArrayList<RestWrapperOptions.Option>();
             for (String column : columnNames) {
                 RestWrapperOptions.Option option = new RestWrapperOptions.Option(column,column);
@@ -45,6 +44,39 @@ public class SparkStreamingAPI extends MetadataAPIBase {
     return restWrapperOptions;
 
     }
+
+
+
+
+
+    @RequestMapping(value = "/getMessageList/{id}", method = RequestMethod.POST)
+    @ResponseBody
+    public RestWrapperOptions listMessageOptions(@PathVariable("id") Integer processId, Principal principal) {
+
+        RestWrapperOptions restWrapperOptions = null;
+        try{
+            GetMessageColumns getMessageColumns = new GetMessageColumns();
+            HashMap<Integer,String> tablePair = getMessageColumns.getMessageList(processId);
+            List<RestWrapperOptions.Option> options = new ArrayList<RestWrapperOptions.Option>();
+            Iterator it = tablePair.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry)it.next();
+                System.out.println(pair.getKey() + " = " + pair.getValue());
+                RestWrapperOptions.Option option = new RestWrapperOptions.Option((String) pair.getValue(), pair.getKey());
+                options.add(option);
+                it.remove();
+            }
+
+            restWrapperOptions = new RestWrapperOptions(options, RestWrapperOptions.OK);
+        } catch (MetadataException e) {
+            LOGGER.error(e);
+            restWrapperOptions = new RestWrapperOptions(e.getMessage(), RestWrapper.ERROR);
+        }
+        return restWrapperOptions;
+
+    }
+
+
 
 
     @Override

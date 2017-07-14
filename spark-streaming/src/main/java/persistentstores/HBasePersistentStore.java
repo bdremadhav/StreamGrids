@@ -1,3 +1,4 @@
+/*
 package persistentstores;
 
 import com.wipro.ats.bdre.md.api.GetProperties;
@@ -30,9 +31,11 @@ import util.WrapperMessage;
 import java.util.Date;
 import java.util.Properties;
 
+*/
 /**
  * Created by cloudera on 5/21/17.
- */
+ *//*
+
 public class HBasePersistentStore implements PersistentStore {
     @Override
     public void persist(JavaRDD emptyRDD, JavaPairDStream<String, WrapperMessage> inputDStream, Integer pid, Integer prevPid, StructType schema) throws Exception {
@@ -110,3 +113,4 @@ public class HBasePersistentStore implements PersistentStore {
         }
     }
 }
+*/

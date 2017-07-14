@@ -31,6 +31,7 @@ import com.wipro.ats.bdre.md.rest.util.BindingResultError;
 import com.wipro.ats.bdre.md.rest.util.DateConverter;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -146,6 +147,31 @@ public class ProcessAPI extends MetadataAPIBase {
                 processDAO.securityCheck(parentProcess.getProcess().getProcessId(), principal.getName(), WRITE);
             else
                 processDAO.securityCheck(processId, principal.getName(), WRITE);
+
+            Integer parentProcessId = parentProcess.getProcess().getProcessId();
+            String nextProcessOfParent = processDAO.get(parentProcessId).getNextProcessId();
+            Map<Integer, String> nextPidMap = new HashMap<Integer, String>();
+            nextPidMap.put(parentProcessId, nextProcessOfParent);
+            List<com.wipro.ats.bdre.md.dao.jpa.Process> jpaProcessList = processDAO.subProcesslist(parentProcessId);
+            for (com.wipro.ats.bdre.md.dao.jpa.Process subProcess : jpaProcessList) {
+                nextPidMap.put(subProcess.getProcessId(), subProcess.getNextProcessId());
+            }
+                  LOGGER.info("nextPidMap is  "+nextPidMap);
+            for (Map.Entry<Integer, String> entry : nextPidMap.entrySet())
+            {
+                System.out.println(entry.getKey() + "/" + entry.getValue());
+                String tmp=entry.getValue();
+                HashSet<String> hashSet=new HashSet<>(Arrays.asList(tmp.split(",")));
+
+                if (hashSet.contains(processId.toString())==true) {
+
+                    hashSet.remove(processId.toString());
+                    com.wipro.ats.bdre.md.dao.jpa.Process process=processDAO.get(entry.getKey());
+                    process.setNextProcessId(StringUtils.join(hashSet, ','));
+                    processDAO.update(process);
+                }
+            }
+
             processDAO.delete(processId);
 
             restWrapper = new RestWrapper(null, RestWrapper.OK);
