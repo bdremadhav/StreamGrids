@@ -511,6 +511,8 @@ map["filtervalue"]=value3;
 $scope.insertHiveProp=function(processId){
 var value1 = $('#hiveColumn').val();
 console.log(value1);
+ var modal = document.getElementById('myModal');
+ modal.style.display = "none";
 }
 var aggregationFinal ="";
 function formIntoText(typeOf) {
