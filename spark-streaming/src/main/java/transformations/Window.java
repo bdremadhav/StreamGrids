@@ -33,8 +33,6 @@ public class Window implements Transformation{
 
         //TODO Comment these 3 lines once UI is done
         windowType = "SlidingWindow";
-        windowDurationString = "60000";
-        slideDurationString = "60000";
 
         Duration windowDuration = new Duration(Long.parseLong(windowDurationString));
         JavaPairDStream<String,WrapperMessage> windowDStream = null;
