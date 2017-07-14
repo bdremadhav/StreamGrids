@@ -32,21 +32,10 @@ public class MapToPair implements Transformation{
         JavaPairDStream<String, WrapperMessage> inputDStream = prevDStreamMap.get(prevPid1);
         GetProperties getProperties = new GetProperties();
         Properties filterProperties = getProperties.getProperties(String.valueOf(pid), "default");
-        String keyType = filterProperties.getProperty("keyType");
         String keyString = filterProperties.getProperty("keyFields");
 
         JavaPairDStream<String, WrapperMessage> finalDStream = null;
         JavaDStream<WrapperMessage> dStream = inputDStream.map(s -> s._2);
-        if (keyType.equalsIgnoreCase("Custom")) {
-            finalDStream = dStream.mapToPair(new PairFunction<WrapperMessage, String, WrapperMessage>() {
-                @Override
-                public Tuple2<String, WrapperMessage> call(WrapperMessage wrapperMessage) throws Exception {
-                    return new Tuple2<String, WrapperMessage>(keyString,wrapperMessage);
-                }
-            });
-
-        }
-        else {
 
             String[] keyFields = keyString.split(",");
             System.out.println(" Printing input dstream");
@@ -80,7 +69,7 @@ public class MapToPair implements Transformation{
             }
 
 
-        }
+
         System.out.println("printing output dstream " );
         finalDStream.print();
         return finalDStream;

@@ -636,13 +636,11 @@ map["slide-duration"]=value3;
 }
 
 $scope.insertMapToPairProp=function(processId){
-var value1=document.getElementById("keyType").value;
 console.log(document.getElementById("keyFields"));
 var value2=document.getElementById("keyFields").value;
-console.log("values are "+value1+" "+value2);
+console.log("values are  "+value2);
 console.log("processId is "+processId);
 var map=new Object();
-map["keyType"]=value1;
 map["keyFields"]=value2;
     $.ajax({
             type: "POST",

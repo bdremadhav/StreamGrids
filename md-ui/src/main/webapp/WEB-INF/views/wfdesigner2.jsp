@@ -640,13 +640,6 @@
 
 
                                                <form class="form-horizontal" role="form" ng-if="genConfig.type == 'MapToPair'">
-                                                  <div class="form-group">
-                                                      <label class="control-label col-sm-2" for="keyType">Key Type</label>
-                                                      <select class="form-control" id="keyType">
-                                                          <option value="Fields">Fields</option>
-                                                          <option value="Custom">Custom</option>
-                                                       </select>
-                                                  </div>
 
                                                   <div class="form-group">
                                                          <label class="control-label col-sm-2" for="keyFields">Key Fields</label>
