@@ -187,6 +187,66 @@ public class CodeUploaderAPI extends MetadataAPIBase {
         }
     }
 
+
+
+
+
+
+
+
+    @RequestMapping(value = "/uploadFile/", method = RequestMethod.POST)
+    @ResponseBody public
+    RestWrapper fileUpload(
+                             @RequestParam("file") MultipartFile file, Principal principal) {
+        if (!file.isEmpty()) {
+            try {
+
+                String name = file.getOriginalFilename();
+                byte[] bytes = file.getBytes();
+                String uploadLocation = System.getProperty("user.home") + "/" + "MessageFiles";
+                LOGGER.debug("Upload location of  file: " + uploadLocation);
+                File fileDir = new File(uploadLocation);
+                fileDir.mkdirs();
+                File f = new File(uploadLocation+"/"+name);
+                if(f.exists()) {
+                    f.delete();
+                }
+                File fileToBeSaved = new File(uploadLocation + "/" + name);
+                BufferedOutputStream stream =
+                        new BufferedOutputStream(new FileOutputStream(fileToBeSaved));
+                stream.write(bytes);
+                stream.close();
+                //Populating Uploaded file bean to return in RestWrapper
+                LOGGER.info("name of the file is + "+name);
+
+                UploadedFile uploadedFile = new UploadedFile();
+                uploadedFile.setParentProcessId(null);
+                uploadedFile.setSubDir("MessageFiles");
+                uploadedFile.setFileName(name);
+                uploadedFile.setFileSize(fileToBeSaved.length());
+                LOGGER.info("The UploadedFile bean:" + uploadedFile);
+                LOGGER.info("File uploaded : " + uploadedFile + " uploaded by User:" + principal.getName());
+                return new RestWrapper(uploadedFile, RestWrapper.OK);
+            } catch (Exception e) {
+                LOGGER.error("error occurred while uploading file", e);
+                return new RestWrapper(e.getMessage(), RestWrapper.ERROR);
+            }
+        } else {
+            return new RestWrapper("You failed to upload because the file was empty.", RestWrapper.ERROR);
+
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
     @RequestMapping(value = "/upload/{parentProcessId}/{subDir}/{fileName:.+}", method = RequestMethod.GET)
     @ResponseBody public
     void download(@PathVariable("parentProcessId") Integer parentProcessId,

@@ -574,6 +574,7 @@ function addDataToJson(properties) {
 
 		</script>
 		<script>
+		var insert=1;
 var wizard = null;
 var finalJson;
 wizard = $(document).ready(function() {
@@ -587,56 +588,38 @@ wizard = $(document).ready(function() {
 			console.log(currentIndex + 'current ' + newIndex );
 			if(currentIndex == 0 && newIndex == 1) {
 			console.log(document.getElementById('fileFormat').elements[1].value);
+			console.log(document.getElementById('fileformat').value);
+           if(document.getElementById('fileformat').value !="Delimited" && insert==1 ){
+           var content1="";
+           content1=content1+'<div class="form-group">';
+           content1=content1+'<label for = "fileUpload" >File Upload</label >';
+           content1=content1+'<input name = "regFile" id = "regFile" type = "file" class = "form-control" style="opacity: 100; position: inherit;" /></div>';
+           content1=content1+'<div class="form-group">';
+            content1=content1+'<div class="clearfix"></div>';
+           content1=content1+'<button class = "btn btn-default  btn-success" style="margin-top: 30px;background: lightsteelblue;" type = "button" onClick = "uploadFile()" href = "#" >Upload File</button >';
+           $('#bdre-data-load').steps('insert', 1, { title: "File Upload", content: content1 });
+           insert=insert+1;
+           }
+
+           if(document.getElementById('fileformat').value =="Delimited" && insert==2)
+           {
+           $('#bdre-data-load').steps('remove',1);
+           insert=insert-1;
+           }
 			}
 			return true;
 		},
 		onStepChanged: function(event, currentIndex, priorIndex) {
 			console.log(currentIndex + " " + priorIndex);
-			if(currentIndex == 1 && priorIndex == 0) {
-				{
                     $('#rawTableColumnDetails').jtable('load');
-                      console.log("$scope.connectionName is "+con_name);
-                      map["fileformat_connectionName"]=con_name;
-                      console.log(map);
-					$('#createjobs').on('click', function(e) {
-                         formIntoMap('fileformat_', 'fileFormat');
-                         jtableIntoMap('rawtablecolumn_', 'rawTableColumnDetails');
-                        console.log(map);
-						$.ajax({
-							type: "POST",
-							url: "/mdrest/message/createjobs",
-							data: jQuery.param(map),
-							success: function(data) {
-								if(data.Result == "OK") {
-									created = 1;
-									$("#div-dialog-warning").dialog({
-										title: "",
-										resizable: false,
-										height: 'auto',
-										modal: true,
-										buttons: {
-											"Ok": function() {
-											    $('#Container').jtable('load');
-												$(this).dialog("close");
-												location.href = '<c:url value="/pages/premessageconfig.page"/>';
-											}
-										}
-									}).html('<p><span class="jtable-confirm-message">Message successfully created </span></p>');
-								}
-							}
-
-						});
-                    return false;
-					});
-
-				}
-			}
 		},
 		onFinished: function(event, currentIndex) {
-                                 title:"create message",
+
 
 		                         formIntoMap('fileformat_', 'fileFormat');
                                  jtableIntoMap('rawtablecolumn_', 'rawTableColumnDetails');
+                                 console.log("$scope.connectionName is "+con_name);
+                                 map["fileformat_connectionName"]=con_name;
                                  console.log(map);
         						$.ajax({
         							type: "POST",
@@ -761,6 +744,58 @@ wizard = $(document).ready(function() {
                             });
                     });
                 });
+                </script>
+
+                <script>
+                var uploadedFileName ="";
+                                    function uploadFile(){
+                                   var arg= ["regFile"];
+                                     var fd = new FormData();
+                                    var fileObj = $("#"+arg[0])[0].files[0];
+                                    var fileName=fileObj.name;
+                                    fd.append("file", fileObj);
+                                    fd.append("name", fileName);
+                                    $.ajax({
+                                      url: '/mdrest/filehandler/uploadFile/',
+                                      type: "POST",
+                                      data: fd,
+                                      async: false,
+                                      enctype: 'multipart/form-data',
+                                      processData: false,  // tell jQuery not to process the data
+                                      contentType: false,  // tell jQuery not to set contentType
+                                      success:function (data) {
+                                            uploadedFileName=data.Record.fileName;
+                                            console.log( data );
+                                            $("#div-dialog-warning").dialog({
+                                                            title: "",
+                                                            resizable: false,
+                                                            height: 'auto',
+                                                            modal: true,
+                                                            buttons: {
+                                                                "Ok" : function () {
+                                                                    $(this).dialog("close");
+                                                                }
+                                                            }
+                                            }).html('<p><span class="jtable-confirm-message"><spring:message code="processimportwizard.page.upload_success"/>'+' ' + uploadedFileName + '</span></p>');
+                                            return false;
+                                        },
+                                      error: function () {
+                                            $("#div-dialog-warning").dialog({
+                                                        title: "",
+                                                        resizable: false,
+                                                        height: 'auto',
+                                                        modal: true,
+                                                        buttons: {
+                                                            "Ok" : function () {
+                                                                $(this).dialog("close");
+                                                            }
+                                                        }
+                                        }).html('<p><span class="jtable-confirm-message"><spring:message code="processimportwizard.page.upload_error"/></span></p>');
+                                        return false;
+                                        }
+                                     });
+
+                                    }
                 </script>
         <script type="text/javascript">
                     $(document).ready(function(){
@@ -1234,9 +1269,10 @@ wizard = $(document).ready(function() {
                     <!-- /btn-group -->
 
                 </form>
-
-
             			</section>
+
+
+
 			<h3>Message Schema</h3>
 			<section>
 			    <div id="rawTableColumnDetails"></div>
