@@ -6,14 +6,14 @@ import com.wipro.ats.bdre.md.api.StreamingMessagesAPI;
 import com.wipro.ats.bdre.md.beans.ProcessInfo;
 import com.wipro.ats.bdre.md.dao.MessagesDAO;
 import com.wipro.ats.bdre.md.dao.jpa.Messages;
+import org.apache.commons.collections.map.LinkedMap;
+import org.apache.spark.sql.types.DataType;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Created by cloudera on 5/20/17.
@@ -25,6 +25,7 @@ public class SchemaReader {
     MessagesDAO messagesDAO;
     //TODO: update the schema automatically
     //String schemaString = "ipAddress clientIdentd userID dateTimeString method endpoint protocol responseCode contentSize";
+    public static final Map<String,DataType> dataTypesMap = new SGDataTypes().dataTypesMap;
 
     public StructType generateSchema(int pid) throws Exception{
         try {
@@ -36,15 +37,30 @@ public class SchemaReader {
             String messageName = properties.getProperty("messageName");
             StreamingMessagesAPI streamingMessagesAPI = new StreamingMessagesAPI();
             Messages messages = streamingMessagesAPI.getMessage(messageName);
+            String format = messages.getFormat();
             String schemaString = messages.getMessageSchema();
             //Generate the schema based on the string of schema
-            List<StructField> fields = new ArrayList<>();
+            Map<String,String> columnDataTypeMap = new LinkedMap();
             for (String fieldName : schemaString.split(",")) {
                 String columnName = fieldName.split(":")[0];
-                StructField field = DataTypes.createStructField(columnName, DataTypes.StringType, true);
-                fields.add(field);
+                String dataType = fieldName.split(":")[1];
+                columnDataTypeMap.put(columnName,dataType);
             }
-            StructType schema = DataTypes.createStructType(fields);
+
+            List<StructField> fields = new ArrayList<>();
+            StructType schema = new StructType();
+            if( !format.equalsIgnoreCase("Json")){
+                for(String column: columnDataTypeMap.keySet()){
+                    StructField field = DataTypes.createStructField(column, dataTypesMap.get(columnDataTypeMap.get(column)), true);
+                    fields.add(field);
+                }
+                schema = DataTypes.createStructType(fields);
+            }
+            else {
+                JsonSchemaReader jsonSchemaReader = new JsonSchemaReader();
+                schema = jsonSchemaReader.generateJsonSchema(columnDataTypeMap);
+            }
+
             return schema;
         }catch (Exception e){
             e.printStackTrace();

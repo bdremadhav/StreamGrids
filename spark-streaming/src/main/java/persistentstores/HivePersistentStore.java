@@ -5,7 +5,6 @@ import org.apache.spark.SparkConf;
 import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.sql.DataFrame;
-import org.apache.spark.sql.hive.HiveContext;
 import org.apache.spark.sql.types.StructType;
 import org.apache.spark.streaming.api.java.JavaDStream;
 import org.apache.spark.streaming.api.java.JavaPairDStream;

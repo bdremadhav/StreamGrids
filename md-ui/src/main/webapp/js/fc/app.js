@@ -535,7 +535,7 @@ $scope.insertAggProp=function(processId){
 var map=new Object();
 formIntoText('processFieldsForm1');
 console.log(aggregationFinal);
-map["column:aggType"]=aggregationFinal.substr(1, aggregationFinal.length-1);;
+map["column:aggType"]=aggregationFinal.substr(0, aggregationFinal.length-2);
     $.ajax({
             type: "POST",
             url: "/mdrest/properties/"+processId,

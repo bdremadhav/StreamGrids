@@ -31,11 +31,17 @@ public class Aggregation implements Transformation{
         System.out.println("Inside Aggregation prevPid = " + prevPid);
         JavaPairDStream<String,WrapperMessage> prevDStream = prevDStreamMap.get(prevPid);
 
-        GetProperties getProperties = new GetProperties();
-        Properties filterProperties = getProperties.getProperties(String.valueOf(pid), "default");
-
-        //TODO: In ui, map should be of this format: Map("col1" -> "max", "col2" -> "avg", "col3" -> "sum", "col4" -> "min")
         Map<String, String> fieldAggrMap = new HashMap<>();
+        GetProperties getProperties = new GetProperties();
+        Properties aggProperties = getProperties.getProperties(String.valueOf(pid), "default");
+        String columnAggr = aggProperties.getProperty("column:aggType");
+        String[] columnsAggrArray = columnAggr.split(",");
+        for(String s: columnsAggrArray){
+            String[] sArray = s.split(":::");
+            fieldAggrMap.put(sArray[0].substring(0,sArray[0].indexOf(":")),sArray[1]);
+        }
+        //TODO: In ui, map should be of this format: Map("col1" -> "max", "col2" -> "avg", "col3" -> "sum", "col4" -> "min")
+
         JavaDStream<WrapperMessage> dStream = prevDStream.map(s -> s._2);
 
         JavaDStream<WrapperMessage> finalDStream = dStream.transform(new Function<JavaRDD<WrapperMessage>, JavaRDD<WrapperMessage>>() {

@@ -1449,11 +1449,18 @@ document.getElementById('indexId').style.display='block';
 				title: 'Data Type',
 				edit: true,
 				options:{ 'String':'String',
-                          'Number':'Number',
+                          'Integer':'Integer',
+                          'Long':'Long',
+                          'Short':'Short',
+                          'Byte':'Byte',
+                          'Float':'Float',
+                          'Double':'Double'
                           'Decimal':'Decimal',
                           'Boolean':'Boolean',
                           'Decimal':'Decimal',
-                          'Date':'Date'
+                          'Binary' : 'Binary',
+                          'Date':'Date',
+                          'TimeStamp':'TimeStamp'
                           }
 			}
 		}
