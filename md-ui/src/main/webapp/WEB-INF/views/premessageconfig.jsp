@@ -1379,8 +1379,10 @@ function isDefault()
 console.log("value is  "+document.getElementById('isDefaultTemplate').value);
 if(document.getElementById('isDefaultTemplate').value == "Yes")
 document.getElementById('defaultMessage').style.display='block';
-else
+else{
 document.getElementById('defaultMessage').style.display='none';
+document.getElementById('messageType').value="";
+}
 }
 
 function showAdvanced()
