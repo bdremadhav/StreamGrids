@@ -1,6 +1,6 @@
 package messageformat;
 
-/*import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -10,7 +10,8 @@ import org.apache.spark.sql.SQLContext;
 import org.jsonschema2pojo.SchemaGenerator;
 
 import java.io.File;
-import java.util.*; */
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Created by cloudera on 6/22/17.
@@ -21,13 +22,13 @@ public class JsonParser implements MessageParser{
        // SQLContext sqlContext = new SQLContext();
         return new Object[0];
     }
-   /* private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper objectMapper = new ObjectMapper();
     private static String columnName;
     private static List<String> columnsList = new ArrayList<>();
     private static Map<String, String> columnsDataTypesMap = new LinkedHashMap<>();
 
     public static void main(String[] args) throws Exception {
-        try {
+        /*try {
             SchemaGenerator schemaGenerator = new SchemaGenerator();
             ObjectNode jsonSchema = schemaGenerator.schemaFromExample(new File("/home/cloudera/tweet.json").toURI().toURL());
             System.out.println("jsonSchema.toString() = " + jsonSchema.toString());
@@ -42,8 +43,31 @@ public class JsonParser implements MessageParser{
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
-        }
+        }*/
     }
+
+
+    public void parseJson(String filePath) throws Exception {
+        try {
+            SchemaGenerator schemaGenerator = new SchemaGenerator();
+            ObjectNode jsonSchema = schemaGenerator.schemaFromExample(new File(filePath).toURI().toURL());
+            System.out.println("jsonSchema.toString() = " + jsonSchema.toString());
+
+            JsonNode rootJson = objectMapper.readTree(jsonSchema.toString());
+            System.out.println("rootJson.toString() = " + rootJson.toString());
+            JsonParser jsonParser = new JsonParser();
+            jsonParser.recurvisefx(rootJson,"");
+            System.out.println("columnNames = " + columnsList);
+            System.out.println("columnsDataTypesMap = " + columnsDataTypesMap.toString());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+
+    }
+
+
 
     public void recurvisefx(JsonNode jsonNode, String key) {
         JsonNode jsonNode2 = jsonNode.path("properties");
@@ -64,5 +88,5 @@ public class JsonParser implements MessageParser{
             }
 
         }
-    }*/
+    }
 }

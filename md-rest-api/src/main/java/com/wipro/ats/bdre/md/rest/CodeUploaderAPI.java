@@ -14,8 +14,11 @@
 
 package com.wipro.ats.bdre.md.rest;
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.wipro.ats.bdre.MDConfig;
 import com.wipro.ats.bdre.md.api.base.MetadataAPIBase;
+import com.wipro.ats.bdre.md.beans.DefaultMessageSchema;
+import com.wipro.ats.bdre.md.beans.table.GeneralConfig;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -30,6 +33,17 @@ import java.nio.file.Path;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+
+import org.apache.commons.collections.map.HashedMap;
+import org.jsonschema2pojo.SchemaGenerator;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Created by AR288503 on 10/4/2015.
@@ -39,6 +53,11 @@ import java.util.List;
 public class CodeUploaderAPI extends MetadataAPIBase {
     private static final Logger LOGGER = Logger.getLogger(CodeUploaderAPI.class);
     private static final String UPLOADBASEDIRECTORY = "upload.base-directory";
+
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static String columnName;
+    private static List<String> columnsList = new ArrayList<>();
+    private static Map<String, String> columnsDataTypesMap = new LinkedHashMap<>();
 
     //Multipart does not support put
     @RequestMapping(value = "/upload/{parentProcessId}/{subDir}", method = RequestMethod.POST)
@@ -187,6 +206,128 @@ public class CodeUploaderAPI extends MetadataAPIBase {
         }
     }
 
+
+
+
+
+
+
+
+    @RequestMapping(value = "/uploadFile/", method = RequestMethod.POST)
+    @ResponseBody public
+    RestWrapper fileUpload(
+                             @RequestParam("file") MultipartFile file, Principal principal) {
+        if (!file.isEmpty()) {
+            try {
+
+                String name = file.getOriginalFilename();
+                byte[] bytes = file.getBytes();
+                String uploadLocation = System.getProperty("user.home") + "/" + "MessageFiles";
+                LOGGER.debug("Upload location of  file: " + uploadLocation);
+                File fileDir = new File(uploadLocation);
+                fileDir.mkdirs();
+                File f = new File(uploadLocation+"/"+name);
+                if(f.exists()) {
+                    f.delete();
+                }
+                File fileToBeSaved = new File(uploadLocation + "/" + name);
+                BufferedOutputStream stream =
+                        new BufferedOutputStream(new FileOutputStream(fileToBeSaved));
+                stream.write(bytes);
+                stream.close();
+                columnsList.clear();
+                columnsDataTypesMap.clear();
+                LOGGER.info("file uploaded successfully at "+uploadLocation + "/" + name);
+                try {
+                    SchemaGenerator schemaGenerator = new SchemaGenerator();
+                    ObjectNode jsonSchema = schemaGenerator.schemaFromExample(new File(uploadLocation + "/" + name).toURI().toURL());
+                    System.out.println("jsonSchema.toString() = " + jsonSchema.toString());
+
+                    JsonNode rootJson = objectMapper.readTree(jsonSchema.toString());
+                    System.out.println("rootJson.toString() = " + rootJson.toString());
+                    CodeUploaderAPI jsonParser = new CodeUploaderAPI();
+                    jsonParser.recurvisefx(rootJson,"");
+                    System.out.println("columnNames = " + columnsList);
+                    System.out.println("columnsDataTypesMap = " + columnsDataTypesMap.toString());
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw e;
+                }
+                RestWrapper restWrapper=null;
+                List<DefaultMessageSchema> defaultMessageSchemaList=new ArrayList<>();
+                int tmp=1;
+                int counter=columnsDataTypesMap.size();
+                for(Map.Entry<String, String> entry:columnsDataTypesMap.entrySet())
+                {
+                    DefaultMessageSchema defaultMessageSchema=new DefaultMessageSchema();
+                    defaultMessageSchema.setSerialNumber(tmp);
+                    defaultMessageSchema.setColumnName(entry.getKey());
+                    defaultMessageSchema.setDataType(entry.getValue().substring(0, 1).toUpperCase()+entry.getValue().substring(1));
+                    defaultMessageSchema.setCounter(counter);
+                    defaultMessageSchemaList.add(defaultMessageSchema);
+                    tmp++;
+                }
+                restWrapper = new RestWrapper(defaultMessageSchemaList, RestWrapper.OK);
+
+
+
+
+                //Populating Uploaded file bean to return in RestWrapper
+                LOGGER.info("name of the file is + "+name);
+
+                UploadedFile uploadedFile = new UploadedFile();
+                uploadedFile.setParentProcessId(null);
+                uploadedFile.setSubDir("MessageFiles");
+                uploadedFile.setFileName(name);
+                uploadedFile.setFileSize(fileToBeSaved.length());
+                uploadedFile.setRestWrapper(restWrapper);
+                LOGGER.info("The UploadedFile bean:" + uploadedFile);
+                LOGGER.info("File uploaded : " + uploadedFile + " uploaded by User:" + principal.getName());
+                return new RestWrapper(uploadedFile, RestWrapper.OK);
+            } catch (Exception e) {
+                LOGGER.error("error occurred while uploading file", e);
+                return new RestWrapper(e.getMessage(), RestWrapper.ERROR);
+            }
+        } else {
+            return new RestWrapper("You failed to upload because the file was empty.", RestWrapper.ERROR);
+
+        }
+
+
+
+
+    }
+
+
+    public void recurvisefx(JsonNode jsonNode, String key) {
+        JsonNode jsonNode2 = jsonNode.path("properties");
+        Iterator i = jsonNode2.fields();
+        while (i.hasNext()) {
+            Map.Entry<String, JsonNode> me = (Map.Entry<String, JsonNode>) i.next();
+            System.out.println("me.getKey() = " + me.getKey());
+            JsonNode childJson = (JsonNode) me.getValue();
+            System.out.println("me.getValue() = " + childJson.toString());
+            if (childJson.get("type").asText().equalsIgnoreCase("object")) {
+                recurvisefx(childJson, key+"."+me.getKey());
+            } else if (childJson.get("type").asText().equalsIgnoreCase("array") && !childJson.path("items").isMissingNode()) {
+                recurvisefx(childJson.path("items"),key+"."+me.getKey());
+            } else {
+                columnsList.add(me.getKey());
+                String columnName = (key+"."+me.getKey()).substring(1);
+                columnsDataTypesMap.put(columnName, childJson.get("type").asText());
+            }
+
+        }
+    }
+
+
+
+
+
+
+
+
     @RequestMapping(value = "/upload/{parentProcessId}/{subDir}/{fileName:.+}", method = RequestMethod.GET)
     @ResponseBody public
     void download(@PathVariable("parentProcessId") Integer parentProcessId,
@@ -218,6 +359,16 @@ public class CodeUploaderAPI extends MetadataAPIBase {
         private String fileName;
         private long fileSize;
         private boolean fileExists;
+
+        public RestWrapper getRestWrapper() {
+            return restWrapper;
+        }
+
+        public void setRestWrapper(RestWrapper restWrapper) {
+            this.restWrapper = restWrapper;
+        }
+
+        RestWrapper restWrapper;
         @Override
         public String toString() {
             return "parentProcessId=" + parentProcessId +
