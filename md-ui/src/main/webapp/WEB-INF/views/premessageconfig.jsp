@@ -556,7 +556,6 @@ function addDataToJson(properties) {
 	var id = properties.id;
 	console.log(id);
 }
-
 		</script>
 			<script type="text/javascript">
         		function copyForm() {
@@ -575,9 +574,9 @@ function addDataToJson(properties) {
 		</script>
 		<script>
 		var insert=1;
-var wizard = null;
-var finalJson;
-wizard = $(document).ready(function() {
+     var wizard = null;
+     var finalJson;
+     wizard = $(document).ready(function() {
 
 	$("#bdre-data-load").steps({
 		headerTag: "h3",
@@ -589,7 +588,7 @@ wizard = $(document).ready(function() {
 			if(currentIndex == 0 && newIndex == 1) {
 			console.log(document.getElementById('fileFormat').elements[1].value);
 			console.log(document.getElementById('fileformat').value);
-           if(document.getElementById('fileformat').value !="Delimited" && insert==1 ){
+           if(document.getElementById('fileformat').value =="Json" && insert==1 && document.getElementById('isDefaultTemplate').value=="No"){
            var content1="";
            content1=content1+'<div class="form-group">';
            content1=content1+'<label for = "fileUpload" >File Upload</label >';
@@ -601,7 +600,7 @@ wizard = $(document).ready(function() {
            insert=insert+1;
            }
 
-           if(document.getElementById('fileformat').value =="Delimited" && insert==2)
+           if(insert==2 && document.getElementById('fileformat').value !="Json" )
            {
            $('#bdre-data-load').steps('remove',1);
            insert=insert-1;
@@ -610,12 +609,13 @@ wizard = $(document).ready(function() {
 			return true;
 		},
 		onStepChanged: function(event, currentIndex, priorIndex) {
-			console.log(currentIndex + " " + priorIndex);
+			        console.log(currentIndex + " " + priorIndex);
+			        if(insert==1 && priorIndex==0 && currentIndex==1)
+                    $('#rawTableColumnDetails').jtable('load');
+                    if(insert==2 && priorIndex==1 && currentIndex==2)
                     $('#rawTableColumnDetails').jtable('load');
 		},
 		onFinished: function(event, currentIndex) {
-
-
 		                         formIntoMap('fileformat_', 'fileFormat');
                                  jtableIntoMap('rawtablecolumn_', 'rawTableColumnDetails');
                                  console.log("$scope.connectionName is "+con_name);
@@ -746,8 +746,9 @@ wizard = $(document).ready(function() {
                 });
                 </script>
 
-                <script>
-                var uploadedFileName ="";
+                          <script>
+                          var restWrapper=new Object();
+                                   var uploadedFileName ="";
                                     function uploadFile(){
                                    var arg= ["regFile"];
                                      var fd = new FormData();
@@ -766,6 +767,8 @@ wizard = $(document).ready(function() {
                                       success:function (data) {
                                             uploadedFileName=data.Record.fileName;
                                             console.log( data );
+                                            restWrapper=data.Record.restWrapper;
+                                            console.log(restWrapper);
                                             $("#div-dialog-warning").dialog({
                                                             title: "",
                                                             resizable: false,
@@ -928,6 +931,19 @@ wizard = $(document).ready(function() {
        {
        document.getElementById('dilimiteddiv').style.display='none';
        }
+      }
+
+
+      function changeMessageformat()
+      {
+        var messageType = document.getElementById('messageType').value;
+      if(messageType=="ApacheLog")
+      {
+               document.getElementById('fileformat').value="Regex";
+               jQuery('#dilimiteddiv label').text("Regex Pattern");
+               document.getElementById('dilimiteddiv').style.display='block';
+               document.getElementById('delimiter').value=".*";
+      }
       }
      </script>
   <script type="text/javascript">
@@ -1205,14 +1221,7 @@ wizard = $(document).ready(function() {
                             <input type="text" class="form-control"  id="messageName" name="messageName" placeholder="message name" value="" required>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2"  for="fileformat">Message Format</label>
-                        <div class="col-sm-10">
-                            <select class="form-control" id="fileformat" name="fileformat" onchange="changeme()" ng-model="fileformat1" ng-options = "file as val.value for (file, val) in fileformats" >
-                                <option  value="">Select the option</option>
-                            </select>
-                        </div>
-                    </div>
+
 
                     <div class="form-group">
                    <label class="control-label col-sm-2" for="isDefaultTemplate">Use Default Message</label>
@@ -1224,16 +1233,25 @@ wizard = $(document).ready(function() {
                       </div>
                     </div>
 
-                   
+
 
                   <div class="form-group" style="display:none;" id="defaultMessage">
                     <label class="control-label col-sm-2"  for="fileformat" >Message Template</label>
                     <div class="col-sm-10">
-                        <select class="form-control" id="messageType" name="messageType"  ng-model="messageType" ng-options = "file as val for (file, val) in messageTypes" >
+                        <select class="form-control" id="messageType" name="messageType" onchange="changeMessageformat()" ng-model="messageType" ng-options = "file as val for (file, val) in messageTypes" >
                             <option  value="">Select the option</option>
                         </select>
                     </div>
                 </div>
+
+                   <div class="form-group">
+                     <label class="control-label col-sm-2"  for="fileformat">Message Format</label>
+                     <div class="col-sm-10">
+                         <select class="form-control" id="fileformat" name="fileformat" onchange="changeme()" ng-model="fileformat1" ng-options = "file as val.value for (file, val) in fileformats" >
+                             <option  value="">Select the option</option>
+                         </select>
+                      </div>
+                  </div>
 
                   <div class="form-group" id="dilimiteddiv" style="display:none;" >
                     <label class="control-label col-sm-2" for="delimiter">Delimiter</label>
@@ -1385,9 +1403,10 @@ document.getElementById('indexId').style.display='block';
 			listAction: function(postData, jtParams) {
 			var messageType = document.getElementById("messageType").value;
              console.log("message type is "+messageType);
-             if(messageType=="")
-                messageType="NOTHING";
+                if(messageType=="")
+                   messageType="NOTHING";
                 return $.Deferred(function ($dfd) {
+                if(document.getElementById('isDefaultTemplate').value=="Yes" || document.getElementById('fileformat').value !="Json"){
                 $.ajax({
                         type: "POST",
                         url: "/mdrest/genconfig/"+messageType+"/?required=2",
@@ -1409,6 +1428,18 @@ document.getElementById('indexId').style.display='block';
                         }
 
                     });
+                    }
+                    else
+                    {
+
+                    console.log(restWrapper);
+                    $dfd.resolve(restWrapper);
+
+                    }
+
+
+
+
                 });
 			},
 			createAction: function(postData) {
