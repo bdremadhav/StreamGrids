@@ -312,7 +312,12 @@ public class CodeUploaderAPI extends MetadataAPIBase {
                 recurvisefx(childJson, key+"."+me.getKey());
             } else if (childJson.get("type").asText().equalsIgnoreCase("array") && !childJson.path("items").isMissingNode()) {
                 recurvisefx(childJson.path("items"),key+"."+me.getKey());
-            } else {
+            }
+            else if(childJson.get("type").asText().equalsIgnoreCase("null") ||childJson.get("type").asText().equalsIgnoreCase("array")  ){
+
+            }
+
+            else {
                 columnsList.add(me.getKey());
                 String columnName = (key+"."+me.getKey()).substring(1);
                 columnsDataTypesMap.put(columnName, childJson.get("type").asText());
