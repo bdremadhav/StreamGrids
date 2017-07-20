@@ -14,13 +14,18 @@
 
 package com.wipro.ats.bdre.md.rest;
 
-import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.wipro.ats.bdre.MDConfig;
 import com.wipro.ats.bdre.md.api.base.MetadataAPIBase;
 import com.wipro.ats.bdre.md.beans.DefaultMessageSchema;
-import com.wipro.ats.bdre.md.beans.table.GeneralConfig;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.json.JSONObject;
+import org.json.XML;
+import org.jsonschema2pojo.SchemaGenerator;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,18 +36,6 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
-
-import org.apache.commons.collections.map.HashedMap;
-import org.jsonschema2pojo.SchemaGenerator;
-
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -51,6 +44,7 @@ import java.util.*;
 @Controller
 @RequestMapping("/filehandler")
 public class CodeUploaderAPI extends MetadataAPIBase {
+
     private static final Logger LOGGER = Logger.getLogger(CodeUploaderAPI.class);
     private static final String UPLOADBASEDIRECTORY = "upload.base-directory";
 
@@ -207,16 +201,9 @@ public class CodeUploaderAPI extends MetadataAPIBase {
     }
 
 
-
-
-
-
-
-
-    @RequestMapping(value = "/uploadFile/", method = RequestMethod.POST)
+    @RequestMapping(value = "/uploadFile/{msgformat}", method = RequestMethod.POST)
     @ResponseBody public
-    RestWrapper fileUpload(
-                             @RequestParam("file") MultipartFile file, Principal principal) {
+    RestWrapper fileUpload(@PathVariable("msgformat") String msgFormat,@RequestParam("file") MultipartFile file, Principal principal) {
         if (!file.isEmpty()) {
             try {
 
@@ -231,14 +218,24 @@ public class CodeUploaderAPI extends MetadataAPIBase {
                     f.delete();
                 }
                 File fileToBeSaved = new File(uploadLocation + "/" + name);
-                BufferedOutputStream stream =
-                        new BufferedOutputStream(new FileOutputStream(fileToBeSaved));
+                BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(fileToBeSaved));
                 stream.write(bytes);
                 stream.close();
                 columnsList.clear();
                 columnsDataTypesMap.clear();
                 LOGGER.info("file uploaded successfully at "+uploadLocation + "/" + name);
+
+                LOGGER.info("Message format "+msgFormat);
+                if(msgFormat.equalsIgnoreCase("XML")){
+                    String xmlString = FileUtils.readFileToString(new File(uploadLocation + "/" + name));
+                    System.out.println("original xmlString = " + xmlString);
+                    JSONObject xmlJSONObj = XML.toJSONObject(xmlString);
+                    String xmlJsonString = xmlJSONObj.toString();
+                    System.out.println("xml to JsonString = " + xmlJsonString);
+                    FileUtils.writeStringToFile(new File(uploadLocation + "/" + name), xmlJsonString,false);
+                }
                 try {
+
                     SchemaGenerator schemaGenerator = new SchemaGenerator();
                     ObjectNode jsonSchema = schemaGenerator.schemaFromExample(new File(uploadLocation + "/" + name).toURI().toURL());
                     System.out.println("jsonSchema.toString() = " + jsonSchema.toString());

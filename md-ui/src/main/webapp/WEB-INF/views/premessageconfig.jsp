@@ -587,20 +587,22 @@ function addDataToJson(properties) {
 			console.log(currentIndex + 'current ' + newIndex );
 			if(currentIndex == 0 && newIndex == 1) {
 			console.log(document.getElementById('fileFormat').elements[1].value);
-			console.log(document.getElementById('fileformat').value);
-           if(document.getElementById('fileformat').value =="Json" && insert==1 && document.getElementById('isDefaultTemplate').value=="No"){
+
+			console.log(document.getElementById('fileFormat'));
+           if((document.getElementById('fileformat').value=="Json" || document.getElementById('fileformat').value=="XML") && insert==1 && document.getElementById('isDefaultTemplate').value=="No"){
            var content1="";
            content1=content1+'<div class="form-group">';
            content1=content1+'<label for = "fileUpload" >File Upload</label >';
            content1=content1+'<input name = "regFile" id = "regFile" type = "file" class = "form-control" style="opacity: 100; position: inherit;" /></div>';
            content1=content1+'<div class="form-group">';
             content1=content1+'<div class="clearfix"></div>';
-           content1=content1+'<button class = "btn btn-default  btn-success" style="margin-top: 30px;background: lightsteelblue;" type = "button" onClick = "uploadFile()" href = "#" >Upload File</button >';
+            var format = document.getElementById('fileformat').value;
+           content1=content1+'<button class = "btn btn-default  btn-success" style="margin-top: 30px;background: lightsteelblue;" type = "button" onClick = "uploadFile(\''+format+'\')" href = "#" >Upload File</button >';
            $('#bdre-data-load').steps('insert', 1, { title: "File Upload", content: content1 });
            insert=insert+1;
            }
 
-           if(insert==2 && document.getElementById('fileformat').value !="Json" )
+           if(insert==2 && document.getElementById('fileformat').value !="Json" && document.getElementById('fileformat').value !="XML" )
            {
            $('#bdre-data-load').steps('remove',1);
            insert=insert-1;
@@ -749,15 +751,16 @@ function addDataToJson(properties) {
                           <script>
                           var restWrapper=new Object();
                                    var uploadedFileName ="";
-                                    function uploadFile(){
+                                    function uploadFile(msgformat){
                                    var arg= ["regFile"];
                                      var fd = new FormData();
                                     var fileObj = $("#"+arg[0])[0].files[0];
                                     var fileName=fileObj.name;
                                     fd.append("file", fileObj);
                                     fd.append("name", fileName);
+                                    console.log("message format : "+msgformat);
                                     $.ajax({
-                                      url: '/mdrest/filehandler/uploadFile/',
+                                      url: '/mdrest/filehandler/uploadFile/'+msgformat,
                                       type: "POST",
                                       data: fd,
                                       async: false,
@@ -1408,7 +1411,7 @@ document.getElementById('indexId').style.display='block';
                 if(messageType=="")
                    messageType="NOTHING";
                 return $.Deferred(function ($dfd) {
-                if(document.getElementById('isDefaultTemplate').value=="Yes" || document.getElementById('fileformat').value !="Json"){
+                if(document.getElementById('isDefaultTemplate').value=="Yes" || (document.getElementById('fileformat').value !="Json" && document.getElementById('fileformat').value !="XML")){
                 $.ajax({
                         type: "POST",
                         url: "/mdrest/genconfig/"+messageType+"/?required=2",
@@ -1523,7 +1526,7 @@ document.getElementById('indexId').style.display='block';
                           'Short':'Short',
                           'Byte':'Byte',
                           'Float':'Float',
-                          'Double':'Double'
+                          'Double':'Double',
                           'Decimal':'Decimal',
                           'Boolean':'Boolean',
                           'Decimal':'Decimal',
