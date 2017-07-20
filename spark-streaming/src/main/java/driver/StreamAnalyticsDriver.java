@@ -6,31 +6,24 @@ import com.wipro.ats.bdre.md.api.GetProperties;
 import com.wipro.ats.bdre.md.api.InstanceExecAPI;
 import com.wipro.ats.bdre.md.api.StreamingMessagesAPI;
 import com.wipro.ats.bdre.md.beans.ProcessInfo;
-import com.wipro.ats.bdre.md.dao.jpa.InstanceExec;
 import com.wipro.ats.bdre.md.dao.jpa.Messages;
 import datasources.Source;
 import emitters.Emitter;
 import messageformat.Parser;
 import messageschema.SchemaReader;
-import org.apache.commons.math3.util.Pair;
 import org.apache.log4j.Logger;
-import org.apache.spark.Accumulator;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.Function;
-import org.apache.spark.api.java.function.PairFunction;
-import org.apache.spark.broadcast.Broadcast;
-import org.apache.spark.rdd.RDD;
+import org.apache.spark.api.java.function.VoidFunction;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.SQLContext;
 import org.apache.spark.sql.types.StructType;
 import org.apache.spark.streaming.Duration;
 import org.apache.spark.streaming.Time;
-import org.apache.spark.streaming.api.java.JavaDStream;
 import org.apache.spark.streaming.api.java.JavaPairDStream;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
 import persistentstores.PersistentStore;
@@ -246,8 +239,14 @@ public class StreamAnalyticsDriver implements Serializable {
                 System.out.println("FetchingDStream for source pid= " + pid);
                 JavaPairDStream<String,String> msgDataStream = pidDStreamMap.get(pid);
                 JavaPairDStream<String, WrapperMessage> wrapperDStream = null;
+                GetProperties getProperties = new GetProperties();
+                Properties properties = getProperties.getProperties(pid.toString(), "message");
+                String messageName = properties.getProperty("messageName");
+                StreamingMessagesAPI streamingMessagesAPI = new StreamingMessagesAPI();
+                Messages messages = streamingMessagesAPI.getMessage(messageName);
+                String format = messages.getFormat();
 
-                if("json1".equalsIgnoreCase("json")) {
+                if(format.equalsIgnoreCase("Json")) {
                     SQLContext sqlContext = new SQLContext(ssc.sparkContext());
                     wrapperDStream = msgDataStream.transformToPair(new Function<JavaPairRDD<String, String>, JavaPairRDD<String, WrapperMessage>>() {
                         @Override
@@ -256,6 +255,27 @@ public class StreamAnalyticsDriver implements Serializable {
                             JavaRDD<String> javaRDD = inputPairRDD.map(s -> s._2).flatMap(s -> Arrays.asList(s.split("\n")));
                             javaRDD.take(15);
                             JavaRDD<Row> rowJavaRDD = sqlContext.read().json(javaRDD).javaRDD();
+                            rowJavaRDD.take(15);
+                            outputPairRdd = rowJavaRDD.mapToPair(row -> new Tuple2<String, WrapperMessage>(null,new WrapperMessage(row)));
+                            return outputPairRdd ;
+                        }
+                    });
+                }
+                else if(format.equalsIgnoreCase("XML")){
+                    SQLContext sqlContext = new SQLContext(ssc.sparkContext());
+                    wrapperDStream = msgDataStream.transformToPair(new Function<JavaPairRDD<String, String>, JavaPairRDD<String, WrapperMessage>>() {
+                        @Override
+                        public JavaPairRDD<String, WrapperMessage> call(JavaPairRDD<String, String> inputPairRDD) throws Exception {
+                            JavaPairRDD<String, WrapperMessage> outputPairRdd = null;
+                            JavaRDD<String> javaRDD = inputPairRDD.map(s -> s._2).flatMap(s -> Arrays.asList(s.split("\n")));
+                            JavaRDD<Row> rowJavaRDD = null;
+                            javaRDD.foreach(new VoidFunction<String>() {
+                                @Override
+                                public void call(String singleXML) throws Exception {
+                                    JavaRDD<Row> singleXMLRDD  = sqlContext.read().format("com.databricks.spark.xml").load(singleXML).javaRDD();
+                                    rowJavaRDD.union(singleXMLRDD);
+                                }
+                            });
                             rowJavaRDD.take(15);
                             outputPairRdd = rowJavaRDD.mapToPair(row -> new Tuple2<String, WrapperMessage>(null,new WrapperMessage(row)));
                             return outputPairRdd ;
