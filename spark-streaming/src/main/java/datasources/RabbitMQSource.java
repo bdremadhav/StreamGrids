@@ -1,4 +1,4 @@
-package datasources;
+/*package datasources;
 
 import com.rabbitmq.client.QueueingConsumer;
 import org.apache.spark.api.java.function.Function;
@@ -12,9 +12,6 @@ import scala.Tuple2;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by cloudera on 5/19/17.
- */
 public class RabbitMQSource implements Source{
 
 
@@ -44,4 +41,4 @@ public class RabbitMQSource implements Source{
 
     //createJavaDistributedStream[R](javaSparkStreamingContext, params, JFunction[Array[Byte], R]);
 
-}
+}*/

@@ -49,16 +49,27 @@ public class SchemaReader {
 
             List<StructField> fields = new ArrayList<>();
             StructType schema = new StructType();
-            if( !format.equalsIgnoreCase("Json")){
+            if(format.equalsIgnoreCase("XML")){
+                Map<String,String> xmlcolumnDataTypeMap = new LinkedMap();
+                for (String fieldName : schemaString.split(",")) {
+                    String columnName = fieldName.split(":")[0];
+                    String xmlColumn = columnName.substring(columnName.indexOf(".")+1);
+                    String dataType = fieldName.split(":")[1];
+                    xmlcolumnDataTypeMap.put(xmlColumn,dataType);
+                }
+                JsonSchemaReader jsonSchemaReader = new JsonSchemaReader();
+                schema = jsonSchemaReader.generateJsonSchema(xmlcolumnDataTypeMap);
+            }
+            else if(format.equalsIgnoreCase("Json")){
+                JsonSchemaReader jsonSchemaReader = new JsonSchemaReader();
+                schema = jsonSchemaReader.generateJsonSchema(columnDataTypeMap);
+            }
+            else {
                 for(String column: columnDataTypeMap.keySet()){
                     StructField field = DataTypes.createStructField(column, dataTypesMap.get(columnDataTypeMap.get(column)), true);
                     fields.add(field);
                 }
                 schema = DataTypes.createStructType(fields);
-            }
-            else {
-                JsonSchemaReader jsonSchemaReader = new JsonSchemaReader();
-                schema = jsonSchemaReader.generateJsonSchema(columnDataTypeMap);
             }
 
             return schema;

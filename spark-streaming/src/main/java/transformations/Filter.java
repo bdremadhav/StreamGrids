@@ -44,11 +44,14 @@ public class Filter implements Transformation {
                 SQLContext sqlContext = SQLContext.getOrCreate(rddWrapperMessage.context());
                 DataFrame dataFrame = sqlContext.createDataFrame(rddRow, schema);
                 DataFrame filteredDF = null;
+                System.out.println("dataFrame = " + dataFrame);
 
                 if (dataFrame != null && !dataFrame.rdd().isEmpty()) {
                     if (check.equals("equals")) {
                         System.out.println("showing dataframe before filter ");
                         dataFrame.show(100);
+                        System.out.println("colName = " + colName);
+                        System.out.println("schema = " + schema);
                         filteredDF = dataFrame.filter(dataFrame.col(colName).equalTo(filterValue));
                         filteredDF.show(100);
                         System.out.println("showing dataframe after filter ");

@@ -17,7 +17,7 @@ import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
-import org.apache.spark.api.java.function.VoidFunction;
+import org.apache.spark.sql.DataFrame;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.SQLContext;
@@ -31,6 +31,7 @@ import scala.Tuple2;
 import transformations.Transformation;
 import util.WrapperMessage;
 
+import com.databricks.spark.xml.XmlReader;
 import java.io.Serializable;
 import java.util.*;
 
@@ -229,6 +230,13 @@ public class StreamAnalyticsDriver implements Serializable {
         return new WrapperMessage(RowFactory.create(attributes));
     }
 
+    public static Row convertXMLStrintToRow(Tuple2<String, String> inputTuple ,SQLContext sqlContext){
+        String xmlString = inputTuple._2;
+        return sqlContext.read().format("com.databricks.spark.xml").load(xmlString).head();
+    }
+
+
+
     //this method invokes DStream operations based on the prev map & handles logic accordingly for source/transformation/emitter
     public void invokeDStreamOperations(JavaRDD emptyRDD,JavaStreamingContext ssc, List<Integer> listOfSourcePids, Map<Integer, Set<Integer>> prevMap, Map<Integer, String> nextPidMap) throws Exception {
         System.out.println(" inside invoke dstream");
@@ -267,15 +275,22 @@ public class StreamAnalyticsDriver implements Serializable {
                         @Override
                         public JavaPairRDD<String, WrapperMessage> call(JavaPairRDD<String, String> inputPairRDD) throws Exception {
                             JavaPairRDD<String, WrapperMessage> outputPairRdd = null;
-                            JavaRDD<String> javaRDD = inputPairRDD.map(s -> s._2).flatMap(s -> Arrays.asList(s.split("\n")));
-                            JavaRDD<Row> rowJavaRDD = null;
-                            javaRDD.foreach(new VoidFunction<String>() {
+                            //JavaRDD<Row> rowJavaRDD = inputPairRDD.map(t -> convertXMLStrintToRow(t,sqlContext));
+                            JavaRDD<String> javaRDD = inputPairRDD.map(s -> s._2);
+                            DataFrame df = new XmlReader().xmlRdd(sqlContext, javaRDD.rdd());
+                            df.show();
+                            df.printSchema();
+                            JavaRDD<Row> rowJavaRDD = df.javaRDD() ;
+
+                          // JavaRDD<String> javaRDD = inputPairRDD.map(s -> s._2);
+                          /* List<Row> rowList = new ArrayList<Row>();
+                           javaRDD.foreach(new VoidFunction<String>() {
                                 @Override
                                 public void call(String singleXML) throws Exception {
-                                    JavaRDD<Row> singleXMLRDD  = sqlContext.read().format("com.databricks.spark.xml").load(singleXML).javaRDD();
-                                    rowJavaRDD.union(singleXMLRDD);
+                                    rowList.add(sqlContext.read().format("com.databricks.spark.xml").load(singleXML).head());
                                 }
-                            });
+                            }); */
+                           // JavaRDD<Row> rowJavaRDD = ssc.sparkContext().parallelize(rowList);
                             rowJavaRDD.take(15);
                             outputPairRdd = rowJavaRDD.mapToPair(row -> new Tuple2<String, WrapperMessage>(null,new WrapperMessage(row)));
                             return outputPairRdd ;
