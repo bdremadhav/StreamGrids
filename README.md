@@ -89,21 +89,25 @@ Tables created successfully in MySQL platmd DB⏎
 ----------------
 # Building
 
-Now build StreamGrids using (note StreamGrids may not compile if the settings.xml is not passed from the commandline so be sure to use the -s option. When building for the first time, it might take a while as maven resolves and downloads the jar libraries from diffrent repositories.⏎
+Now build StreamGrids using (note StreamGrids may not compile if the settings.xml is not passed from the commandline so be sure to use the -s option. When building for the first time, it might take a while as maven resolves and downloads the jar libraries from diffrent repositories.
 
 mvn -s settings.xml clean install -P cdh52⏎
 
 -----------------
-Installing StreamGrids⏎
-After building StreamGrids successfully run⏎
+# Installing StreamGrids⏎
 
-sh install-scripts.sh local⏎
-It'll install the StreamGrids scripts and artifacts in /home/cloudera/bdre⏎
+After building StreamGrids successfully run
+
+sh install-scripts.sh local
+
+It'll install the StreamGrids scripts and artifacts in /home/cloudera/bdre
 
 # Using StreamGrids
 
-After a successful build, start the StreamGrids UI service⏎
-[ StreamGrids]$ sh quick-run.sh⏎
+After a successful build, start the StreamGrids UI service
+
+[cloudera@quickstart ~/StreamGrids]$ sh quick-run.sh⏎
 
 Use Google Chrome browser from the host machine and open http://VM_IP:28850/mdui/pages/content.page⏎
+
 Login using admin/zaq1xsw2⏎
