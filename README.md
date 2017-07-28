@@ -19,29 +19,28 @@ Google Chrome browser
 4)Login to Cloudera Quickstart VM
 5)Download Maven from a mirror, unpack and add to the PATH.
 
-[~]# wget http://www.us.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.zip
-[~]# unzip apache-maven-3.3.9-bin.zip
-[~]# export PATH=$PATH:/home/cloudera/apache-maven-3.3.9/bin
+[cloudera@quickstart ~]# wget http://www.us.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.zip
+[cloudera@quickstart ~]# unzip apache-maven-3.3.9-bin.zip
+[cloudera@quickstart ~]# export PATH=$PATH:/home/cloudera/apache-maven-3.3.9/bin
 
 # Building StreamGrids from source
 
 Obtain the source code
 cd to the home directory of cloudera.
 
-[~]# cd ~
+[cloudera@quickstart ~]# cd ~
 Pull StreamGrids source from this git repository. To find out your repository link navigate to the repository in this website and copy the https repo URL.
 
-[~]# git clone https://github.com/bdremadhav/StreamGrids.git
+[cloudera@quickstart ~]# git clone https://github.com/bdremadhav/StreamGrids.git
 cd to the cloned source dir 
 
-[~]# cd StreamGrids
+[cloudera@quickstart ~]# cd StreamGrids
 
 -------------------------
 # Database Setup
 
 Execute the dbsetup.sh script without any parameters as shown below. In this example, we are going to use MySQL as StreamGrids backend as it's already available in the Cloudera VM.
-[~]# sh dbsetup.sh
-[ StreamGrids]$ sh dbsetup.sh⏎
+[cloudera@quickstart ~/StreamGrids]# sh dbsetup.sh
 Supported DB
 1) Embedded 
 2) Oracle
