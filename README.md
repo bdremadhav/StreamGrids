@@ -2,10 +2,7 @@
 
 General Prerequisites
 
-For testing/development perpose and to save time use the fully loaded Hadoop VMs from Cloudera or Hortonworks because all the required software are mostly installed and configured.
-
-A Hadoop Cluster
-In this section we are using Cloudera Quickstart 5.5.0
+Cloudera Quickstart 5.5.0
 Git 1.9 and up
 Maven 3 and up
 Oracle JDK 8(and up) or OpenJDK
