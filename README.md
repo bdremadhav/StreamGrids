@@ -11,9 +11,13 @@ Google Chrome browser
 
 # Steps:
 1)Download and install VirtualBox from https://www.virtualbox.org/⏎
+
 2)Download Cloudera Quickstart VM 5.5.0 from https://www.cloudera.com/downloads/cdh/5-5-0.html⏎
+
 3)Setup a 'Host-Only Adapter' for network to enable communication between Host and Guest OS.⏎
+
 4)Login to Cloudera Quickstart VM⏎
+
 5)Download Maven from a mirror, unpack and add to the PATH.⏎
 
 [cloudera@quickstart ~]# wget http://www.us.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.zip⏎
