@@ -16,15 +16,15 @@ Google Chrome browser
 
 
 ## Steps:
-1)Download and install VirtualBox from https://www.virtualbox.org/⏎
+1)Download and install VirtualBox from https://www.virtualbox.org/
 
-2)Download Cloudera Quickstart VM 5.5.0 from https://www.cloudera.com/downloads/cdh/5-5-0.html⏎
+2)Download Cloudera Quickstart VM 5.5.0 from https://www.cloudera.com/downloads/cdh/5-5-0.html
 
-3)Setup a 'Host-Only Adapter' for network to enable communication between Host and Guest OS.⏎
+3)Setup a 'Host-Only Adapter' for network to enable communication between Host and Guest OS.
 
-4)Login to Cloudera Quickstart VM⏎
+4)Login to Cloudera Quickstart VM
 
-5)Download Maven from a mirror, unpack and add to the PATH.⏎
+5)Download Maven from a mirror, unpack and add to the PATH.
 
 [cloudera@quickstart ~]# wget http://www.us.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.zip
 
@@ -34,22 +34,24 @@ Google Chrome browser
 
 ## Building StreamGrids from source
 
-Obtain the source code⏎
+Obtain the source code
 
-cd to the home directory of cloudera.⏎
+cd to the home directory of cloudera.
 
 [cloudera@quickstart ~]# cd ~
-Pull StreamGrids source from this git repository. To find out your repository link navigate to the repository in this website and copy the https repo URL.⏎
+
+Pull StreamGrids source from this git repository.
 
 [cloudera@quickstart ~]# git clone https://github.com/bdremadhav/StreamGrids.git
-cd to the cloned source dir ⏎
+cd to the cloned source dir
 
-[cloudera@quickstart ~]# cd StreamGrids⏎
+[cloudera@quickstart ~]# cd StreamGrids
 
 -------------------------
 ## Database Setup
 
-Execute the dbsetup.sh script without any parameters as shown below. In this example, we are going to use MySQL as StreamGrids backend as it's already available in the Cloudera VM.⏎
+Execute the dbsetup.sh script without any parameters as shown below. In this example, we are going to use MySQL as StreamGrids backend as it's already available in the Cloudera VM.
+
 [cloudera@quickstart ~/StreamGrids]# sh dbsetup.sh⏎
 Supported DB⏎
 1) Embedded ⏎
