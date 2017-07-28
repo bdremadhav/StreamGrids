@@ -15,7 +15,7 @@ MySQL Server 5.1 and up
 Google Chrome browser
 
 
-# Steps:
+## Steps:
 1)Download and install VirtualBox from https://www.virtualbox.org/⏎
 
 2)Download Cloudera Quickstart VM 5.5.0 from https://www.cloudera.com/downloads/cdh/5-5-0.html⏎
@@ -32,9 +32,10 @@ Google Chrome browser
 
 [cloudera@quickstart ~]# export PATH=$PATH:/home/cloudera/apache-maven-3.3.9/bin
 
-# Building StreamGrids from source
+## Building StreamGrids from source
 
 Obtain the source code⏎
+
 cd to the home directory of cloudera.⏎
 
 [cloudera@quickstart ~]# cd ~
@@ -46,7 +47,7 @@ cd to the cloned source dir ⏎
 [cloudera@quickstart ~]# cd StreamGrids⏎
 
 -------------------------
-# Database Setup
+## Database Setup
 
 Execute the dbsetup.sh script without any parameters as shown below. In this example, we are going to use MySQL as StreamGrids backend as it's already available in the Cloudera VM.⏎
 [cloudera@quickstart ~/StreamGrids]# sh dbsetup.sh⏎
@@ -95,14 +96,14 @@ Will create DB and tables⏎
 Tables created successfully in MySQL platmd DB⏎
 
 ----------------
-# Building
+## Building
 
 Now build StreamGrids using (note StreamGrids may not compile if the settings.xml is not passed from the commandline so be sure to use the -s option. When building for the first time, it might take a while as maven resolves and downloads the jar libraries from diffrent repositories.
 
 mvn -s settings.xml clean install -P cdh52⏎
 
 -----------------
-# Installing StreamGrids⏎
+## Installing StreamGrids⏎
 
 After building StreamGrids successfully run
 
@@ -110,7 +111,7 @@ sh install-scripts.sh local
 
 It'll install the StreamGrids scripts and artifacts in /home/cloudera/bdre
 
-# Using StreamGrids
+## Using StreamGrids
 
 After a successful build, start the StreamGrids UI service
 
