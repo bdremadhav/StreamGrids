@@ -20,9 +20,11 @@ Google Chrome browser
 
 5)Download Maven from a mirror, unpack and add to the PATH.⏎
 
-[cloudera@quickstart ~]# wget http://www.us.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.zip⏎
-[cloudera@quickstart ~]# unzip apache-maven-3.3.9-bin.zip⏎
-[cloudera@quickstart ~]# export PATH=$PATH:/home/cloudera/apache-maven-3.3.9/bin⏎
+[cloudera@quickstart ~]# wget http://www.us.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.zip
+
+[cloudera@quickstart ~]# unzip apache-maven-3.3.9-bin.zip
+
+[cloudera@quickstart ~]# export PATH=$PATH:/home/cloudera/apache-maven-3.3.9/bin
 
 # Building StreamGrids from source
 
