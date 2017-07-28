@@ -1,13 +1,19 @@
 # Installation Steps
 
-General Prerequisites
+## General Prerequisites
 
 Cloudera Quickstart 5.5.0
+
 Git 1.9 and up
+
 Maven 3 and up
+
 Oracle JDK 8(and up) or OpenJDK
+
 MySQL Server 5.1 and up
+
 Google Chrome browser
+
 
 # Steps:
 1)Download and install VirtualBox from https://www.virtualbox.org/⏎
