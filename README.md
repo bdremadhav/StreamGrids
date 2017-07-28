@@ -32,6 +32,22 @@ Google Chrome browser
 
 [cloudera@quickstart ~]# export PATH=$PATH:/home/cloudera/apache-maven-3.3.9/bin
 
+Download Oracle JDK 8 tar.gz file from here:
+
+http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+
+Extract the jdk tar.gz
+
+Edit the /etc/profile and change 
+
+[cloudera@quickstart ~]# sudo vi /etc/profile
+
+1)JAVA_HOME variable to point to new Java home after downloading and extracting (export JAVA_HOME=/home/cloudera/jdk.1.8.--)
+
+2)PATH variable and append :$JAVA_HOME/bin
+
+[cloudera@quickstart ~]# source /etc/profile
+
 ## Building StreamGrids from source
 
 Obtain the source code
