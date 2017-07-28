@@ -1,4 +1,4 @@
-# Stream Grids
+# Installation Steps
 
 General Prerequisites
 
