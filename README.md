@@ -89,39 +89,23 @@ Enter DB name (Type db name or leave it blank for default 'bdre'):platmd⏎
 
 Enter DB schema (Type schema or leave it blank for default 'bdre'):platmd⏎
 
-Please confirm:
-
-Database Type: mysql⏎
-
-JDBC Driver Class: com.mysql.jdbc.Driver⏎
-
-JDBC Connection URL: jdbc:mysql://localhost:3306/platmd⏎
-
-Database Username: root⏎
-
-Database Password: cloudera⏎
-
-Hibernate Dialect: org.hibernate.dialect.MySQLDialect⏎
-
-Database Schema: platmd⏎
-
 Are those correct? (type y or n - default y):y⏎
 
-Database configuration written to ./md-dao/src/main/resources/db.properties⏎
+Database configuration written to ./md-dao/src/main/resources/db.properties
 
-Will create DB and tables⏎
+Will create DB and tables
 
-Tables created successfully in MySQL platmd DB⏎
+Tables created successfully in MySQL platmd DB
 
 ----------------
 ## Building
 
 Now build StreamGrids using (note StreamGrids may not compile if the settings.xml is not passed from the commandline so be sure to use the -s option. When building for the first time, it might take a while as maven resolves and downloads the jar libraries from diffrent repositories.
 
-mvn -s settings.xml clean install -P cdh52⏎
+mvn -s settings.xml clean install -P cdh52
 
 -----------------
-## Installing StreamGrids⏎
+## Installing StreamGrids
 
 After building StreamGrids successfully run
 
@@ -133,7 +117,7 @@ It'll install the StreamGrids scripts and artifacts in /home/cloudera/bdre
 
 After a successful build, start the StreamGrids UI service
 
-[cloudera@quickstart ~/StreamGrids]$ sh quick-run.sh⏎
+[cloudera@quickstart ~/StreamGrids]$ sh quick-run.sh
 
 Use Google Chrome browser from the host machine and open http://VM_IP:28850/mdui/pages/content.page⏎
 
