@@ -51,23 +51,39 @@ Supported DB⏎
 Select Database Type(Enter 1, 2, 3 , 4 or leave empty and press empty to select the default DB):3⏎
 
 Enter DB username (Type username or leave it blank for default 'root'):root⏎
+
 Enter DB password (Type password or leave it blank for default '<blank>'):cloudera⏎
+  
 Enter DB hostname (Type db hostname or leave it blank for default 'localhost'):localhost⏎
+
 Enter DB port (Type db port or leave it blank for default '3306'):3306⏎
+
 Enter DB name (Type db name or leave it blank for default 'bdre'):platmd⏎
+
 Enter DB schema (Type schema or leave it blank for default 'bdre'):platmd⏎
+
 Please confirm:
 
 Database Type: mysql⏎
+
 JDBC Driver Class: com.mysql.jdbc.Driver⏎
+
 JDBC Connection URL: jdbc:mysql://localhost:3306/platmd⏎
+
 Database Username: root⏎
+
 Database Password: cloudera⏎
+
 Hibernate Dialect: org.hibernate.dialect.MySQLDialect⏎
+
 Database Schema: platmd⏎
+
 Are those correct? (type y or n - default y):y⏎
+
 Database configuration written to ./md-dao/src/main/resources/db.properties⏎
+
 Will create DB and tables⏎
+
 Tables created successfully in MySQL platmd DB⏎
 
 ----------------
